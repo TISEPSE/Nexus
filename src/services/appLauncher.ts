@@ -118,8 +118,10 @@ export async function launchTool(toolId: string, webUrl: string): Promise<void> 
     if (tool?.startCommand) {
       try {
         console.log(`[App Launcher] Starting background command for ${toolId}: ${tool.startCommand}`);
-        const command = Command.create(tool.startCommand);
-        command.spawn();
+
+        // Use sh -c to run the command in the background
+        const command = Command.create('sh', ['-c', `${tool.startCommand} > /dev/null 2>&1 &`]);
+        await command.spawn();
         console.log(`[App Launcher] Background command spawned successfully`);
 
         // Wait a bit for the service to start
