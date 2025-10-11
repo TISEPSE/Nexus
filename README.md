@@ -11,7 +11,7 @@ Lanceur desktop pour accéder rapidement à 50+ outils d'IA.
 Installation automatique :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/TISEPSE/Nexus/main/scripts/install.sh | bash
+wget -O - https://raw.githubusercontent.com/TISEPSE/Nexus/main/scripts/install.sh | bash
 ```
 
 Cette commande installe toutes les dépendances, compile et installe l'application.
@@ -21,7 +21,7 @@ Cette commande installe toutes les dépendances, compile et installe l'applicati
 Pour mettre à jour Nexus vers la dernière version :
 
 ```bash
-sudo dpkg -r nexus 2>/dev/null; curl -fsSL https://raw.githubusercontent.com/TISEPSE/Nexus/main/scripts/install.sh | bash
+sudo dpkg -r nexus 2>/dev/null; wget -O - https://raw.githubusercontent.com/TISEPSE/Nexus/main/scripts/install.sh | bash
 ```
 
 ## Utilisation
