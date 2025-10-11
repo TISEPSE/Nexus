@@ -6,31 +6,6 @@
   "permissions": [
     "core:default",
     "shell:allow-open",
-    {
-      "identifier": "shell:allow-execute",
-      "allow": [
-        {
-          "cmd": "sh",
-          "args": ["-c"]
-        },
-        {
-          "cmd": "gnome-terminal",
-          "args": true
-        },
-        {
-          "cmd": "konsole",
-          "args": true
-        },
-        {
-          "cmd": "xfce4-terminal",
-          "args": true
-        },
-        {
-          "cmd": "xterm",
-          "args": true
-        }
-      ]
-    },
     "opener:default"
   ]
 }
