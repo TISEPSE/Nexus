@@ -12,6 +12,22 @@
         {
           "cmd": "sh",
           "args": ["-c"]
+        },
+        {
+          "cmd": "gnome-terminal",
+          "args": true
+        },
+        {
+          "cmd": "konsole",
+          "args": true
+        },
+        {
+          "cmd": "xfce4-terminal",
+          "args": true
+        },
+        {
+          "cmd": "xterm",
+          "args": true
         }
       ]
     },

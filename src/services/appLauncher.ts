@@ -114,20 +114,43 @@ export async function launchTool(toolId: string, webUrl: string): Promise<void> 
     // Get the tool data to check for startCommand
     const tool = aiTools.find(t => t.id === toolId);
 
-    // If there's a startCommand, execute it in the background
+    // If there's a startCommand, execute it in a terminal
     if (tool?.startCommand) {
       try {
-        console.log(`[App Launcher] Starting background command for ${toolId}: ${tool.startCommand}`);
+        console.log(`[App Launcher] Starting command in terminal for ${toolId}: ${tool.startCommand}`);
 
-        // Use sh -c to run the command in the background
-        const command = Command.create('sh', ['-c', `${tool.startCommand} > /dev/null 2>&1 &`]);
-        await command.spawn();
-        console.log(`[App Launcher] Background command spawned successfully`);
+        // Try different terminal emulators in order of preference
+        const terminals = [
+          { cmd: 'gnome-terminal', args: ['--', 'bash', '-c', tool.startCommand] },
+          { cmd: 'konsole', args: ['-e', 'bash', '-c', tool.startCommand] },
+          { cmd: 'xfce4-terminal', args: ['-e', `bash -c "${tool.startCommand}"`] },
+          { cmd: 'xterm', args: ['-e', 'bash', '-c', tool.startCommand] },
+        ];
+
+        let launched = false;
+        for (const terminal of terminals) {
+          try {
+            const command = Command.create(terminal.cmd, terminal.args);
+            await command.spawn();
+            console.log(`[App Launcher] Command spawned in ${terminal.cmd}`);
+            launched = true;
+            break;
+          } catch (e) {
+            // Try next terminal
+            continue;
+          }
+        }
+
+        if (!launched) {
+          console.warn(`[App Launcher] No terminal emulator found, trying background execution`);
+          const command = Command.create('sh', ['-c', `nohup ${tool.startCommand} > /dev/null 2>&1 &`]);
+          await command.spawn();
+        }
 
         // Wait a bit for the service to start
         await new Promise(resolve => setTimeout(resolve, 2000));
       } catch (cmdError) {
-        console.error(`[App Launcher] Error starting background command:`, cmdError);
+        console.error(`[App Launcher] Error starting command:`, cmdError);
         // Continue anyway, the URL might still work
       }
     }
