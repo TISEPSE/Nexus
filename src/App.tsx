@@ -11,6 +11,7 @@ import { AddToolModal } from './components/AddToolModal';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { RoleSelectorFAB } from './components/RoleSelectorFAB';
 import { RoleSelectorModal } from './components/RoleSelectorModal';
+import { TitleBar } from './components/TitleBar';
 import { aiTools, categories, AITool } from './data/aiData';
 import { toolMatchesTemplate } from './data/templateMappings';
 
@@ -236,8 +237,9 @@ function App() {
   }, [filteredTools, selectedTemplate]);
 
   return (
-    <div className="min-h-screen bg-gh-canvas-default text-gh-fg-default overflow-x-hidden">
-      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 max-w-full">
+    <div className="min-h-screen bg-gh-canvas-default text-gh-fg-default overflow-x-hidden flex flex-col">
+      <TitleBar />
+      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 max-w-full flex-1">
         {/* Header - Optimized responsive layout with clear visual hierarchy */}
         <header className="mb-4 sm:mb-6 border-b border-gh-border-default pb-4 sm:pb-6">
           <div className="flex flex-col gap-3 sm:gap-4">
