@@ -1,9 +1,5 @@
 # Nexus
 
-Lanceur desktop pour accéder rapidement à 50+ outils d'IA.
-
-**Version web :** [https://tisepse.github.io/IA_Website/](https://tisepse.github.io/IA_Website/)
-
 ## Installation
 
 ### Linux (Ubuntu/Debian)
