@@ -12,6 +12,7 @@ export interface AITool {
     macos?: string[];
     linux?: string[];
   };
+  startCommand?: string; // Optional: command to run in background before opening URL
 }
 
 export const aiTools: AITool[] = [
@@ -1390,14 +1391,15 @@ export const aiTools: AITool[] = [
     id: 'n8n',
     name: 'n8n',
     description: 'Workflow automation tool',
-    url: 'https://n8n.io',
+    url: 'http://localhost:5678',
     category: ['Automation', 'Productivity', 'Code'],
     logo: [
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.rNZsPUGKf6R4FsQhH8mVrQHaHa%3Fcb%3D12%26pid%3DApi&f=1&ipt=58123bb185775efc7704bbe324ea1ac8f92cf8076990144e6b071519180d16ee&ipo=images',
       'https://n8n.io/favicon.ico',
     ],
     domain: 'n8n.io',
-    tags: ['automation', 'workflow', 'integration', 'open-source', 'no-code']
+    tags: ['automation', 'workflow', 'integration', 'open-source', 'no-code'],
+    startCommand: 'n8n'
   },
 
   // Media & Entertainment
@@ -1531,6 +1533,30 @@ export const aiTools: AITool[] = [
     ],
     domain: 'gomining.com',
     tags: ['crypto', 'mining', 'bitcoin', 'cloud-mining']
+  },
+  {
+    id: 'revolut',
+    name: 'Revolut',
+    description: 'Digital banking and financial services',
+    url: 'https://www.revolut.com',
+    category: ['Finance', 'Crypto', 'Trading'],
+    logo: [
+      'https://www.revolut.com/favicon.ico',
+    ],
+    domain: 'revolut.com',
+    tags: ['banking', 'finance', 'crypto', 'trading', 'card', 'digital-bank']
+  },
+  {
+    id: 'trade-republic',
+    name: 'Trade Republic',
+    description: 'Commission-free trading platform',
+    url: 'https://www.traderepublic.com',
+    category: ['Finance', 'Trading'],
+    logo: [
+      'https://www.traderepublic.com/favicon.ico',
+    ],
+    domain: 'traderepublic.com',
+    tags: ['trading', 'stocks', 'finance', 'investing', 'broker']
   },
 ];
 

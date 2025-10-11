@@ -1,5 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-shell';
+import { Command } from '@tauri-apps/plugin-shell';
 import { aiTools } from '../data/aiData';
 
 /**
@@ -110,6 +111,25 @@ export async function launchNativeApp(appPath: string): Promise<boolean> {
  */
 export async function launchTool(toolId: string, webUrl: string): Promise<void> {
   try {
+    // Get the tool data to check for startCommand
+    const tool = aiTools.find(t => t.id === toolId);
+
+    // If there's a startCommand, execute it in the background
+    if (tool?.startCommand) {
+      try {
+        console.log(`[App Launcher] Starting background command for ${toolId}: ${tool.startCommand}`);
+        const command = Command.create(tool.startCommand);
+        command.spawn();
+        console.log(`[App Launcher] Background command spawned successfully`);
+
+        // Wait a bit for the service to start
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } catch (cmdError) {
+        console.error(`[App Launcher] Error starting background command:`, cmdError);
+        // Continue anyway, the URL might still work
+      }
+    }
+
     // Try to find native app
     const appPath = await findNativeApp(toolId);
 
