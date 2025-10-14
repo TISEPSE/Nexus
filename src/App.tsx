@@ -11,6 +11,7 @@ import { AddToolModal } from './components/AddToolModal';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { RoleSelectorFAB } from './components/RoleSelectorFAB';
 import { RoleSelectorModal } from './components/RoleSelectorModal';
+import { UpdateChecker } from './components/UpdateChecker';
 import { aiTools, categories, AITool } from './data/aiData';
 import { toolMatchesTemplate } from './data/templateMappings';
 
@@ -402,6 +403,9 @@ function App() {
         onTemplateChange={setSelectedTemplate}
         icons={icons}
       />
+
+      {/* Update Notification */}
+      <UpdateChecker />
     </div>
   );
 }
