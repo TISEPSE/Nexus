@@ -8,8 +8,8 @@ const host = process.env.TAURI_DEV_HOST;
 export default defineConfig(async () => ({
   plugins: [react()],
 
-  // Set base path: '/' for Tauri builds, '/Nexus/' for GitHub Pages
-  base: process.env.TAURI_ENV_PLATFORM || process.env.TAURI_PLATFORM ? '/' : '/Nexus/',
+  // Set base path: '/' for Tauri/Docker builds, '/Nexus/' for GitHub Pages
+  base: process.env.TAURI_ENV_PLATFORM || process.env.TAURI_PLATFORM || process.env.VITE_BASE_PATH === '/' ? '/' : '/Nexus/',
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
