@@ -10,6 +10,8 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-22.04
+    outputs:
+      should_release: ${{ steps.check_tag.outputs.should_release }}
 
     steps:
       - uses: actions/checkout@v4
@@ -32,8 +34,10 @@ jobs:
         run: |
           if git rev-parse "v${{ steps.version.outputs.current }}" >/dev/null 2>&1; then
             echo "exists=true" >> $GITHUB_OUTPUT
+            echo "should_release=false" >> $GITHUB_OUTPUT
           else
             echo "exists=false" >> $GITHUB_OUTPUT
+            echo "should_release=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Create and push tag
@@ -59,7 +63,7 @@ jobs:
           - platform: 'macos-latest'
             args: '--target universal-apple-darwin'
     runs-on: ${{ matrix.platform }}
-    if: needs.check-and-release.outputs.tag_created != 'skipped'
+    if: needs.check-and-release.outputs.should_release == 'true'
 
     steps:
       - uses: actions/checkout@v4
