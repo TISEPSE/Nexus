@@ -47,7 +47,8 @@
   },
   "filters": {
     "label": "Filters",
-    "available": "categories available"
+    "available": "categories available",
+    "selectCategory": "Select category"
   },
   "navigation": {
     "home": "Home",
