@@ -67,3 +67,6 @@ private-key*
 
 # Local development
 .local/
+
+# Claude Code
+.claude/
