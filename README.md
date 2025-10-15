@@ -15,8 +15,8 @@ Téléchargez la dernière version pour votre système :
 ### Installation rapide Linux
 
 ```bash
-wget https://github.com/TISEPSE/Nexus/releases/latest/download/nexus_0.1.9_amd64.deb
-sudo dpkg -i nexus_0.1.9_amd64.deb
+wget https://github.com/TISEPSE/Nexus/releases/latest/download/nexus_0.0.1_amd64.deb
+sudo dpkg -i nexus_0.0.1_amd64.deb
 ```
 
 ## 🔄 Mises à jour
