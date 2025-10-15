@@ -1,71 +1,54 @@
 # Nexus
 
-## Installation
+Votre hub centralisé pour tous vos outils d'IA.
 
-### Linux (Ubuntu/Debian)
+## 📥 Installation
 
-Installation automatique :
+Téléchargez la dernière version pour votre système :
 
-```bash
-wget -O - https://raw.githubusercontent.com/TISEPSE/Nexus/main/scripts/install.sh | bash
-```
+**[👉 Télécharger Nexus](https://github.com/TISEPSE/Nexus/releases/latest)**
 
-Cette commande installe toutes les dépendances, compile et installe l'application.
+- **Windows** : `.msi` ou `.exe`
+- **macOS** : `.dmg`
+- **Linux** : `.deb` ou `.rpm`
 
-## Mise à jour
-
-Pour mettre à jour Nexus vers la dernière version :
+### Installation rapide Linux
 
 ```bash
-sudo dpkg -r nexus 2>/dev/null; wget -O - https://raw.githubusercontent.com/TISEPSE/Nexus/main/scripts/install.sh | bash
+wget https://github.com/TISEPSE/Nexus/releases/latest/download/nexus_0.1.9_amd64.deb
+sudo dpkg -i nexus_0.1.9_amd64.deb
 ```
 
-## Utilisation
+## 🔄 Mises à jour
 
-### Lancer en mode développement
+L'application vérifie automatiquement les mises à jour au démarrage et toutes les 30 minutes. Une notification apparaît quand une nouvelle version est disponible.
+
+## ✨ Fonctionnalités
+
+- 🔍 Recherche rapide
+- ⭐ Favoris personnalisés
+- 🎨 Thèmes clair/sombre
+- 🌍 Multilingue (FR/EN)
+- ➕ Ajout d'outils personnalisés
+- 📱 50+ outils d'IA pré-intégrés
+
+## 🛠️ Développement
+
 ```bash
-npm run tauri dev
+npm install
+npm run tauri:dev
 ```
 
-### Compiler l'application
+**Build :**
+
 ```bash
-npm run tauri build
+npm run tauri:build
 ```
 
-## Fonctionnalités
+## 📦 Technologies
 
-- 🔍 Recherche par nom, description ou catégorie
-- ⭐ Système de favoris
-- 🎨 Thème GitHub Dark
-- ⚡ Ultra rapide et léger
-- 📱 50+ outils d'IA : ChatGPT, Claude, Midjourney, Runway, GitHub Copilot, etc.
+Tauri 2 • React 19 • TypeScript • Tailwind CSS 4
 
-## Développement
+## 📄 Licence
 
-### Ajouter un nouvel outil
-
-Éditez `src/data/aiData.ts` :
-
-```typescript
-{
-  id: 'mon-outil',
-  name: 'Mon Outil IA',
-  description: 'Description de l\'outil',
-  url: 'https://example.com',
-  category: ['AI', 'Chat'],
-  logo: ['https://example.com/logo.png'],
-  domain: 'example.com',
-  tags: ['ai', 'chat']
-}
-```
-
-## Technologies
-
-- **Tauri** - Framework desktop
-- **React** - Interface utilisateur
-- **TypeScript** - Typage statique
-- **Tailwind CSS** - Styles
-
-## Licence
-
-MIT - Libre d'utilisation pour projets personnels ou commerciaux.
+MIT
