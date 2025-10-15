@@ -117,10 +117,14 @@ fn launch_app_windows(app_path: String) -> Result<bool, String> {
 // ========================================
 #[cfg(target_os = "macos")]
 fn find_app_macos(app_names: Vec<String>) -> Option<String> {
+    // Create bindings to extend lifetime
+    let home_dir = std::env::var("HOME").unwrap_or_default();
+    let home_apps_path = format!("{}/Applications", home_dir);
+
     // Standard macOS application paths
     let search_paths = vec![
         "/Applications",
-        &format!("{}/Applications", std::env::var("HOME").unwrap_or_default()),
+        &home_apps_path,
         "/System/Applications",
     ];
 
