@@ -33,7 +33,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) =>
       <div className="relative w-5 h-5 flex-shrink-0 sm:flex-shrink">
         {/* Sun Icon - Visible in Dark Mode */}
         <svg
-          className={`absolute inset-0 w-5 h-5 text-gh-fg-default transition-all duration-300 ${
+          className={`absolute inset-0 w-5 h-5 text-gh-fg-default group-hover:text-gh-accent-fg transition-all duration-300 ${
             isDark
               ? 'opacity-100 rotate-0 scale-100'
               : 'opacity-0 -rotate-90 scale-0'
@@ -53,7 +53,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) =>
 
         {/* Moon Icon - Visible in Light Mode */}
         <svg
-          className={`absolute inset-0 w-5 h-5 text-gh-fg-default transition-all duration-300 ${
+          className={`absolute inset-0 w-5 h-5 text-gh-fg-default group-hover:text-gh-accent-fg transition-all duration-300 ${
             !isDark
               ? 'opacity-100 rotate-0 scale-100'
               : 'opacity-0 rotate-90 scale-0'
@@ -73,7 +73,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) =>
       </div>
 
       {/* Text Label - Descriptive and Clear */}
-      <span className="text-sm font-medium text-gh-fg-default whitespace-nowrap hidden sm:inline">
+      <span className="text-sm font-medium text-gh-fg-default group-hover:text-gh-accent-fg transition-colors whitespace-nowrap hidden sm:inline">
         {isDark ? 'Light' : 'Dark'}
       </span>
 

@@ -609,3 +609,49 @@ body.light-theme .shadow-fab {
     opacity: 1;
   }
 }
+
+/* ========================================
+   CUSTOM SCROLLBAR
+   Subtle themed scrollbar for dropdowns
+   ======================================== */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gh-border-muted) var(--color-gh-canvas-default);
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-gh-canvas-default);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gh-border-muted);
+  border-radius: 4px;
+  border: 2px solid var(--color-gh-canvas-default);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gh-accent-muted);
+}
+
+/* Light theme scrollbar */
+body.light-theme ::-webkit-scrollbar-track {
+  background: var(--color-gh-canvas-subtle);
+}
+
+body.light-theme ::-webkit-scrollbar-thumb {
+  background: var(--color-gh-border-default);
+  border-color: var(--color-gh-canvas-subtle);
+}
+
+body.light-theme ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gh-accent-emphasis);
+}

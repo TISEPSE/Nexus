@@ -143,18 +143,18 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                 onTemplateChange(template.id);
                 setIsOpen(false);
               }}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all duration-200 ${
                 selectedTemplate === template.id
                   ? 'bg-gh-accent-subtle text-gh-accent-fg border-l-2 border-gh-accent-fg'
-                  : 'text-gh-fg-default hover:bg-gh-canvas-inset border-l-2 border-transparent'
+                  : 'text-gh-fg-default hover:bg-gh-accent-subtle/30 hover:text-gh-accent-fg'
               }`}
               role="option"
               aria-selected={selectedTemplate === template.id}
             >
               <svg
-                className={`w-5 h-5 flex-shrink-0 ${
+                className={`w-5 h-5 flex-shrink-0 transition-all duration-200 ${
                   selectedTemplate === template.id
-                    ? 'text-gh-accent-fg'
+                    ? 'text-gh-accent-fg scale-110'
                     : 'text-gh-fg-muted'
                 }`}
                 fill="none"

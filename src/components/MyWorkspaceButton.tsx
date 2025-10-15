@@ -12,11 +12,11 @@ export function MyWorkspaceButton({ isActive, onClick }: MyWorkspaceButtonProps)
     <button
       onClick={onClick}
       className={`
-        relative flex items-center gap-2 px-3 py-2 rounded-md border transition-all duration-200
-        min-h-[44px]
+        group relative flex items-center gap-1.5 px-2 sm:px-3 py-2 rounded-md border transition-all duration-200
+        min-h-[44px] min-w-[44px]
         ${isActive
           ? 'bg-gh-accent-subtle border-gh-accent-emphasis text-gh-accent-fg'
-          : 'bg-gh-canvas-subtle border-gh-border-default text-gh-fg-muted hover:bg-gh-canvas-inset hover:border-gh-accent-fg hover:text-gh-fg-default'
+          : 'bg-gh-canvas-subtle border-gh-border-default text-gh-fg-default hover:bg-gh-canvas-inset hover:border-gh-accent-fg hover:text-gh-accent-fg'
         }
       `}
       aria-label={t('workspace.ariaLabel')}
@@ -25,7 +25,7 @@ export function MyWorkspaceButton({ isActive, onClick }: MyWorkspaceButtonProps)
     >
       {/* Thumbtack Icon - FontAwesome */}
       <svg
-        className="w-5 h-5"
+        className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 group-hover:text-gh-accent-fg transition-colors"
         fill="currentColor"
         viewBox="0 0 640 640"
         aria-hidden="true"
@@ -34,7 +34,12 @@ export function MyWorkspaceButton({ isActive, onClick }: MyWorkspaceButtonProps)
       </svg>
 
       {/* Label - Desktop only */}
-      <span className="hidden lg:inline text-sm font-medium">
+      <span className="hidden sm:inline text-sm font-medium whitespace-nowrap">
+        {t('workspace.title')}
+      </span>
+
+      {/* Hover Tooltip - Mobile */}
+      <span className="sm:hidden absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gh-canvas-default border border-gh-border-default rounded text-xs text-gh-fg-default whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg z-50">
         {t('workspace.title')}
       </span>
     </button>

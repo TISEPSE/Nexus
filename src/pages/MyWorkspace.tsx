@@ -124,7 +124,7 @@ export function MyWorkspace({
       </div>
 
       {/* Grid View - Aligned with filter tabs */}
-      <div className="grid grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9 gap-2 sm:gap-3 md:gap-3">
+      <div className="grid grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-3 md:gap-3">
         {/* Add Tool Card - Only show in custom view or all view */}
         {(view === 'all' || view === 'custom') && (
           <AddToolCard onClick={() => setIsModalOpen(true)} />

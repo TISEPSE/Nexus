@@ -230,8 +230,7 @@ function App({
   return (
     <>
       {/* Tile Grid View */}
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-2 sm:gap-3 md:gap-3">
+      <div className="grid grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-3 md:gap-3">
           {/* Add Tool Card - Only show in "All" category */}
           {selectedCategory === 'All' && (
             <AddToolCard onClick={() => setIsModalOpen(true)} />
@@ -256,7 +255,6 @@ function App({
               />
             );
           })}
-        </div>
       </div>
 
       {/* Add/Edit Tool Modal */}

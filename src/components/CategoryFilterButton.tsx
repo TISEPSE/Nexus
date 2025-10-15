@@ -190,7 +190,12 @@ export function CategoryFilterButton({
       {/* Dropdown Menu */}
       {isOpen && (
         <div
-          className="absolute top-full mt-2 right-0 w-56 max-h-80 overflow-y-auto bg-gh-canvas-subtle border border-gh-border-default rounded-md shadow-lg z-50 animate-slide-in-fade"
+          className="absolute top-full mt-2 right-0 w-56 max-h-80 overflow-y-auto bg-gh-canvas-subtle border border-gh-border-default rounded-md shadow-lg z-50 animate-slide-in-fade
+                     scrollbar-thin scrollbar-track-gh-canvas-default scrollbar-thumb-gh-border-muted hover:scrollbar-thumb-gh-accent-muted"
+          style={{
+            scrollbarWidth: 'thin',
+            scrollbarColor: 'var(--color-border-muted) var(--color-canvas-default)'
+          }}
           role="listbox"
         >
           {categories.map((category) => (
@@ -200,18 +205,18 @@ export function CategoryFilterButton({
                 onCategoryChange(category);
                 setIsOpen(false);
               }}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all duration-200 ${
                 selectedCategory === category
                   ? 'bg-gh-accent-subtle text-gh-accent-fg border-l-2 border-gh-accent-fg'
-                  : 'text-gh-fg-default hover:bg-gh-canvas-inset border-l-2 border-transparent'
+                  : 'text-gh-fg-default hover:bg-gh-accent-subtle/30 hover:text-gh-accent-fg'
               }`}
               role="option"
               aria-selected={selectedCategory === category}
             >
               <svg
-                className={`w-5 h-5 flex-shrink-0 ${
+                className={`w-5 h-5 flex-shrink-0 transition-all duration-200 ${
                   selectedCategory === category
-                    ? 'text-gh-accent-fg'
+                    ? 'text-gh-accent-fg scale-110'
                     : 'text-gh-fg-muted'
                 }`}
                 fill="none"

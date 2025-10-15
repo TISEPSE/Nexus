@@ -76,7 +76,7 @@ const AICardComponent: React.FC<AICardProps> = ({ tool, isFavorite, onToggleFavo
                  hover:bg-gh-canvas-default hover:border-gh-accent-fg hover:shadow-md
                  active:scale-[0.98] transition-all duration-150 text-left w-full cursor-pointer
                  focus:outline-none focus:ring-2 focus:ring-gh-accent-fg focus:ring-offset-2 focus:ring-offset-gh-canvas-default
-                 touch-manipulation min-h-[140px] sm:min-h-[160px]
+                 touch-manipulation h-[180px] sm:h-[200px] md:h-[220px]
                  template-transition
                  ${matchesTemplate ? 'template-highlighted' : ''}`}
       role="button"
@@ -88,7 +88,7 @@ const AICardComponent: React.FC<AICardProps> = ({ tool, isFavorite, onToggleFavo
         }
       }}
     >
-      <div className="flex flex-col h-full items-center">
+      <div className="flex flex-col h-full items-center justify-between">
         {/* Logo with automatic fallback */}
         <div className="flex items-center justify-center mb-2 sm:mb-3">
           {!showFallback ? (

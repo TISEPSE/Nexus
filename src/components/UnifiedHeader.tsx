@@ -67,9 +67,9 @@ export function UnifiedHeader({
           </div>
 
           {/* Unified Control Bar - All Buttons */}
-          <div className="flex flex-wrap items-center justify-end gap-2 lg:gap-3">
+          <div className="flex flex-wrap items-center justify-end gap-1.5">
             {/* Navigation Group */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <HomeButton
                 isActive={activeView === 'dashboard'}
                 onClick={() => onViewChange('dashboard')}
@@ -81,7 +81,7 @@ export function UnifiedHeader({
             </div>
 
             {/* Filter Group - Toujours visible */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               {onTemplateChange && (
                 <TemplateSelector
                   selectedTemplate={selectedTemplate || 'all'}
@@ -101,7 +101,7 @@ export function UnifiedHeader({
             <div className="hidden lg:block w-px h-6 bg-gh-border-default mx-1" />
 
             {/* Settings Group */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <LanguageToggle />
               <ThemeToggle isDark={isDarkTheme} onToggle={onToggleTheme} />
             </div>
