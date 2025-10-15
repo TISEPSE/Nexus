@@ -54,7 +54,9 @@ export function MyWorkspace({
     // Filter by view type
     if (view === 'all') {
       const favTools = allTools.filter((tool) => favorites.includes(tool.id));
-      tools = [...favTools, ...customTools];
+      // Add custom tools that are not already in favorites to avoid duplicates
+      const customToolsNotInFav = customTools.filter((tool) => !favorites.includes(tool.id));
+      tools = [...favTools, ...customToolsNotInFav];
     } else if (view === 'favorites') {
       tools = allTools.filter((tool) => favorites.includes(tool.id));
     } else {
