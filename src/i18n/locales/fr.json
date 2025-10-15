@@ -11,7 +11,7 @@
     "Ajout personnel": "Ajout personnel",
     "AI": "IA",
     "Chat": "Chat",
-    "Code": "Code",
+    "Développement": "Développement",
     "IDE": "IDE",
     "Image": "Image",
     "Video": "Vidéo",
@@ -45,6 +45,15 @@
   "search": {
     "placeholder": "Rechercher des outils..."
   },
+  "filters": {
+    "label": "Filtres",
+    "available": "catégories disponibles"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "switchedToDashboard": "Revenu au tableau de bord",
+    "switchedToWorkspace": "Basculé vers mon espace"
+  },
   "card": {
     "addToFavorites": "Ajouter aux favoris",
     "removeFromFavorites": "Retirer des favoris",
@@ -71,7 +80,7 @@
     "categoriesHelper": "Sélectionner les catégories pour cet outil",
     "cancel": "Annuler",
     "add": "Ajouter l'outil",
-    "save": "Enregistrer les modifications",
+    "save": "Enregistrer",
     "required": "obligatoire"
   },
   "delete": {
@@ -108,6 +117,37 @@
     "student": "Étudiant",
     "mediaEnthusiast": "Passionné média",
     "selectTemplate": "Filtrer par rôle"
+  },
+  "workspace": {
+    "title": "Mon Espace",
+    "ariaLabel": "Mon Espace - Voir les favoris et outils personnalisés",
+    "itemCount": "{{count}} élément dans l'espace de travail",
+    "itemCount_plural": "{{count}} éléments dans l'espace de travail",
+    "pageTitle": "Mon Espace",
+    "summary": "{{favorites}} favoris • {{custom}} outils personnalisés",
+    "searchPlaceholder": "Rechercher dans mon espace...",
+    "back": "Retour",
+    "tabs": {
+      "all": "Tous",
+      "favorites": "Favoris",
+      "custom": "Personnalisés"
+    },
+    "sections": {
+      "favorites": "Favoris",
+      "custom": "Ajout Personnel"
+    },
+    "empty": {
+      "favorites": {
+        "title": "Aucun favori pour le moment",
+        "description": "Cliquez sur l'étoile de n'importe quel outil pour le voir ici",
+        "action": "Parcourir tous les outils"
+      },
+      "custom": {
+        "title": "Aucun outil personnalisé",
+        "description": "Ajoutez vos outils préférés pour y accéder rapidement",
+        "action": "Ajouter un outil"
+      }
+    }
   },
   "tools": {
     "chatgpt": "Assistant IA conversationnel par OpenAI",

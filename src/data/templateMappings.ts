@@ -11,7 +11,7 @@ export const templateMappings: Record<string, string[]> = {
   ],
 
   developer: [
-    'Code',
+    'Développement',
     'AI',
     'Documentation',
     'API',

@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 interface AddToolCardProps {
   onClick: () => void;
 }
 
 export function AddToolCard({ onClick }: AddToolCardProps) {
+  const { t } = useTranslation();
   return (
     <button
       onClick={onClick}
@@ -13,7 +16,7 @@ export function AddToolCard({ onClick }: AddToolCardProps) {
           +
         </div>
         <span className="text-xs text-gh-fg-muted group-hover:text-gh-fg-default transition-colors">
-          Add Tool
+          {t('addTool.addTool')}
         </span>
       </div>
     </button>

@@ -21,7 +21,7 @@ export const aiTools: AITool[] = [
     name: 'ChatGPT',
     description: 'Conversational AI assistant by OpenAI',
     url: 'https://chat.openai.com',
-    category: ['AI', 'Chat', 'Code', 'Writing'],
+    category: ['AI', 'Chat', 'Développement', 'Writing'],
     logo: [
       'https://cdn.oaistatic.com/_next/static/media/apple-touch-icon.82af6fe1.png',
       'https://openai.com/favicon.ico',
@@ -34,7 +34,7 @@ export const aiTools: AITool[] = [
     name: 'Claude',
     description: 'Advanced AI assistant by Anthropic',
     url: 'https://claude.ai',
-    category: ['AI', 'Chat', 'Code', 'Writing'],
+    category: ['AI', 'Chat', 'Développement', 'Writing'],
     logo: [
       'https://claude.ai/images/claude_app_icon.png',
       'https://www.anthropic.com/images/icons/safari-pinned-tab.svg',
@@ -47,7 +47,7 @@ export const aiTools: AITool[] = [
     name: 'Google Gemini',
     description: 'Google\'s multimodal AI assistant',
     url: 'https://gemini.google.com',
-    category: ['AI', 'Chat', 'Code', 'Research'],
+    category: ['AI', 'Chat', 'Développement', 'Research'],
     logo: [
       'https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg',
       'https://www.gstatic.com/lamda/images/gemini_favicon_f069958c85030456e93de685481c559f160ea06b.png',
@@ -91,7 +91,7 @@ export const aiTools: AITool[] = [
     name: 'Visual Studio Code',
     description: 'Free code editor by Microsoft',
     url: 'https://code.visualstudio.com',
-    category: ['Code', 'IDE', 'Productivity'],
+    category: ['Développement', 'IDE', 'Productivity'],
     logo: [
       'https://code.visualstudio.com/assets/images/code-stable.png',
       'https://code.visualstudio.com/favicon.ico',
@@ -109,7 +109,7 @@ export const aiTools: AITool[] = [
     name: 'GitHub Copilot',
     description: 'AI pair programmer',
     url: 'https://github.com/features/copilot',
-    category: ['AI', 'Code'],
+    category: ['AI', 'Développement'],
     logo: [
       'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png',
       'https://github.com/favicon.ico',
@@ -122,7 +122,7 @@ export const aiTools: AITool[] = [
     name: 'Cursor',
     description: 'AI-first code editor',
     url: 'https://cursor.sh',
-    category: ['AI', 'Code', 'IDE'],
+    category: ['AI', 'Développement', 'IDE'],
     logo: [
       'https://cursor.sh/brand/icon.svg',
       'https://cursor.sh/favicon.ico',
@@ -140,7 +140,7 @@ export const aiTools: AITool[] = [
     name: 'Codeium',
     description: 'Free AI code completion',
     url: 'https://codeium.com',
-    category: ['AI', 'Code'],
+    category: ['AI', 'Développement'],
     logo: 'https://codeium.com/favicon.ico',
     domain: 'codeium.com',
     tags: ['code', 'completion', 'free', 'ide']
@@ -150,7 +150,7 @@ export const aiTools: AITool[] = [
     name: 'Tabnine',
     description: 'AI code assistant',
     url: 'https://www.tabnine.com',
-    category: ['AI', 'Code'],
+    category: ['AI', 'Développement'],
     logo: 'https://www.tabnine.com/favicon.ico',
     domain: 'tabnine.com',
     tags: ['code', 'completion', 'privacy']
@@ -160,7 +160,7 @@ export const aiTools: AITool[] = [
     name: 'Replit AI',
     description: 'Browser-based AI IDE',
     url: 'https://replit.com',
-    category: ['AI', 'Code', 'IDE'],
+    category: ['AI', 'Développement', 'IDE'],
     logo: [
       'https://replit.com/public/images/favicon.ico',
       'https://replit.com/favicon.ico',
@@ -284,7 +284,7 @@ export const aiTools: AITool[] = [
     name: 'Ultralytics YOLO',
     description: 'Real-time object detection',
     url: 'https://ultralytics.com',
-    category: ['AI', 'Vision', 'Code'],
+    category: ['AI', 'Vision', 'Développement'],
     logo: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.GdZPe9LcIDms1BkB9q_j3QHaHa%3Fcb%3D12%26pid%3DApi&f=1&ipt=21706640b90175c6a73b4c492d112ccbe79824742ea1f3fb96161fe08b5ae2a3&ipo=images',
     domain: 'ultralytics.com',
     tags: ['computer-vision', 'object-detection', 'yolo', 'real-time']
@@ -383,7 +383,7 @@ export const aiTools: AITool[] = [
     name: 'Paperspace',
     description: 'Cloud platform for computer vision ML',
     url: 'https://www.paperspace.com',
-    category: ['AI', 'Vision', 'Code', 'Cloud'],
+    category: ['AI', 'Vision', 'Développement', 'Cloud'],
     logo: [
       'https://www.paperspace.com/favicon.ico',
     ],
@@ -772,7 +772,7 @@ export const aiTools: AITool[] = [
     name: 'Phind',
     description: 'AI search for developers',
     url: 'https://www.phind.com',
-    category: ['AI', 'Code', 'Documentation', 'Search'],
+    category: ['AI', 'Développement', 'Documentation', 'Search'],
     logo: 'https://www.phind.com/images/favicon.png',
     domain: 'phind.com',
     tags: ['search', 'code', 'documentation', 'developers']
@@ -802,7 +802,7 @@ export const aiTools: AITool[] = [
     name: 'Readme.so',
     description: 'README generator',
     url: 'https://readme.so',
-    category: ['AI', 'Documentation', 'Code'],
+    category: ['AI', 'Documentation', 'Développement'],
     logo: 'https://readme.so/favicon.ico',
     domain: 'readme.so',
     tags: ['readme', 'documentation', 'markdown']
@@ -879,7 +879,7 @@ export const aiTools: AITool[] = [
     name: 'Noteable',
     description: 'Data notebooks with AI',
     url: 'https://app.noteable.io',
-    category: ['AI', 'Data', 'Code'],
+    category: ['AI', 'Data', 'Développement'],
     logo: 'https://noteable.io/favicon.ico',
     domain: 'noteable.io',
     tags: ['data', 'notebook', 'jupyter', 'collaborative']
@@ -976,7 +976,7 @@ export const aiTools: AITool[] = [
     name: 'Hugging Face',
     description: 'ML models platform',
     url: 'https://huggingface.co',
-    category: ['AI', 'Code', 'Research', 'Multi-tool'],
+    category: ['AI', 'Développement', 'Research', 'Multi-tool'],
     logo: 'https://huggingface.co/favicon.ico',
     domain: 'huggingface.co',
     tags: ['ml', 'models', 'datasets', 'research']
@@ -986,7 +986,7 @@ export const aiTools: AITool[] = [
     name: 'Replicate',
     description: 'Run ML models via API',
     url: 'https://replicate.com',
-    category: ['AI', 'Code', 'Multi-tool'],
+    category: ['AI', 'Développement', 'Multi-tool'],
     logo: 'https://replicate.com/favicon.ico',
     domain: 'replicate.com',
     tags: ['ml', 'api', 'models', 'open-source']
@@ -1006,7 +1006,7 @@ export const aiTools: AITool[] = [
     name: 'Vercel AI',
     description: 'Build AI apps',
     url: 'https://ai-sdk.dev/playground',
-    category: ['AI', 'Code', 'Web'],
+    category: ['AI', 'Développement', 'Web'],
     logo: 'https://vercel.com/favicon.ico',
     domain: 'vercel.com',
     tags: ['framework', 'sdk', 'development', 'web']
@@ -1016,7 +1016,7 @@ export const aiTools: AITool[] = [
     name: 'Anthropic Console',
     description: 'Claude API access',
     url: 'https://console.anthropic.com',
-    category: ['AI', 'Code', 'API'],
+    category: ['AI', 'Développement', 'API'],
     logo: [
       'https://claude.ai/images/claude_app_icon.png',
       'https://www.anthropic.com/images/icons/safari-pinned-tab.svg',
@@ -1029,7 +1029,7 @@ export const aiTools: AITool[] = [
     name: 'OpenAI Platform',
     description: 'OpenAI APIs',
     url: 'https://platform.openai.com',
-    category: ['AI', 'Code', 'API'],
+    category: ['AI', 'Développement', 'API'],
     logo: [
       'https://cdn.oaistatic.com/_next/static/media/apple-touch-icon.82af6fe1.png',
       'https://openai.com/favicon.ico',
@@ -1055,7 +1055,7 @@ export const aiTools: AITool[] = [
     name: 'Codecademy',
     description: 'Interactive coding courses and tutorials',
     url: 'https://www.codecademy.com/catalog',
-    category: ['Code', 'Productivity'],
+    category: ['Développement', 'Productivity'],
     logo: [
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa%2FAATXAJykVH9taajY7C7frBCb-_BCVV5HYcmstwBAyA%3Ds900-c-k-c0xffffffff-no-rj-mo&f=1&nofb=1&ipt=111f8dab3b81a9d6c362e11ce4ae8aa3c32c7afbb8d93a2d6d12151ba8c056fb',
       'https://www.codecademy.com/favicon.ico',
@@ -1352,7 +1352,7 @@ export const aiTools: AITool[] = [
     name: 'MkDocs',
     description: 'Static site generator for documentation',
     url: 'https://www.mkdocs.org/getting-started/',
-    category: ['Documentation', 'Code', 'Productivity'],
+    category: ['Documentation', 'Développement', 'Productivity'],
     logo: 'https://squidfunk.github.io/mkdocs-material/assets/logo.png',
     domain: 'mkdocs.org',
     tags: ['documentation', 'static-site', 'markdown', 'open-source', 'generator']
@@ -1362,7 +1362,7 @@ export const aiTools: AITool[] = [
     name: 'GitHub',
     description: 'Platform for version control and collaboration',
     url: 'https://github.com',
-    category: ['Code', 'Productivity', 'Community'],
+    category: ['Développement', 'Productivity', 'Community'],
     logo: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png',
     domain: 'github.com',
     tags: ['git', 'version-control', 'code', 'repository', 'collaboration', 'open-source'],
@@ -1391,7 +1391,7 @@ export const aiTools: AITool[] = [
     name: 'n8n',
     description: 'Workflow automation tool',
     url: 'https://github.com/n8n-io/n8n#quick-start',
-    category: ['Automation', 'Productivity', 'Code'],
+    category: ['Automation', 'Productivity', 'Développement'],
     logo: [
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.rNZsPUGKf6R4FsQhH8mVrQHaHa%3Fcb%3D12%26pid%3DApi&f=1&ipt=58123bb185775efc7704bbe324ea1ac8f92cf8076990144e6b071519180d16ee&ipo=images',
       'https://n8n.io/favicon.ico',
@@ -1560,11 +1560,9 @@ export const aiTools: AITool[] = [
 
 export const categories = [
   'All',
-  'Favorites',
-  'Ajout personnel',
   'AI',
   'Chat',
-  'Code',
+  'Développement',
   'IDE',
   'Image',
   'Video',

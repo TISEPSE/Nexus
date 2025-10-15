@@ -11,7 +11,7 @@
     "Ajout personnel": "Personal",
     "AI": "AI",
     "Chat": "Chat",
-    "Code": "Code",
+    "Développement": "Development",
     "IDE": "IDE",
     "Image": "Image",
     "Video": "Video",
@@ -44,6 +44,15 @@
   },
   "search": {
     "placeholder": "Search tools..."
+  },
+  "filters": {
+    "label": "Filters",
+    "available": "categories available"
+  },
+  "navigation": {
+    "home": "Home",
+    "switchedToDashboard": "Switched to dashboard",
+    "switchedToWorkspace": "Switched to my workspace"
   },
   "card": {
     "addToFavorites": "Add to favorites",
@@ -108,6 +117,37 @@
     "student": "Student",
     "mediaEnthusiast": "Media Enthusiast",
     "selectTemplate": "Filter by role"
+  },
+  "workspace": {
+    "title": "My Workspace",
+    "ariaLabel": "My Workspace - View favorites and custom tools",
+    "itemCount": "{{count}} item in workspace",
+    "itemCount_plural": "{{count}} items in workspace",
+    "pageTitle": "My Workspace",
+    "summary": "{{favorites}} favorites • {{custom}} custom tools",
+    "searchPlaceholder": "Search in my workspace...",
+    "back": "Back",
+    "tabs": {
+      "all": "All",
+      "favorites": "Favorites",
+      "custom": "Custom"
+    },
+    "sections": {
+      "favorites": "Favorites",
+      "custom": "Personal Addition"
+    },
+    "empty": {
+      "favorites": {
+        "title": "No favorites yet",
+        "description": "Click the star icon on any tool to see it here",
+        "action": "Browse all tools"
+      },
+      "custom": {
+        "title": "No Custom Tools Yet",
+        "description": "Add your favorite tools to quickly access them",
+        "action": "Add Tool"
+      }
+    }
   },
   "tools": {
     "chatgpt": "Conversational AI assistant by OpenAI",
