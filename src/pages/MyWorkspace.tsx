@@ -98,7 +98,7 @@ export function MyWorkspace({
 
   return (
     <>
-      {/* Quick Filter Tabs */}
+      {/* Quick Filter Tabs - Full width, aligned left */}
       <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
         <FilterTab
           active={view === 'all'}
@@ -123,44 +123,42 @@ export function MyWorkspace({
         </FilterTab>
       </div>
 
-      {/* Grid View - Comme la page d'accueil */}
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-2 sm:gap-3 md:gap-3">
-          {/* Add Tool Card - Only show in custom view or all view */}
-          {(view === 'all' || view === 'custom') && (
-            <AddToolCard onClick={() => setIsModalOpen(true)} />
-          )}
-
-          {/* Tools Grid */}
-          {workspaceTools.map((tool) => {
-            const isCustom = tool.id.startsWith('custom-');
-            const showEditDelete = isCustom && (view === 'all' || view === 'custom');
-
-            return (
-              <AICard
-                key={tool.id}
-                tool={tool}
-                isFavorite={favoritesSet.has(tool.id)}
-                onToggleFavorite={onToggleFavorite}
-                isCustom={isCustom}
-                showEditDelete={showEditDelete}
-                onEdit={showEditDelete ? () => handleEdit(tool) : undefined}
-                onDelete={showEditDelete ? () => handleDeleteClick(tool) : undefined}
-                matchesTemplate={false}
-              />
-            );
-          })}
-        </div>
-
-        {/* Empty State */}
-        {workspaceTools.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gh-fg-muted">
-              {t('empty.noToolsFound')}
-            </p>
-          </div>
+      {/* Grid View - Aligned with filter tabs */}
+      <div className="grid grid-cols-2 min-[480px]:grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9 gap-2 sm:gap-3 md:gap-3">
+        {/* Add Tool Card - Only show in custom view or all view */}
+        {(view === 'all' || view === 'custom') && (
+          <AddToolCard onClick={() => setIsModalOpen(true)} />
         )}
+
+        {/* Tools Grid */}
+        {workspaceTools.map((tool) => {
+          const isCustom = tool.id.startsWith('custom-');
+          const showEditDelete = isCustom && (view === 'all' || view === 'custom');
+
+          return (
+            <AICard
+              key={tool.id}
+              tool={tool}
+              isFavorite={favoritesSet.has(tool.id)}
+              onToggleFavorite={onToggleFavorite}
+              isCustom={isCustom}
+              showEditDelete={showEditDelete}
+              onEdit={showEditDelete ? () => handleEdit(tool) : undefined}
+              onDelete={showEditDelete ? () => handleDeleteClick(tool) : undefined}
+              matchesTemplate={false}
+            />
+          );
+        })}
       </div>
+
+      {/* Empty State */}
+      {workspaceTools.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gh-fg-muted">
+            {t('empty.noToolsFound')}
+          </p>
+        </div>
+      )}
 
       {/* Add/Edit Tool Modal */}
       <AddToolModal
