@@ -1,0 +1,10 @@
+# Cargo configuration for Tauri project
+# Ensures binaries use system libraries instead of snap libraries
+
+[target.x86_64-unknown-linux-gnu]
+# Set rpath to prioritize system libraries
+rustflags = ["-C", "link-arg=-Wl,-rpath,/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu"]
+
+[build]
+# Additional build configuration for better library resolution
+target-dir = "target"

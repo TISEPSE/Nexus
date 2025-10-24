@@ -1,0 +1,665 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gh-canvas-default: #0d1117;
+  --color-gh-canvas-subtle: #161b22;
+  --color-gh-border-default: #30363d;
+  --color-gh-border-muted: #21262d;
+  --color-gh-fg-default: #e6edf3;
+  --color-gh-fg-muted: #7d8590;
+  --color-gh-fg-subtle: #6e7681;
+  --color-gh-accent-emphasis: #1f6feb;
+  --color-gh-accent-fg: #58a6ff;
+  --color-gh-accent-subtle: #388bfd26;
+  --color-gh-success-emphasis: #238636;
+  --color-gh-danger-emphasis: #da3633;
+
+  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'Helvetica', 'Arial', sans-serif;
+}
+
+/* Light theme colors - WARM "Latte Mode" - Coffee & Cream inspired palette */
+body.light-theme {
+  /* Main backgrounds - Rich cream/latte tones */
+  --color-gh-canvas-default: #f5ebe0;  /* Warm latte cream - primary background */
+  --color-gh-canvas-subtle: #ede4d7;   /* Warm sand - cards & subtle elements */
+
+  /* Borders - Warm taupe with golden undertones */
+  --color-gh-border-default: #d4c4b0;  /* Warm beige border */
+  --color-gh-border-muted: #e2d6c8;    /* Lighter warm border */
+
+  /* Text colors - Warm espresso & cocoa tones */
+  --color-gh-fg-default: #3d2817;      /* Warm espresso brown - primary text */
+  --color-gh-fg-muted: #6b5744;        /* Warm cocoa - secondary text */
+  --color-gh-fg-subtle: #8b7355;       /* Warm taupe - subtle text */
+
+  /* Accent colors - Warm amber/honey instead of cold blue */
+  --color-gh-accent-emphasis: #d97706; /* Warm amber - primary accent */
+  --color-gh-accent-fg: #f59e0b;       /* Golden honey - interactive elements */
+  --color-gh-accent-subtle: #fef3c7;   /* Pale honey - subtle accents */
+}
+
+* {
+  border-color: var(--color-gh-border-default);
+}
+
+body {
+  background-color: var(--color-gh-canvas-default);
+  color: var(--color-gh-fg-default);
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+#root {
+  min-height: 100vh;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+@layer utilities {
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Minimalistic Theme Toggle Switch */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  outline: none;
+  transition: transform 0.1s ease;
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-gh-accent-fg);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
+.theme-toggle__track {
+  position: relative;
+  display: block;
+  width: 48px;
+  height: 24px;
+  background-color: var(--color-gh-border-muted);
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle[aria-checked="true"] .theme-toggle__track {
+  background-color: var(--color-gh-accent-emphasis);
+}
+
+.theme-toggle__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  border-radius: 999px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Warm cream thumb in light mode */
+body.light-theme .theme-toggle__thumb {
+  background-color: #fef8f0;
+  box-shadow: 0 1px 3px rgba(61, 40, 23, 0.15), 0 1px 2px rgba(61, 40, 23, 0.1);
+}
+
+.theme-toggle[aria-checked="true"] .theme-toggle__thumb {
+  transform: translateX(24px);
+}
+
+/* Hover effects */
+.theme-toggle:hover .theme-toggle__track {
+  background-color: var(--color-gh-border-default);
+}
+
+.theme-toggle[aria-checked="true"]:hover .theme-toggle__track {
+  background-color: var(--color-gh-accent-fg);
+}
+
+/* Smooth transitions for theme switching */
+.theme-toggle:hover .theme-toggle__thumb {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================
+   WARM LATTE CARD DESIGN - Light Mode Only
+   Coffee-shop aesthetic with premium paper-card feel
+   ======================================== */
+
+body.light-theme {
+  /* Custom card-specific color tokens for light mode */
+  --latte-card-bg: #faf6f1;           /* Warm cream paper - lighter than canvas */
+  --latte-card-border: #d9c7af;        /* Warm tan border - visible contrast */
+  --latte-card-shadow-sm: rgba(107, 87, 68, 0.08);   /* Soft warm shadow */
+  --latte-card-shadow-md: rgba(107, 87, 68, 0.12);   /* Medium warm shadow */
+  --latte-card-shadow-lg: rgba(107, 87, 68, 0.16);   /* Pronounced warm shadow */
+
+  /* Hover state - warmer, elevated paper */
+  --latte-card-hover-bg: #ffffff;      /* Pure white paper on hover */
+  --latte-card-hover-border: #c5a57a;  /* Golden tan border */
+  --latte-card-hover-shadow: rgba(217, 119, 6, 0.15); /* Warm amber glow */
+
+  /* Badge colors - enhanced for light mode */
+  --latte-badge-bg: #fde68a;           /* Warm golden badge */
+  --latte-badge-border: #d4a574;       /* Warm tan badge border */
+  --latte-badge-text: #92400e;         /* Deep amber-brown text */
+
+  /* Logo container */
+  --latte-logo-bg: rgba(255, 255, 255, 0.6);  /* Subtle white overlay */
+
+  /* Text enhancements for cards */
+  --latte-text-primary: #2d1810;       /* Darker espresso for card text */
+  --latte-text-secondary: #5c4a3a;     /* Rich cocoa for descriptions */
+}
+
+/* Card base styles - Light mode override */
+body.light-theme .group {
+  /* Target the card container */
+  background-color: var(--latte-card-bg) !important;
+  border-color: var(--latte-card-border) !important;
+
+  /* Warm paper-card shadow with subtle depth */
+  box-shadow:
+    0 1px 2px var(--latte-card-shadow-sm),
+    0 2px 4px var(--latte-card-shadow-sm),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5); /* Subtle inner highlight */
+}
+
+/* Card hover state - Elevated warm paper effect */
+body.light-theme .group:hover {
+  background-color: var(--latte-card-hover-bg) !important;
+  border-color: var(--latte-card-hover-border) !important;
+
+  /* Premium warm elevation with amber glow */
+  box-shadow:
+    0 4px 8px var(--latte-card-shadow-md),
+    0 6px 12px var(--latte-card-shadow-lg),
+    0 0 0 1px var(--latte-card-hover-border),
+    0 0 24px var(--latte-card-hover-shadow),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.8) !important; /* Brighter inner glow */
+}
+
+/* Card active/pressed state - Subtle depression */
+body.light-theme .group:active {
+  box-shadow:
+    0 1px 2px var(--latte-card-shadow-sm),
+    inset 0 1px 3px var(--latte-card-shadow-md) !important; /* Pressed-in effect */
+}
+
+/* Card focus state - Warm amber ring */
+body.light-theme .group:focus-visible {
+  outline: 2px solid var(--color-gh-accent-emphasis) !important;
+  outline-offset: 2px;
+  box-shadow:
+    0 4px 8px var(--latte-card-shadow-md),
+    0 0 0 4px rgba(217, 119, 6, 0.1) !important; /* Warm amber focus glow */
+}
+
+/* Logo styling enhancement */
+body.light-theme .group img {
+  /* Subtle warm background behind logos */
+  background: var(--latte-logo-bg);
+  padding: 4px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(107, 87, 68, 0.08);
+  transition: all 0.2s ease;
+}
+
+body.light-theme .group:hover img {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(107, 87, 68, 0.12);
+  transform: scale(1.05);
+}
+
+/* Card title text - Enhanced contrast */
+body.light-theme .group h3 {
+  color: var(--latte-text-primary) !important;
+  font-weight: 600; /* Slightly bolder for better hierarchy */
+}
+
+body.light-theme .group:hover h3 {
+  color: var(--color-gh-accent-emphasis) !important; /* Warm amber on hover */
+}
+
+/* Card description text - Improved readability */
+body.light-theme .group p {
+  color: var(--latte-text-secondary) !important;
+  font-weight: 450; /* Slightly heavier than default */
+}
+
+/* Category badges - Premium warm design */
+body.light-theme .group span[class*="bg-gh-accent-subtle"] {
+  background-color: var(--latte-badge-bg) !important;
+  border-color: var(--latte-badge-border) !important;
+  color: var(--latte-badge-text) !important;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+
+  /* Subtle warm shadow for depth */
+  box-shadow:
+    0 1px 2px rgba(146, 64, 14, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+body.light-theme .group:hover span[class*="bg-gh-accent-subtle"] {
+  background-color: #fbbf24 !important; /* Richer gold on hover */
+  border-color: #b8884d !important;
+  box-shadow:
+    0 2px 4px rgba(146, 64, 14, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Favorite button styling - Warm tones */
+body.light-theme .group button {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 3px var(--latte-card-shadow-sm);
+}
+
+body.light-theme .group button:hover {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 2px 4px var(--latte-card-shadow-md);
+}
+
+/* External link icon - Warm subtle appearance */
+body.light-theme .group svg[class*="text-gh-fg-muted"] {
+  color: var(--latte-text-secondary) !important;
+}
+
+body.light-theme .group:hover svg[class*="text-gh-fg-muted"] {
+  color: var(--color-gh-accent-emphasis) !important;
+}
+
+/* Extra +N category indicator */
+body.light-theme .group span[class*="text-gh-fg-subtle"] {
+  color: var(--latte-text-secondary) !important;
+  font-weight: 500;
+}
+
+/* Empty state card styling */
+body.light-theme div[class*="bg-gh-canvas-subtle"] {
+  background-color: var(--latte-card-bg) !important;
+  border-color: var(--latte-card-border) !important;
+  box-shadow:
+    0 2px 4px var(--latte-card-shadow-sm),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/* ========================================
+   UPDATE NOTIFICATION ANIMATION
+   Smooth slide-in from top-right
+   ======================================== */
+
+@keyframes slide-in-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+}
+
+.animate-slide-in-fade {
+  animation: slide-in-fade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ========================================
+   TEMPLATE HIGHLIGHTING SYSTEM
+   Animated gradient borders for template-matched tools
+   ======================================== */
+
+/* Dark Mode: Cool blue gradient with subtle pulse */
+@keyframes template-border-pulse-dark {
+  0%, 100% {
+    border-color: var(--color-gh-accent-fg);
+    box-shadow:
+      0 0 0 1px var(--color-gh-accent-fg),
+      0 0 12px rgba(88, 166, 255, 0.4),
+      0 0 24px rgba(88, 166, 255, 0.2);
+  }
+  50% {
+    border-color: var(--color-gh-accent-emphasis);
+    box-shadow:
+      0 0 0 1px var(--color-gh-accent-emphasis),
+      0 0 16px rgba(31, 111, 235, 0.5),
+      0 0 32px rgba(31, 111, 235, 0.25);
+  }
+}
+
+/* Light Mode: Warm amber gradient with subtle pulse */
+@keyframes template-border-pulse-light {
+  0%, 100% {
+    border-color: var(--color-gh-accent-emphasis);
+    box-shadow:
+      0 0 0 1px var(--color-gh-accent-emphasis),
+      0 0 12px rgba(217, 119, 6, 0.35),
+      0 0 24px rgba(217, 119, 6, 0.15),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+  }
+  50% {
+    border-color: var(--color-gh-accent-fg);
+    box-shadow:
+      0 0 0 1px var(--color-gh-accent-fg),
+      0 0 16px rgba(245, 158, 11, 0.45),
+      0 0 32px rgba(245, 158, 11, 0.2),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Base class for template-highlighted cards */
+.template-highlighted {
+  position: relative;
+  border-width: 2px !important;
+  animation-duration: 3s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  animation-iteration-count: infinite;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode animation */
+.template-highlighted {
+  animation-name: template-border-pulse-dark;
+}
+
+/* Light mode animation */
+body.light-theme .template-highlighted {
+  animation-name: template-border-pulse-light;
+  background-color: #ffffff !important;
+}
+
+/* Smooth transition when template changes */
+.template-transition {
+  transition:
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Respect user's motion preferences - remove animation, keep visual highlight */
+@media (prefers-reduced-motion: reduce) {
+  .template-highlighted {
+    animation: none !important;
+    border-width: 2px !important;
+  }
+
+  /* Static highlight - Dark mode */
+  .template-highlighted {
+    border-color: var(--color-gh-accent-fg) !important;
+    box-shadow:
+      0 0 0 1px var(--color-gh-accent-fg),
+      0 0 16px rgba(88, 166, 255, 0.4) !important;
+  }
+
+  /* Static highlight - Light mode */
+  body.light-theme .template-highlighted {
+    border-color: var(--color-gh-accent-emphasis) !important;
+    box-shadow:
+      0 0 0 1px var(--color-gh-accent-emphasis),
+      0 0 16px rgba(217, 119, 6, 0.4),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.9) !important;
+  }
+}
+
+/* ========================================
+   FLOATING ACTION BUTTON (FAB) ANIMATIONS
+   Mobile role selector button
+   ======================================== */
+
+/* FAB shadow with theme-specific glow */
+.shadow-fab {
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(31, 111, 235, 0.3);
+}
+
+body.light-theme .shadow-fab {
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    0 8px 16px rgba(217, 119, 6, 0.3);
+}
+
+/* FAB entry animation with elastic bounce */
+@keyframes fab-entry {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  60% {
+    transform: scale(1.05) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* FAB subtle pulse animation */
+@keyframes fab-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-fab-entry {
+  animation: fab-entry 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-fab-pulse {
+  animation: fab-pulse 2s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+/* ========================================
+   MODAL ANIMATIONS
+   Bottom sheet slide and backdrop fade
+   ======================================== */
+
+/* Modal slide up from bottom - Improved with smooth spring easing */
+@keyframes modal-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal slide down to bottom - Quick exit */
+@keyframes modal-slide-down {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Backdrop fade in - Synchronized with modal */
+@keyframes backdrop-fade-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Backdrop fade out - Quick exit */
+@keyframes backdrop-fade-out {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+.animate-modal-slide-up {
+  animation: modal-slide-up 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-modal-slide-down {
+  animation: modal-slide-down 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.animate-backdrop-in {
+  animation: backdrop-fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-backdrop-out {
+  animation: backdrop-fade-out 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* ========================================
+   STAGGERED GRID ITEM ANIMATIONS
+   Role cards fade in with delay
+   ======================================== */
+
+@keyframes item-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-item-stagger {
+  animation: item-fade-in 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+/* Stagger delay for each item (up to 11 roles) */
+.animate-item-stagger:nth-child(1) { animation-delay: 0ms; }
+.animate-item-stagger:nth-child(2) { animation-delay: 50ms; }
+.animate-item-stagger:nth-child(3) { animation-delay: 100ms; }
+.animate-item-stagger:nth-child(4) { animation-delay: 150ms; }
+.animate-item-stagger:nth-child(5) { animation-delay: 200ms; }
+.animate-item-stagger:nth-child(6) { animation-delay: 250ms; }
+.animate-item-stagger:nth-child(7) { animation-delay: 300ms; }
+.animate-item-stagger:nth-child(8) { animation-delay: 350ms; }
+.animate-item-stagger:nth-child(9) { animation-delay: 400ms; }
+.animate-item-stagger:nth-child(10) { animation-delay: 450ms; }
+.animate-item-stagger:nth-child(11) { animation-delay: 500ms; }
+
+/* ========================================
+   ACCESSIBILITY - REDUCED MOTION
+   Respect user preferences
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fab-entry {
+    animation: none;
+    opacity: 1;
+  }
+
+  .animate-fab-pulse {
+    animation: none;
+  }
+
+  .animate-modal-slide-up,
+  .animate-modal-slide-down {
+    animation: none;
+  }
+
+  .animate-item-stagger {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   CUSTOM SCROLLBAR
+   Subtle themed scrollbar for dropdowns
+   ======================================== */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gh-border-muted) var(--color-gh-canvas-default);
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-gh-canvas-default);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gh-border-muted);
+  border-radius: 4px;
+  border: 2px solid var(--color-gh-canvas-default);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gh-accent-muted);
+}
+
+/* Light theme scrollbar */
+body.light-theme ::-webkit-scrollbar-track {
+  background: var(--color-gh-canvas-subtle);
+}
+
+body.light-theme ::-webkit-scrollbar-thumb {
+  background: var(--color-gh-border-default);
+  border-color: var(--color-gh-canvas-subtle);
+}
+
+body.light-theme ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gh-accent-emphasis);
+}
