@@ -8,7 +8,6 @@ interface ManageCollectionsModalProps {
   collections: Collection[];
   onRenameCollection: (collectionId: string, newName: string) => void;
   onDeleteCollection: (collectionId: string) => void;
-  onCreateCollection: (name: string) => void;
 }
 
 export function ManageCollectionsModal({
@@ -16,8 +15,7 @@ export function ManageCollectionsModal({
   onClose,
   collections,
   onRenameCollection,
-  onDeleteCollection,
-  onCreateCollection
+  onDeleteCollection
 }: ManageCollectionsModalProps) {
   const { t } = useTranslation();
   const [editingId, setEditingId] = useState<string | null>(null);

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { AITool } from '../data/aiData';
 import { Collection } from '../types/collection';
 
@@ -22,7 +21,6 @@ export function AddToCollectionModal({
   onRemoveFromCollection,
   onCreateCollection
 }: AddToCollectionModalProps) {
-  const { t } = useTranslation();
   const [isCreating, setIsCreating] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');
   const [justAddedToId, setJustAddedToId] = useState<string | null>(null);

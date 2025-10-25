@@ -1206,19 +1206,6 @@ export const aiTools: AITool[] = [
     tags: ['email', 'google', 'mail']
   },
   {
-    id: 'google-drive',
-    name: 'Google Drive',
-    description: 'Cloud storage and file sharing',
-    url: 'https://drive.google.com',
-    category: ['Productivity', 'Storage'],
-    logo: [
-      'https://www.gstatic.com/images/branding/product/2x/drive_2020q4_48dp.png',
-      'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_96dp.png',
-    ],
-    domain: 'google.com',
-    tags: ['storage', 'cloud', 'google', 'files']
-  },
-  {
     id: 'google-docs',
     name: 'Google Docs',
     description: 'Online document editor',

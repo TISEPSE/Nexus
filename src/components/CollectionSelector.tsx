@@ -10,7 +10,6 @@ interface CollectionSelectorProps {
   selectedView: ViewType;
   onSelectCollection: (collectionId: string | null) => void;
   onSelectView: (view: ViewType) => void;
-  onOpenManage: () => void;
   onCreateCollection: (name: string) => void;
   onRenameCollection: (collectionId: string, newName: string) => void;
   onDeleteCollection: (collectionId: string) => void;
@@ -22,7 +21,6 @@ export function CollectionSelector({
   selectedView,
   onSelectCollection,
   onSelectView,
-  onOpenManage,
   onCreateCollection,
   onRenameCollection,
   onDeleteCollection

@@ -64,7 +64,6 @@ export function MyWorkspace({
     createCollection,
     renameCollection,
     deleteCollection,
-    addToolsToCollection,
     getCollection
   } = useCollections();
 
@@ -151,8 +150,6 @@ export function MyWorkspace({
     setSelectedCollectionId(collectionId);
   }, [setSelectedCollectionId]);
 
-  const selectedCollection = getCollection(selectedCollectionId);
-
   return (
     <>
       {/* Collection Selector */}
@@ -163,7 +160,6 @@ export function MyWorkspace({
           selectedView={view}
           onSelectCollection={handleSelectCollection}
           onSelectView={setView}
-          onOpenManage={() => setIsManageCollectionsOpen(true)}
           onCreateCollection={createCollection}
           onRenameCollection={renameCollection}
           onDeleteCollection={deleteCollection}
@@ -241,7 +237,6 @@ export function MyWorkspace({
         collections={collections}
         onRenameCollection={renameCollection}
         onDeleteCollection={deleteCollection}
-        onCreateCollection={createCollection}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AITool } from '../data/aiData';
 import { buildLogoSources, extractDomain } from '../utils/logoUtils';
@@ -19,7 +19,6 @@ interface AICardProps {
   onToggleSelect?: (toolId: string) => void;
   collections?: Collection[];
   onOpenCollectionModal?: (tool: AITool) => void;
-  showCollectionIndicator?: boolean;
 }
 
 const AICardComponent: React.FC<AICardProps> = ({
@@ -35,8 +34,7 @@ const AICardComponent: React.FC<AICardProps> = ({
   isSelected = false,
   onToggleSelect,
   collections = [],
-  onOpenCollectionModal,
-  showCollectionIndicator = false
+  onOpenCollectionModal
 }) => {
   const { t, i18n } = useTranslation();
 

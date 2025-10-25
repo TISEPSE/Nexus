@@ -1,6 +1,5 @@
 import { SearchBar } from './SearchBar';
 import { CategoryFilterButton } from './CategoryFilterButton';
-import { TemplateSelector } from './TemplateSelector';
 import { LanguageToggle } from './LanguageToggle';
 import { ThemeToggle } from './ThemeToggle';
 import { HomeButton } from './HomeButton';
