@@ -327,7 +327,7 @@ const AICardComponent: React.FC<AICardProps> = ({
           className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10
                      p-1.5 rounded
                      bg-gh-accent-emphasis hover:bg-gh-accent-fg active:bg-gh-accent-emphasis
-                     opacity-0 sm:opacity-0 sm:group-hover:opacity-100
+                     opacity-100 sm:opacity-0 sm:group-hover:opacity-100
                      transition-all duration-200 ease-out
                      hover:scale-105 active:scale-95
                      focus:outline-none focus:ring-2 focus:ring-gh-accent-fg focus:ring-offset-2 focus:ring-offset-gh-canvas-subtle
