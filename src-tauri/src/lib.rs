@@ -278,7 +278,7 @@ fn launch_app_linux(app_path: String) -> Result<bool, String> {
             .map_err(|e| format!("Failed to launch flatpak app: {}", e));
     }
 
-    // Regular executable
+    // Regular executable 
     Command::new(&app_path)
         .spawn()
         .map(|_| true)
