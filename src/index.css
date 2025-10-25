@@ -707,3 +707,31 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
 .animate-checkmark-appear {
   animation: checkmark-appear 300ms ease-out;
 }
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms ease-out;
+}
+
+@keyframes menu-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-menu-appear {
+  animation: menu-appear 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}

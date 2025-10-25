@@ -317,41 +317,44 @@ const AICardComponent: React.FC<AICardProps> = ({
         </button>
       )}
 
-      {/* Add to Collection button - Bottom left */}
+      {/* Add to Collection button - Bottom right (next to edit/delete if present) */}
       {!isMultiSelectMode && collections.length > 0 && onOpenCollectionModal && (
         <button
           onClick={(e) => {
             e.stopPropagation();
             onOpenCollectionModal(tool);
           }}
-          className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10
-                     p-1.5 rounded
-                     bg-gh-accent-emphasis hover:bg-gh-accent-fg active:bg-gh-accent-emphasis
-                     opacity-100 sm:opacity-0 sm:group-hover:opacity-100
+          className={`absolute z-10 p-1 rounded
+                     hover:bg-gh-canvas-default/50 active:bg-gh-canvas-default/70
                      transition-all duration-200 ease-out
-                     hover:scale-105 active:scale-95
                      focus:outline-none focus:ring-2 focus:ring-gh-accent-fg focus:ring-offset-2 focus:ring-offset-gh-canvas-subtle
-                     touch-manipulation"
+                     touch-manipulation
+                     ${showEditDelete ? 'bottom-1 left-1 sm:bottom-1.5 sm:left-1.5' : 'bottom-1 right-1 sm:bottom-1.5 sm:right-1.5'}`}
           aria-label="Ajouter à une collection"
+          title="Ajouter à une collection"
         >
-          {/* Folder Plus Icon */}
+          {/* Bookmark Plus Icon */}
           <svg
-            className="w-4 h-4 text-white"
-            fill="none"
-            stroke="currentColor"
+            className={`w-3.5 h-3.5 transition-colors ${
+              collectionCount > 0
+                ? 'fill-gh-accent-fg stroke-gh-accent-fg'
+                : 'fill-none stroke-gh-fg-muted hover:stroke-gh-accent-fg'
+            }`}
             viewBox="0 0 24 24"
-            strokeWidth={2}
+            strokeWidth={1.5}
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
             />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 11v4m-2-2h4"
-            />
+            {collectionCount === 0 && (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 8v5m-2.5-2.5h5"
+              />
+            )}
           </svg>
         </button>
       )}

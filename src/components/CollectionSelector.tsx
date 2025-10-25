@@ -10,7 +10,7 @@ interface CollectionSelectorProps {
   selectedView: ViewType;
   onSelectCollection: (collectionId: string | null) => void;
   onSelectView: (view: ViewType) => void;
-  onCreateCollection: (name: string) => void;
+  onCreateCollection: (name: string) => string;
   onRenameCollection: (collectionId: string, newName: string) => void;
   onDeleteCollection: (collectionId: string) => void;
 }
@@ -46,6 +46,8 @@ export function CollectionSelector({
         setIsOpen(false);
         setIsCreating(false);
         setMenuOpenId(null);
+        setEditingId(null);
+        setEditingName('');
       }
     };
 
@@ -61,15 +63,29 @@ export function CollectionSelector({
   // Close menu when collection changes
   useEffect(() => {
     setMenuOpenId(null);
+    setEditingId(null);
+    setEditingName('');
   }, [selectedCollectionId]);
+
+  // Cancel editing when dropdown closes
+  useEffect(() => {
+    if (!isOpen) {
+      setEditingId(null);
+      setEditingName('');
+    }
+  }, [isOpen]);
 
   const handleCreateCollection = (e: React.FormEvent) => {
     e.preventDefault();
     if (newCollectionName.trim()) {
-      onCreateCollection(newCollectionName.trim());
+      const newId = onCreateCollection(newCollectionName.trim());
       setNewCollectionName('');
       setIsCreating(false);
       setIsOpen(false);
+      // Auto-select the newly created collection
+      if (newId) {
+        onSelectCollection(newId);
+      }
     }
   };
 
@@ -285,7 +301,7 @@ export function CollectionSelector({
                           cancelEdit();
                         }
                       }}
-                      className="flex-1 px-2 py-1 bg-gh-canvas-default border border-gh-accent-emphasis rounded text-gh-fg-default text-sm focus:outline-none"
+                      className="flex-1 px-2 py-1 bg-gh-canvas-default border border-gh-accent-emphasis rounded text-gh-fg-default text-sm focus:outline-none max-w-[158px]"
                       autoFocus
                       onClick={(e) => e.stopPropagation()}
                     />
@@ -308,9 +324,17 @@ export function CollectionSelector({
                         e.stopPropagation();
                         const button = e.currentTarget;
                         const rect = button.getBoundingClientRect();
+                        const menuHeight = 80; // Approximate height of 2-item menu
+                        const viewportHeight = window.innerHeight;
+                        const spaceBelow = viewportHeight - rect.bottom;
+                        const spaceAbove = rect.top;
+
+                        // Decide if menu should appear above or below
+                        const shouldFlipUp = spaceBelow < menuHeight && spaceAbove > spaceBelow;
+
                         setMenuPosition({
-                          top: rect.bottom + 4,
-                          left: rect.right - 176
+                          top: shouldFlipUp ? rect.top - menuHeight - 4 : rect.bottom + 4,
+                          left: rect.right - 128 // 128px = w-32, right-align menu with button
                         });
                         setMenuOpenId(menuOpenId === collection.id ? null : collection.id);
                       }}
@@ -327,25 +351,6 @@ export function CollectionSelector({
             </div>
           )}
 
-          {/* Empty State */}
-          {collections.length === 0 && !isCreating && (
-            <div className="px-4 py-6 text-center">
-              <svg
-                className="w-12 h-12 mx-auto text-gh-fg-muted mb-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                />
-              </svg>
-              <p className="text-gh-fg-muted mb-4 text-sm">{t('collections.noCollections')}</p>
-            </div>
-          )}
 
           {/* Create New Collection - Inline Form */}
           {isCreating ? (
@@ -396,7 +401,7 @@ export function CollectionSelector({
       {/* Context Menu - Rendered outside main dropdown */}
       {menuOpenId && menuPosition && (
         <div
-          className="fixed w-32 bg-gh-canvas-default border border-gh-border-default rounded-md shadow-xl z-[9999]"
+          className="fixed w-32 bg-gh-canvas-default border border-gh-border-default rounded-md shadow-xl z-[9999] animate-menu-appear overflow-hidden"
           style={{
             top: `${menuPosition.top}px`,
             left: `${menuPosition.left}px`
@@ -410,9 +415,9 @@ export function CollectionSelector({
                 startEditing(collection);
               }
             }}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gh-fg-default hover:bg-gh-accent-subtle/30 transition-colors text-left rounded-t-md"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gh-fg-default hover:bg-gh-accent-emphasis/10 hover:text-gh-accent-fg transition-colors text-left"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -421,15 +426,16 @@ export function CollectionSelector({
             </svg>
             <span>Renommer</span>
           </button>
+          <div className="h-px bg-gh-border-default"></div>
           <button
             onClick={(e) => {
               e.stopPropagation();
               setDeletingId(menuOpenId);
               setMenuOpenId(null);
             }}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-500/10 transition-colors text-left rounded-b-md"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-500/10 transition-colors text-left"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

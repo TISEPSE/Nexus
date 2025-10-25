@@ -37,7 +37,7 @@ function App({
   const [deletingTool, setDeletingTool] = useState<AITool | null>(null);
   const [collectionModalTool, setCollectionModalTool] = useState<AITool | null>(null);
 
-  const { collections, addToolsToCollection, removeToolsFromCollection, createCollection } = useCollections();
+  const { collections, addToolsToCollection, removeToolsFromCollection, createCollection, setSelectedCollectionId } = useCollections();
 
   // Convert favorites array to Set for O(1) lookup performance
   const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
@@ -164,6 +164,7 @@ function App({
         onAddToCollection={(collectionId, toolId) => addToolsToCollection(collectionId, [toolId])}
         onRemoveFromCollection={(collectionId, toolId) => removeToolsFromCollection(collectionId, [toolId])}
         onCreateCollection={createCollection}
+        onSelectCollection={setSelectedCollectionId}
       />
     </>
   );
