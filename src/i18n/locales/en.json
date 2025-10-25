@@ -40,7 +40,31 @@
     "Media": "Media",
     "Crypto": "Crypto",
     "Finance": "Finance",
-    "Trading": "Trading"
+    "Trading": "Trading",
+    "Marketing": "Marketing",
+    "SEO": "SEO",
+    "Analytics": "Analytics",
+    "Social Media": "Social Media",
+    "Email": "Email",
+    "CRM": "CRM",
+    "Project Management": "Project Management",
+    "Gaming": "Gaming",
+    "Music": "Music",
+    "Photography": "Photography",
+    "Presentation": "Presentation",
+    "Business": "Business",
+    "HR": "HR",
+    "Legal": "Legal",
+    "Healthcare": "Healthcare",
+    "E-commerce": "E-commerce",
+    "No-Code": "No-Code",
+    "Low-Code": "Low-Code",
+    "Database": "Database",
+    "Blockchain": "Blockchain",
+    "IoT": "IoT",
+    "AR/VR": "AR/VR",
+    "Machine Learning": "Machine Learning",
+    "Search": "Search"
   },
   "search": {
     "placeholder": "Search tools..."
@@ -171,6 +195,9 @@
     "gemini": "Google's multimodal AI assistant",
     "perplexity": "AI search with sources",
     "poe": "Access to multiple AI models",
+    "lobechat": "Open-source AI chat framework with plugin support",
+    "lobe-icons": "Popular brand SVG logo library with 5000+ icons",
+    "dashboard-icons": "Free icon library for dashboards and web applications",
     "vscode": "Free code editor by Microsoft",
     "github-copilot": "AI pair programmer",
     "cursor": "AI code editor",
@@ -250,5 +277,76 @@
     "nanonets": "OCR and computer vision APIs",
     "chooch": "Computer vision AI platform",
     "v7": "Training data platform for computer vision"
+  },
+  "collections": {
+    "title": "Collections",
+    "all": "All Collections",
+    "allDescription": "View all tools from all collections",
+    "empty": "No collections yet",
+    "emptyDescription": "Create your first collection to organize your tools",
+    "emptyCollection": "This collection is empty",
+    "emptyCollectionDescription": "Add tools to this collection to get started",
+    "noCollections": "You don't have any collections yet",
+    "noCollectionsDescription": "Collections help you organize your tools into groups",
+
+    "create": "Create Collection",
+    "createNew": "Create New Collection",
+    "createButton": "Create",
+    "createSuccess": "Collection created successfully",
+    "createError": "Failed to create collection",
+
+    "rename": "Rename Collection",
+    "renameButton": "Rename",
+    "renameSuccess": "Collection renamed successfully",
+    "renameError": "Failed to rename collection",
+
+    "delete": "Delete Collection",
+    "deleteButton": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this collection?",
+    "deleteWarning": "This collection contains {{count}} tool",
+    "deleteWarning_plural": "This collection contains {{count}} tools",
+    "deleteNote": "The tools will not be deleted.",
+    "deleteSuccess": "Collection deleted successfully",
+    "deleteError": "Failed to delete collection",
+
+    "manage": "Manage Collections",
+    "manageButton": "Manage",
+
+    "addTools": "Add Tools",
+    "addToolsButton": "Add Tools",
+    "addToolsTo": "Add to {{name}}",
+    "addToolsSuccess": "{{count}} tool added successfully",
+    "addToolsSuccess_plural": "{{count}} tools added successfully",
+    "addToolsError": "Failed to add tools to collection",
+
+    "removeTools": "Remove from Collection",
+    "removeToolsSuccess": "Tool removed successfully",
+    "removeToolsError": "Failed to remove tool from collection",
+
+    "multiSelectMode": "Select tools to add",
+    "multiSelectCancel": "Cancel",
+    "multiSelectAdd": "Add ({{count}})",
+    "multiSelectSelectAll": "Select All",
+    "multiSelectDeselectAll": "Deselect All",
+    "multiSelectSelected": "{{count}} selected",
+
+    "name": "Collection Name",
+    "namePlaceholder": "Enter collection name",
+    "nameRequired": "Name is required",
+    "nameTaken": "A collection with this name already exists",
+
+    "description": "Description",
+    "descriptionPlaceholder": "Optional description",
+
+    "toolCount": "{{count}} tool",
+    "toolCount_plural": "{{count}} tools",
+
+    "openSelector": "Open collections menu",
+    "selectCollection": "Select a collection",
+
+    "sortBy": "Sort by",
+    "sortName": "Name",
+    "sortDate": "Date created",
+    "sortSize": "Number of tools"
   }
 }

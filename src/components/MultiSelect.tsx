@@ -8,6 +8,7 @@ interface MultiSelectProps {
   placeholder?: string;
   required?: boolean;
   helperText?: string;
+  displayTransform?: (value: string) => string;
 }
 
 /**
@@ -29,6 +30,7 @@ export function MultiSelect({
   onChange,
   required = false,
   helperText,
+  displayTransform,
 }: MultiSelectProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -129,7 +131,7 @@ export function MultiSelect({
                   <span className={`text-sm font-medium truncate ${
                     isSelected ? 'text-gh-accent-fg' : 'text-gh-fg-default'
                   }`}>
-                    {option}
+                    {displayTransform ? displayTransform(option) : option}
                   </span>
                 </button>
               );
@@ -151,12 +153,12 @@ export function MultiSelect({
               key={item}
               className="inline-flex items-center gap-1.5 px-2 py-1 bg-gh-accent-subtle border border-gh-accent-emphasis/30 rounded text-xs font-medium text-gh-accent-fg"
             >
-              {item}
+              {displayTransform ? displayTransform(item) : item}
               <button
                 type="button"
                 onClick={() => toggleOption(item)}
                 className="hover:bg-gh-accent-emphasis/20 rounded-full p-0.5 transition-colors focus:outline-none focus:ring-2 focus:ring-gh-accent-fg min-w-[16px] min-h-[16px]"
-                aria-label={`Remove ${item}`}
+                aria-label={`Remove ${displayTransform ? displayTransform(item) : item}`}
               >
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

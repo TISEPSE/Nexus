@@ -5,9 +5,8 @@ import { LanguageToggle } from './LanguageToggle';
 import { ThemeToggle } from './ThemeToggle';
 import { HomeButton } from './HomeButton';
 import { MyWorkspaceButton } from './MyWorkspaceButton';
-import { GoogleDriveButton } from './GoogleDriveButton';
 
-type ViewMode = 'dashboard' | 'workspace' | 'drive';
+type ViewMode = 'dashboard' | 'workspace';
 
 interface UnifiedHeaderProps {
   // View state
@@ -19,14 +18,10 @@ interface UnifiedHeaderProps {
   onSearchChange: (query: string) => void;
   searchPlaceholder?: string;
 
-  // Category filter (dashboard only)
+  // Category filter
   categories?: string[];
   selectedCategory?: string;
   onCategoryChange?: (category: string) => void;
-
-  // Template selector (dashboard only)
-  selectedTemplate?: string;
-  onTemplateChange?: (template: string) => void;
 
   // Theme
   isDarkTheme: boolean;
@@ -35,9 +30,6 @@ interface UnifiedHeaderProps {
   // Display info
   title: string;
   subtitle: string;
-
-  // Google Drive
-  onGoogleDriveClick?: () => void;
 }
 
 export function UnifiedHeader({
@@ -48,13 +40,10 @@ export function UnifiedHeader({
   categories,
   selectedCategory,
   onCategoryChange,
-  selectedTemplate,
-  onTemplateChange,
   isDarkTheme,
   onToggleTheme,
   title,
   subtitle,
-  onGoogleDriveClick,
 }: UnifiedHeaderProps) {
   return (
     <header className="mb-4 border-b border-gh-border-default pb-3">
@@ -95,12 +84,6 @@ export function UnifiedHeader({
 
               {/* Filter Group */}
               <div className="flex items-center gap-1.5">
-                {onTemplateChange && (
-                  <TemplateSelector
-                    selectedTemplate={selectedTemplate || 'all'}
-                    onTemplateChange={onTemplateChange}
-                  />
-                )}
                 {categories && onCategoryChange && (
                   <CategoryFilterButton
                     categories={categories}
@@ -113,11 +96,8 @@ export function UnifiedHeader({
               {/* Divider */}
               <div className="w-px h-6 bg-gh-border-default mx-1" />
 
-              {/* Settings Group - Google Drive + Language + Theme */}
+              {/* Settings Group - Language + Theme */}
               <div className="flex items-center gap-1.5">
-                {onGoogleDriveClick && (
-                  <GoogleDriveButton onClick={onGoogleDriveClick} />
-                )}
                 <LanguageToggle />
                 <ThemeToggle isDark={isDarkTheme} onToggle={onToggleTheme} />
               </div>

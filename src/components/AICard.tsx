@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AITool } from '../data/aiData';
 import { buildLogoSources, extractDomain } from '../utils/logoUtils';
 import { launchTool } from '../services/appLauncher';
+import { Collection } from '../types/collection';
 
 interface AICardProps {
   tool: AITool;
@@ -13,10 +14,36 @@ interface AICardProps {
   onEdit?: () => void;
   onDelete?: () => void;
   matchesTemplate?: boolean;
+  isMultiSelectMode?: boolean;
+  isSelected?: boolean;
+  onToggleSelect?: (toolId: string) => void;
+  collections?: Collection[];
+  onOpenCollectionModal?: (tool: AITool) => void;
+  showCollectionIndicator?: boolean;
 }
 
-const AICardComponent: React.FC<AICardProps> = ({ tool, isFavorite, onToggleFavorite, isCustom = false, showEditDelete = false, onEdit, onDelete, matchesTemplate = false }) => {
+const AICardComponent: React.FC<AICardProps> = ({
+  tool,
+  isFavorite,
+  onToggleFavorite,
+  isCustom = false,
+  showEditDelete = false,
+  onEdit,
+  onDelete,
+  matchesTemplate = false,
+  isMultiSelectMode = false,
+  isSelected = false,
+  onToggleSelect,
+  collections = [],
+  onOpenCollectionModal,
+  showCollectionIndicator = false
+}) => {
   const { t, i18n } = useTranslation();
+
+  // Count how many collections contain this tool
+  const collectionCount = useMemo(() => {
+    return collections.filter(collection => collection.toolIds.includes(tool.id)).length;
+  }, [collections, tool.id]);
 
   // Build complete list of logo sources (primary + fallbacks)
   const logoSources = React.useMemo(() => {
@@ -58,6 +85,12 @@ const AICardComponent: React.FC<AICardProps> = ({ tool, isFavorite, onToggleFavo
   }, [currentLogoIndex, logoSources.length]);
 
   const handleClick = async () => {
+    // In multi-select mode, clicking toggles selection instead of launching
+    if (isMultiSelectMode && onToggleSelect) {
+      onToggleSelect(tool.id);
+      return;
+    }
+
     try {
       console.log('Launching tool:', tool.name, 'with ID:', tool.id);
       await launchTool(tool.id, tool.url);
@@ -142,35 +175,81 @@ const AICardComponent: React.FC<AICardProps> = ({ tool, isFavorite, onToggleFavo
         </div>
       </div>
 
-      {/* Favorite button - Top left, larger touch target on mobile */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggleFavorite(tool.id);
-        }}
-        className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 p-1.5 sm:p-1 rounded hover:bg-gh-canvas-default active:bg-gh-canvas-default transition-colors touch-manipulation"
-        aria-label={isFavorite ? t('card.removeFromFavorites') : t('card.addToFavorites')}
-      >
-        <svg
-          className={`w-4 h-4 sm:w-4 sm:h-4 transition-colors ${
-            isFavorite
-              ? 'fill-yellow-400 stroke-yellow-400'
-              : 'fill-none stroke-gh-fg-muted hover:stroke-yellow-400'
-          }`}
-          viewBox="0 0 24 24"
-          strokeWidth={2}
+      {/* Multi-select checkbox - Top left (shows instead of favorite in multi-select mode) */}
+      {isMultiSelectMode ? (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSelect?.(tool.id);
+          }}
+          className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-20 p-1 touch-manipulation"
+          aria-label={isSelected ? 'Deselect tool' : 'Select tool'}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-          />
-        </svg>
-      </button>
+          <div
+            className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
+              isSelected
+                ? 'bg-gh-accent-emphasis border-gh-accent-emphasis'
+                : 'bg-gh-canvas-default border-gh-border-default hover:border-gh-accent-fg'
+            }`}
+          >
+            {isSelected && (
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            )}
+          </div>
+        </button>
+      ) : (
+        /* Favorite button - Top left, larger touch target on mobile */
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite(tool.id);
+          }}
+          className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 p-1.5 sm:p-1 rounded hover:bg-gh-canvas-default active:bg-gh-canvas-default transition-colors touch-manipulation"
+          aria-label={isFavorite ? t('card.removeFromFavorites') : t('card.addToFavorites')}
+        >
+          <svg
+            className={`w-4 h-4 sm:w-4 sm:h-4 transition-colors ${
+              isFavorite
+                ? 'fill-yellow-400 stroke-yellow-400'
+                : 'fill-none stroke-gh-fg-muted hover:stroke-yellow-400'
+            }`}
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+            />
+          </svg>
+        </button>
+      )}
 
 
-      {/* External link icon - Top right, hidden on very small mobile and when edit button is shown */}
-      {!showEditDelete && (
+      {/* Collection indicator - Top right, when tool is in collection */}
+      {!showEditDelete && collectionCount > 0 && (
+        <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded bg-gh-accent-subtle/90 border border-gh-accent-emphasis/50 backdrop-blur-sm">
+          <svg
+            className="w-3 h-3 text-gh-accent-fg"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+            />
+          </svg>
+          <span className="text-xs font-medium text-gh-accent-fg">{collectionCount}</span>
+        </div>
+      )}
+
+      {/* External link icon - Top right, hidden on very small mobile and when edit button or collection indicator is shown */}
+      {!showEditDelete && collectionCount === 0 && (
         <div className="hidden sm:block absolute top-2 right-2 opacity-0 group-hover:opacity-60 transition-opacity">
           <svg
             className="w-3.5 h-3.5 text-gh-fg-muted"
@@ -235,6 +314,45 @@ const AICardComponent: React.FC<AICardProps> = ({ tool, isFavorite, onToggleFavo
               strokeLinecap="round"
               strokeLinejoin="round"
               d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            />
+          </svg>
+        </button>
+      )}
+
+      {/* Add to Collection button - Bottom left */}
+      {!isMultiSelectMode && collections.length > 0 && onOpenCollectionModal && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenCollectionModal(tool);
+          }}
+          className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10
+                     p-1.5 rounded
+                     bg-gh-accent-emphasis hover:bg-gh-accent-fg active:bg-gh-accent-emphasis
+                     opacity-0 sm:opacity-0 sm:group-hover:opacity-100
+                     transition-all duration-200 ease-out
+                     hover:scale-105 active:scale-95
+                     focus:outline-none focus:ring-2 focus:ring-gh-accent-fg focus:ring-offset-2 focus:ring-offset-gh-canvas-subtle
+                     touch-manipulation"
+          aria-label="Ajouter à une collection"
+        >
+          {/* Folder Plus Icon */}
+          <svg
+            className="w-4 h-4 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 11v4m-2-2h4"
             />
           </svg>
         </button>

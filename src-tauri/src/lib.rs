@@ -1,9 +1,6 @@
 use std::process::Command;
 use std::path::Path;
 
-mod google_drive;
-use google_drive::OAuthState;
-
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -295,14 +292,10 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_process::init())
-        .manage(OAuthState::new())
         .invoke_handler(tauri::generate_handler![
             greet,
             find_app,
-            launch_app,
-            google_drive::google_drive_authenticate,
-            google_drive::google_drive_list_files,
-            google_drive::google_drive_logout
+            launch_app
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,11 +1,16 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AICard } from '../components/AICard';
 import { AddToolCard } from '../components/AddToolCard';
 import { AddToolModal } from '../components/AddToolModal';
 import { DeleteConfirmModal } from '../components/DeleteConfirmModal';
+import { CollectionSelector } from '../components/CollectionSelector';
+import { ManageCollectionsModal } from '../components/ManageCollectionsModal';
+import { useCollections } from '../hooks/useCollections';
 import { AITool, aiTools } from '../data/aiData';
 import { categories } from '../data/aiData';
+
+const WORKSPACE_STATE_KEY = 'nexus_workspace_state';
 
 interface MyWorkspaceProps {
   favorites: string[];
@@ -32,10 +37,38 @@ export function MyWorkspace({
   onDeleteTool,
 }: MyWorkspaceProps) {
   const { t } = useTranslation();
-  const [view, setView] = useState<ViewType>('all');
+
+  // Load saved state from localStorage
+  const [view, setView] = useState<ViewType>(() => {
+    try {
+      const saved = localStorage.getItem(WORKSPACE_STATE_KEY);
+      if (saved) {
+        const { view } = JSON.parse(saved);
+        return view || 'all';
+      }
+    } catch (error) {
+      console.error('Failed to load workspace state:', error);
+    }
+    return 'all';
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTool, setEditingTool] = useState<AITool | null>(null);
   const [deletingTool, setDeletingTool] = useState<AITool | null>(null);
+
+  // Collections state
+  const {
+    collections,
+    selectedCollectionId,
+    setSelectedCollectionId,
+    createCollection,
+    renameCollection,
+    deleteCollection,
+    addToolsToCollection,
+    getCollection
+  } = useCollections();
+
+  const [isManageCollectionsOpen, setIsManageCollectionsOpen] = useState(false);
 
   // Available categories
   const availableCategories = useMemo(() => {
@@ -51,16 +84,23 @@ export function MyWorkspace({
   const workspaceTools = useMemo(() => {
     let tools: AITool[] = [];
 
-    // Filter by view type
-    if (view === 'all') {
-      const favTools = allTools.filter((tool) => favorites.includes(tool.id));
-      // Add custom tools that are not already in favorites to avoid duplicates
-      const customToolsNotInFav = customTools.filter((tool) => !favorites.includes(tool.id));
-      tools = [...favTools, ...customToolsNotInFav];
-    } else if (view === 'favorites') {
-      tools = allTools.filter((tool) => favorites.includes(tool.id));
+    // If a collection is selected, get tools from ALL available tools
+    if (selectedCollectionId) {
+      const collection = getCollection(selectedCollectionId);
+      if (collection) {
+        tools = allTools.filter(tool => collection.toolIds.includes(tool.id));
+      }
     } else {
-      tools = customTools;
+      // Filter by view type only when no collection is selected
+      if (view === 'all') {
+        const favTools = allTools.filter((tool) => favorites.includes(tool.id));
+        const customToolsNotInFav = customTools.filter((tool) => !favorites.includes(tool.id));
+        tools = [...favTools, ...customToolsNotInFav];
+      } else if (view === 'favorites') {
+        tools = allTools.filter((tool) => favorites.includes(tool.id));
+      } else {
+        tools = customTools;
+      }
     }
 
     // Apply search filter
@@ -79,7 +119,7 @@ export function MyWorkspace({
     }
 
     return tools;
-  }, [allTools, favorites, customTools, view, searchQuery, selectedCategory]);
+  }, [allTools, favorites, customTools, view, searchQuery, selectedCategory, selectedCollectionId, getCollection]);
 
   // Convert favorites to Set for O(1) lookup
   const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
@@ -98,37 +138,42 @@ export function MyWorkspace({
     setEditingTool(null);
   };
 
+  // Save workspace state to localStorage when view changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(WORKSPACE_STATE_KEY, JSON.stringify({ view }));
+    } catch (error) {
+      console.error('Failed to save workspace state:', error);
+    }
+  }, [view]);
+
+  const handleSelectCollection = useCallback((collectionId: string | null) => {
+    setSelectedCollectionId(collectionId);
+  }, [setSelectedCollectionId]);
+
+  const selectedCollection = getCollection(selectedCollectionId);
+
   return (
     <>
-      {/* Quick Filter Tabs - Full width, aligned left */}
-      <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-        <FilterTab
-          active={view === 'all'}
-          onClick={() => setView('all')}
-          count={favorites.length + customTools.length}
-        >
-          {t('workspace.tabs.all')}
-        </FilterTab>
-        <FilterTab
-          active={view === 'favorites'}
-          onClick={() => setView('favorites')}
-          count={favorites.length}
-        >
-          {t('workspace.tabs.favorites')}
-        </FilterTab>
-        <FilterTab
-          active={view === 'custom'}
-          onClick={() => setView('custom')}
-          count={customTools.length}
-        >
-          {t('workspace.tabs.custom')}
-        </FilterTab>
+      {/* Collection Selector */}
+      <div className="flex items-center gap-2 mb-4">
+        <CollectionSelector
+          collections={collections}
+          selectedCollectionId={selectedCollectionId}
+          selectedView={view}
+          onSelectCollection={handleSelectCollection}
+          onSelectView={setView}
+          onOpenManage={() => setIsManageCollectionsOpen(true)}
+          onCreateCollection={createCollection}
+          onRenameCollection={renameCollection}
+          onDeleteCollection={deleteCollection}
+        />
       </div>
 
       {/* Grid View - Aligned with filter tabs */}
       <div className="grid grid-cols-3 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-3 md:gap-3">
-        {/* Add Tool Card - Only show in custom view or all view */}
-        {(view === 'all' || view === 'custom') && (
+        {/* Add Tool Card - Only show in "all" view and not when a collection is selected */}
+        {view === 'all' && !selectedCollectionId && (
           <AddToolCard onClick={() => setIsModalOpen(true)} />
         )}
 
@@ -188,40 +233,17 @@ export function MyWorkspace({
         }}
         onCancel={() => setDeletingTool(null)}
       />
+
+      {/* Manage Collections Modal */}
+      <ManageCollectionsModal
+        isOpen={isManageCollectionsOpen}
+        onClose={() => setIsManageCollectionsOpen(false)}
+        collections={collections}
+        onRenameCollection={renameCollection}
+        onDeleteCollection={deleteCollection}
+        onCreateCollection={createCollection}
+      />
     </>
   );
 }
 
-// Filter Tab Component
-interface FilterTabProps {
-  active: boolean;
-  onClick: () => void;
-  count: number;
-  children: React.ReactNode;
-}
-
-function FilterTab({ active, onClick, count, children }: FilterTabProps) {
-  return (
-    <button
-      onClick={onClick}
-      className={`
-        flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-colors whitespace-nowrap
-        ${
-          active
-            ? 'bg-gh-accent-emphasis text-white'
-            : 'bg-gh-canvas-subtle text-gh-fg-muted hover:bg-gh-canvas-inset hover:text-gh-fg-default'
-        }
-      `}
-    >
-      {children}
-      <span
-        className={`
-        text-xs px-1.5 py-0.5 rounded-full
-        ${active ? 'bg-white/20' : 'bg-gh-canvas-inset'}
-      `}
-      >
-        {count}
-      </span>
-    </button>
-  );
-}

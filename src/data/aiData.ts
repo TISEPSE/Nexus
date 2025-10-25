@@ -84,6 +84,42 @@ export const aiTools: AITool[] = [
     domain: 'poe.com',
     tags: ['multi-model', 'chat', 'platform']
   },
+  {
+    id: 'lobechat',
+    name: 'LobeChat',
+    description: 'Open-source AI chat framework with plugin support',
+    url: 'https://lobechat.com/chat',
+    category: ['AI', 'Chat', 'Multi-tool', 'No-Code'],
+    logo: [
+      'https://lobechat.com/icons/icon-512x512.png',
+      'https://lobechat.com/favicon.ico',
+    ],
+    domain: 'lobechat.com',
+    tags: ['chat', 'open-source', 'multi-model', 'plugins', 'framework']
+  },
+  {
+    id: 'lobe-icons',
+    name: 'Lobe Icons',
+    description: 'Popular brand SVG logo library with 5000+ icons',
+    url: 'https://icons.lobehub.com/',
+    category: ['Design', 'Productivity', 'API', 'No-Code'],
+    logo: [
+      'https://lobechat.com/icons/icon-512x512.png',
+      'https://lobechat.com/favicon.ico',
+    ],
+    domain: 'icons.lobehub.com',
+    tags: ['icons', 'logos', 'svg', 'brand', 'library', 'design', 'resources']
+  },
+  {
+    id: 'dashboard-icons',
+    name: 'Dashboard Icons',
+    description: 'Free icon library for dashboards and web applications',
+    url: 'https://dashboardicons.com/',
+    category: ['Design', 'Productivity', 'No-Code'],
+    logo: '/logos/homarr.svg',
+    domain: 'dashboardicons.com',
+    tags: ['icons', 'dashboard', 'ui', 'free', 'library', 'design', 'web']
+  },
 
   // Code Assistants
   {
@@ -430,7 +466,7 @@ export const aiTools: AITool[] = [
     id: 'runway',
     name: 'Runway',
     description: 'AI video editing',
-    url: 'https://app.runwayml.com',
+    url: 'https://runwayml.com/',
     category: ['AI', 'Video', 'Image'],
     logo: 'https://runwayml.com/favicon.ico',
     domain: 'runwayml.com',
@@ -558,29 +594,6 @@ export const aiTools: AITool[] = [
     ],
     domain: 'shotcut.org',
     tags: ['video', 'editing', 'free', 'open-source']
-  },
-  {
-    id: 'openshot',
-    name: 'OpenShot',
-    description: 'Free and easy video editor',
-    url: 'https://www.openshot.org',
-    category: ['Video', 'Editor'],
-    logo: 'https://www.openshot.org/static/img/favicon.png',
-    domain: 'openshot.org',
-    tags: ['video', 'editing', 'free', 'open-source', 'simple']
-  },
-  {
-    id: 'kdenlive',
-    name: 'Kdenlive',
-    description: 'Open-source video editor',
-    url: 'https://kdenlive.org',
-    category: ['Video', 'Editor'],
-    logo: [
-      'https://kdenlive.org/wp-content/uploads/2020/02/kdenlive-logo.png',
-      'https://kdenlive.org/favicon.ico',
-    ],
-    domain: 'kdenlive.org',
-    tags: ['video', 'editing', 'free', 'open-source', 'linux']
   },
   {
     id: 'lightworks',
@@ -1549,7 +1562,7 @@ export const aiTools: AITool[] = [
     name: 'Revolut',
     description: 'Digital banking and financial services',
     url: 'https://www.revolut.com',
-    category: ['Finance', 'Crypto', 'Trading'],
+    category: ['Finance', 'Trading'],
     logo: [
       'https://www.revolut.com/favicon.ico',
     ],
@@ -1604,4 +1617,28 @@ export const categories = [
   'Crypto',
   'Finance',
   'Trading',
+  'Marketing',
+  'SEO',
+  'Analytics',
+  'Social Media',
+  'Email',
+  'CRM',
+  'Project Management',
+  'Gaming',
+  'Music',
+  'Photography',
+  'Presentation',
+  'Business',
+  'HR',
+  'Legal',
+  'Healthcare',
+  'E-commerce',
+  'No-Code',
+  'Low-Code',
+  'Database',
+  'Blockchain',
+  'IoT',
+  'AR/VR',
+  'Machine Learning',
+  'Search',
 ];

@@ -2,12 +2,11 @@ import { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UnifiedHeader } from './components/UnifiedHeader';
 import { FloatingMenu } from './components/FloatingMenu';
-import { GoogleDrivePage } from './pages/GoogleDrivePage';
 import App from './App';
 import { MyWorkspace } from './pages/MyWorkspace';
 import { AITool, categories as allCategories, aiTools } from './data/aiData';
 
-type ViewMode = 'dashboard' | 'workspace' | 'drive';
+type ViewMode = 'dashboard' | 'workspace';
 
 interface AppContainerProps {
   favorites: string[];
@@ -47,8 +46,6 @@ export function AppContainer({
       announcement = t('navigation.switchedToDashboard', 'Switched to Dashboard');
     } else if (newView === 'workspace') {
       announcement = t('navigation.switchedToWorkspace', 'Switched to Workspace');
-    } else if (newView === 'drive') {
-      announcement = t('navigation.switchedToDrive', 'Switched to Google Drive');
     }
 
     // Update ARIA live region
@@ -77,9 +74,6 @@ export function AppContainer({
       custom: customTools.length,
     });
     searchPlaceholder = t('workspace.searchPlaceholder');
-  } else if (activeView === 'drive') {
-    subtitle = t('googleDrive.subtitle', 'Manage your Google Drive files');
-    searchPlaceholder = t('googleDrive.searchPlaceholder', 'Search files...');
   }
 
   // Compute available categories
@@ -165,16 +159,13 @@ export function AppContainer({
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           searchPlaceholder={searchPlaceholder}
-          categories={activeView === 'dashboard' ? categories : undefined}
-          selectedCategory={activeView === 'dashboard' ? selectedCategory : undefined}
-          onCategoryChange={activeView === 'dashboard' ? setSelectedCategory : undefined}
-          selectedTemplate={activeView === 'dashboard' ? selectedTemplate : undefined}
-          onTemplateChange={activeView === 'dashboard' ? setSelectedTemplate : undefined}
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
           isDarkTheme={isDarkTheme}
           onToggleTheme={onToggleTheme}
           title={title}
           subtitle={subtitle}
-          onGoogleDriveClick={() => handleViewChange('drive')}
         />
 
         {/* Content Area - Conditional Rendering */}
@@ -190,7 +181,7 @@ export function AppContainer({
             selectedCategory={selectedCategory}
             selectedTemplate={selectedTemplate}
           />
-        ) : activeView === 'workspace' ? (
+        ) : (
           <MyWorkspace
             favorites={favorites}
             customTools={customTools}
@@ -202,24 +193,20 @@ export function AppContainer({
             onEditTool={onEditTool}
             onDeleteTool={onDeleteTool}
           />
-        ) : (
-          <GoogleDrivePage searchQuery={searchQuery} />
         )}
 
-        {/* Mobile Floating Menu - Only for dashboard and workspace */}
-        {activeView !== 'drive' && (
-          <FloatingMenu
-            activeView={activeView}
-            onViewChange={handleViewChange}
-            templates={templates}
-            selectedTemplate={selectedTemplate}
-            onTemplateChange={setSelectedTemplate}
-            icons={icons}
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
-        )}
+        {/* Mobile Floating Menu */}
+        <FloatingMenu
+          activeView={activeView}
+          onViewChange={handleViewChange}
+          templates={templates}
+          selectedTemplate={selectedTemplate}
+          onTemplateChange={setSelectedTemplate}
+          icons={icons}
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
       </div>
     </div>
   );

@@ -40,7 +40,31 @@
     "Media": "Média",
     "Crypto": "Crypto",
     "Finance": "Finance",
-    "Trading": "Trading"
+    "Trading": "Trading",
+    "Marketing": "Marketing",
+    "SEO": "SEO",
+    "Analytics": "Analytique",
+    "Social Media": "Réseaux sociaux",
+    "Email": "Email",
+    "CRM": "CRM",
+    "Project Management": "Gestion de projet",
+    "Gaming": "Jeux",
+    "Music": "Musique",
+    "Photography": "Photographie",
+    "Presentation": "Présentation",
+    "Business": "Entreprise",
+    "HR": "RH",
+    "Legal": "Juridique",
+    "Healthcare": "Santé",
+    "E-commerce": "E-commerce",
+    "No-Code": "No-Code",
+    "Low-Code": "Low-Code",
+    "Database": "Base de données",
+    "Blockchain": "Blockchain",
+    "IoT": "IoT",
+    "AR/VR": "AR/VR",
+    "Machine Learning": "Machine Learning",
+    "Search": "Recherche"
   },
   "search": {
     "placeholder": "Rechercher des outils..."
@@ -171,6 +195,9 @@
     "gemini": "Assistant IA multimodal de Google",
     "perplexity": "Recherche IA avec sources",
     "poe": "Accès à plusieurs modèles IA",
+    "lobechat": "Framework de chat IA open-source avec support de plugins",
+    "lobe-icons": "Bibliothèque de logos SVG de marques populaires avec plus de 5000 icônes",
+    "dashboard-icons": "Bibliothèque d'icônes gratuites pour tableaux de bord et applications web",
     "vscode": "Éditeur de code gratuit par Microsoft",
     "github-copilot": "Programmeur IA en binôme",
     "cursor": "Éditeur de code IA",
@@ -250,5 +277,76 @@
     "nanonets": "APIs OCR et vision par ordinateur",
     "chooch": "Plateforme IA de vision par ordinateur",
     "v7": "Plateforme de données d'entraînement pour vision par ordinateur"
+  },
+  "collections": {
+    "title": "Collections",
+    "all": "Toutes les collections",
+    "allDescription": "Voir tous les outils de toutes les collections",
+    "empty": "Aucune collection",
+    "emptyDescription": "Créez votre première collection pour organiser vos outils",
+    "emptyCollection": "Cette collection est vide",
+    "emptyCollectionDescription": "Ajoutez des outils à cette collection pour commencer",
+    "noCollections": "Vous n'avez pas encore de collections",
+    "noCollectionsDescription": "Les collections vous aident à organiser vos outils en groupes",
+
+    "create": "Créer une collection",
+    "createNew": "Créer une nouvelle collection",
+    "createButton": "Créer",
+    "createSuccess": "Collection créée avec succès",
+    "createError": "Échec de la création de la collection",
+
+    "rename": "Renommer la collection",
+    "renameButton": "Renommer",
+    "renameSuccess": "Collection renommée avec succès",
+    "renameError": "Échec du renommage de la collection",
+
+    "delete": "Supprimer la collection",
+    "deleteButton": "Supprimer",
+    "deleteConfirm": "Voulez-vous vraiment supprimer cette collection ?",
+    "deleteWarning": "Cette collection contient {{count}} outil",
+    "deleteWarning_plural": "Cette collection contient {{count}} outils",
+    "deleteNote": "Les outils ne seront pas supprimés.",
+    "deleteSuccess": "Collection supprimée avec succès",
+    "deleteError": "Échec de la suppression de la collection",
+
+    "manage": "Gérer les collections",
+    "manageButton": "Gérer",
+
+    "addTools": "Ajouter des outils",
+    "addToolsButton": "Ajouter des outils",
+    "addToolsTo": "Ajouter à {{name}}",
+    "addToolsSuccess": "{{count}} outil ajouté avec succès",
+    "addToolsSuccess_plural": "{{count}} outils ajoutés avec succès",
+    "addToolsError": "Échec de l'ajout d'outils à la collection",
+
+    "removeTools": "Retirer de la collection",
+    "removeToolsSuccess": "Outil retiré avec succès",
+    "removeToolsError": "Échec du retrait de l'outil de la collection",
+
+    "multiSelectMode": "Sélectionner les outils à ajouter",
+    "multiSelectCancel": "Annuler",
+    "multiSelectAdd": "Ajouter ({{count}})",
+    "multiSelectSelectAll": "Tout sélectionner",
+    "multiSelectDeselectAll": "Tout désélectionner",
+    "multiSelectSelected": "{{count}} sélectionné",
+
+    "name": "Nom de la collection",
+    "namePlaceholder": "Entrez le nom de la collection",
+    "nameRequired": "Le nom est requis",
+    "nameTaken": "Une collection avec ce nom existe déjà",
+
+    "description": "Description",
+    "descriptionPlaceholder": "Description optionnelle",
+
+    "toolCount": "{{count}} outil",
+    "toolCount_plural": "{{count}} outils",
+
+    "openSelector": "Ouvrir le menu des collections",
+    "selectCollection": "Sélectionner une collection",
+
+    "sortBy": "Trier par",
+    "sortName": "Nom",
+    "sortDate": "Date de création",
+    "sortSize": "Nombre d'outils"
   }
 }

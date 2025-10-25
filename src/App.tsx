@@ -4,6 +4,8 @@ import { AddToolCard } from './components/AddToolCard';
 import { AddToolModal } from './components/AddToolModal';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { UpdateChecker } from './components/UpdateChecker';
+import { AddToCollectionModal } from './components/AddToCollectionModal';
+import { useCollections } from './hooks/useCollections';
 import { aiTools, categories, AITool } from './data/aiData';
 import { toolMatchesTemplate } from './data/templateMappings';
 
@@ -33,6 +35,9 @@ function App({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTool, setEditingTool] = useState<AITool | null>(null);
   const [deletingTool, setDeletingTool] = useState<AITool | null>(null);
+  const [collectionModalTool, setCollectionModalTool] = useState<AITool | null>(null);
+
+  const { collections, addToolsToCollection, removeToolsFromCollection, createCollection } = useCollections();
 
   // Convert favorites array to Set for O(1) lookup performance
   const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
@@ -118,6 +123,8 @@ function App({
                   showEditDelete ? () => handleDeleteClick(tool) : undefined
                 }
                 matchesTemplate={matchesTemplate}
+                collections={collections}
+                onOpenCollectionModal={(tool) => setCollectionModalTool(tool)}
               />
             );
           })}
@@ -147,6 +154,17 @@ function App({
 
       {/* Update Notification */}
       <UpdateChecker />
+
+      {/* Add to Collection Modal */}
+      <AddToCollectionModal
+        isOpen={!!collectionModalTool}
+        onClose={() => setCollectionModalTool(null)}
+        tool={collectionModalTool}
+        collections={collections}
+        onAddToCollection={(collectionId, toolId) => addToolsToCollection(collectionId, [toolId])}
+        onRemoveFromCollection={(collectionId, toolId) => removeToolsFromCollection(collectionId, [toolId])}
+        onCreateCollection={createCollection}
+      />
     </>
   );
 }
