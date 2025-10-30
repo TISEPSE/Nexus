@@ -6,6 +6,7 @@ import { AddToolModal } from '../components/AddToolModal';
 import { DeleteConfirmModal } from '../components/DeleteConfirmModal';
 import { CollectionSelector } from '../components/CollectionSelector';
 import { ManageCollectionsModal } from '../components/ManageCollectionsModal';
+import { AddToCollectionModal } from '../components/AddToCollectionModal';
 import { useCollections } from '../hooks/useCollections';
 import { AITool, aiTools } from '../data/aiData';
 import { categories } from '../data/aiData';
@@ -55,6 +56,7 @@ export function MyWorkspace({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTool, setEditingTool] = useState<AITool | null>(null);
   const [deletingTool, setDeletingTool] = useState<AITool | null>(null);
+  const [collectionModalTool, setCollectionModalTool] = useState<AITool | null>(null);
 
   // Collections state
   const {
@@ -64,6 +66,8 @@ export function MyWorkspace({
     createCollection,
     renameCollection,
     deleteCollection,
+    addToolsToCollection,
+    removeToolsFromCollection,
     getCollection
   } = useCollections();
 
@@ -79,7 +83,7 @@ export function MyWorkspace({
     return [...aiTools, ...customTools];
   }, [customTools]);
 
-  // Get all workspace tools (favorites + custom) with filters
+  // Get all workspace tools (favorites + custom + collections) with filters
   const workspaceTools = useMemo(() => {
     let tools: AITool[] = [];
 
@@ -92,9 +96,22 @@ export function MyWorkspace({
     } else {
       // Filter by view type only when no collection is selected
       if (view === 'all') {
-        const favTools = allTools.filter((tool) => favorites.includes(tool.id));
-        const customToolsNotInFav = customTools.filter((tool) => !favorites.includes(tool.id));
-        tools = [...favTools, ...customToolsNotInFav];
+        // Get all unique tool IDs from: favorites, collections, and custom tools
+        const toolIdsSet = new Set<string>();
+
+        // Add favorites
+        favorites.forEach(id => toolIdsSet.add(id));
+
+        // Add all tools from all collections
+        collections.forEach(collection => {
+          collection.toolIds.forEach(id => toolIdsSet.add(id));
+        });
+
+        // Add custom tools
+        customTools.forEach(tool => toolIdsSet.add(tool.id));
+
+        // Get actual tools from the IDs
+        tools = allTools.filter(tool => toolIdsSet.has(tool.id));
       } else if (view === 'favorites') {
         tools = allTools.filter((tool) => favorites.includes(tool.id));
       } else {
@@ -118,7 +135,7 @@ export function MyWorkspace({
     }
 
     return tools;
-  }, [allTools, favorites, customTools, view, searchQuery, selectedCategory, selectedCollectionId, getCollection]);
+  }, [allTools, favorites, customTools, view, searchQuery, selectedCategory, selectedCollectionId, getCollection, collections]);
 
   // Convert favorites to Set for O(1) lookup
   const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
@@ -168,8 +185,8 @@ export function MyWorkspace({
 
       {/* Grid View - Aligned with filter tabs */}
       <div className="grid grid-cols-3 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-3 md:gap-3">
-        {/* Add Tool Card - Only show in "all" view and not when a collection is selected */}
-        {view === 'all' && !selectedCollectionId && (
+        {/* Add Tool Card - Show in "all" and "custom" views, not when a collection is selected */}
+        {(view === 'all' || view === 'custom') && !selectedCollectionId && (
           <AddToolCard onClick={() => setIsModalOpen(true)} />
         )}
 
@@ -177,18 +194,21 @@ export function MyWorkspace({
         {workspaceTools.map((tool) => {
           const isCustom = tool.id.startsWith('custom-');
           const showEditDelete = isCustom && (view === 'all' || view === 'custom');
+          const isInCollectionView = !!selectedCollectionId;
 
           return (
             <AICard
               key={tool.id}
               tool={tool}
               isFavorite={favoritesSet.has(tool.id)}
-              onToggleFavorite={onToggleFavorite}
+              onToggleFavorite={view !== 'all' && !isInCollectionView ? onToggleFavorite : undefined}
               isCustom={isCustom}
               showEditDelete={showEditDelete}
               onEdit={showEditDelete ? () => handleEdit(tool) : undefined}
               onDelete={showEditDelete ? () => handleDeleteClick(tool) : undefined}
               matchesTemplate={false}
+              collections={collections}
+              onOpenCollectionModal={view === 'all' || isInCollectionView ? undefined : (tool) => setCollectionModalTool(tool)}
             />
           );
         })}
@@ -237,6 +257,18 @@ export function MyWorkspace({
         collections={collections}
         onRenameCollection={renameCollection}
         onDeleteCollection={deleteCollection}
+      />
+
+      {/* Add to Collection Modal */}
+      <AddToCollectionModal
+        isOpen={!!collectionModalTool}
+        onClose={() => setCollectionModalTool(null)}
+        tool={collectionModalTool}
+        collections={collections}
+        onAddToCollection={(collectionId, toolId) => addToolsToCollection(collectionId, [toolId])}
+        onRemoveFromCollection={(collectionId, toolId) => removeToolsFromCollection(collectionId, [toolId])}
+        onCreateCollection={createCollection}
+        onSelectCollection={setSelectedCollectionId}
       />
     </>
   );

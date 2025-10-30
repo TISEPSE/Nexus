@@ -1,22 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface Template {
-  id: string;
-  icon: string;
-  label: string;
-}
-
 interface FloatingMenuProps {
   // Navigation
-  activeView: 'dashboard' | 'workspace';
-  onViewChange: (view: 'dashboard' | 'workspace') => void;
-
-  // Template
-  templates: Template[];
-  selectedTemplate: string;
-  onTemplateChange: (templateId: string) => void;
-  icons: Record<string, React.ReactNode>;
+  activeView: 'dashboard' | 'workspace' | 'settings';
+  onViewChange: (view: 'dashboard' | 'workspace' | 'settings') => void;
 
   // Category
   categories: string[];
@@ -25,22 +13,17 @@ interface FloatingMenuProps {
 }
 
 /**
- * Floating Menu - Mobile Navigation & Filters
+ * Floating Menu - Simple Mobile Navigation
  *
- * Combines all controls into a single expandable bottom-right menu:
- * - Navigation (Dashboard/Workspace)
- * - Role/Template selector
- * - Category filter
+ * A clean, bottom-sheet style menu for mobile with:
+ * - Quick navigation buttons (Dashboard, Workspace, Settings)
+ * - Optional category filters
  *
- * Note: Theme and Language toggles are in the header for quick access
+ * Theme and Language toggles remain in the header
  */
 export const FloatingMenu: React.FC<FloatingMenuProps> = ({
   activeView,
   onViewChange,
-  templates,
-  selectedTemplate,
-  onTemplateChange,
-  icons,
   categories,
   selectedCategory,
   onCategoryChange,
@@ -74,9 +57,8 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
     };
   }, [isOpen]);
 
-  // Handle close - always immediate, no animation delay
+  // Handle close
   const handleClose = () => {
-    // Remove focus from button to prevent ring effect
     if (buttonRef.current) {
       buttonRef.current.blur();
     }
@@ -87,7 +69,7 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
     setIsDragging(false);
   };
 
-  // Handle swipe to close (only from header)
+  // Handle swipe to close
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
     setTouchStart(touch.clientY);
@@ -122,7 +104,7 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
     if (diff > 80) {
       handleClose();
     } else {
-      // Reset - will bounce back to original position
+      // Reset
       setTouchStart(null);
       setTouchCurrent(null);
       setIsDragging(false);
@@ -138,6 +120,38 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
     const diff = touchCurrent - touchStart;
     return diff > 0 ? `translateY(${diff}px)` : 'translateY(0)';
   };
+
+  // Navigation items
+  const navigationItems = [
+    {
+      id: 'dashboard' as const,
+      label: t('navigation.dashboard', 'Dashboard'),
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+      ),
+    },
+    {
+      id: 'workspace' as const,
+      label: t('navigation.workspace', 'My Workspace'),
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      ),
+    },
+    {
+      id: 'settings' as const,
+      label: t('settings.title', 'Settings'),
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      ),
+    },
+  ];
 
   if (!isOpen) {
     return (
@@ -157,7 +171,7 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
           focus:outline-none
           animate-fab-entry
         "
-        aria-label="Open menu"
+        aria-label={t('menu.title', 'Menu')}
         aria-expanded={false}
         aria-haspopup="dialog"
       >
@@ -177,7 +191,7 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
         </svg>
 
         {/* Badge indicator if filters are active */}
-        {(selectedTemplate !== 'all' || selectedCategory !== 'All') && (
+        {selectedCategory !== 'All' && (
           <div
             className="
               absolute -top-1 -right-1
@@ -230,7 +244,7 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
           flex flex-col
         "
       >
-        {/* Drag Handle & Header - Draggable zone */}
+        {/* Drag Handle & Header */}
         <div
           className="flex-shrink-0 cursor-grab active:cursor-grabbing"
           style={{ touchAction: 'none', userSelect: 'none' }}
@@ -249,106 +263,49 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
               id="menu-title"
               className="text-lg font-semibold text-gh-fg-default"
             >
-              {t('menu.title', 'Menu')}
+              {t('menu.navigation', 'Navigation')}
             </h2>
           </div>
         </div>
 
         {/* Content - Scrollable zone */}
-        <div className="overflow-y-auto overflow-x-hidden flex-1 p-4 space-y-6">
-          {/* Navigation Section */}
-          <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => {
-                  onViewChange('dashboard');
-                  handleClose();
-                }}
-                className={`
-                  px-4 py-4 rounded-md
-                  flex flex-col items-center justify-center gap-2
-                  font-semibold text-sm
-                  transition-all duration-200
-                  ${activeView === 'dashboard'
-                    ? 'bg-gh-accent-emphasis text-white shadow-lg scale-[1.02]'
-                    : 'bg-gh-canvas-default text-gh-fg-default hover:bg-gh-canvas-inset border-2 border-gh-border-default'
-                  }
-                `}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                {t('navigation.dashboard', 'Dashboard')}
-              </button>
-              <button
-                onClick={() => {
-                  onViewChange('workspace');
-                  handleClose();
-                }}
-                className={`
-                  px-4 py-4 rounded-md
-                  flex flex-col items-center justify-center gap-2
-                  font-semibold text-sm
-                  transition-all duration-200
-                  ${activeView === 'workspace'
-                    ? 'bg-gh-accent-emphasis text-white shadow-lg scale-[1.02]'
-                    : 'bg-gh-canvas-default text-gh-fg-default hover:bg-gh-canvas-inset border-2 border-gh-border-default'
-                  }
-                `}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-                {t('navigation.workspace', 'My Workspace')}
-              </button>
-            </div>
-          </div>
+        <div className="overflow-y-auto overflow-x-hidden flex-1 p-5 space-y-6">
 
-          {/* Divider */}
-          <div className="border-t border-gh-border-default"></div>
-
-          {/* Role/Template Section */}
+          {/* Main Navigation Section */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-gh-fg-muted uppercase tracking-wider">
-              {t('menu.role', 'Role / Template')}
-            </h3>
-            <div className="grid grid-cols-4 gap-2">
-              {templates.map((template) => {
-                const isSelected = selectedTemplate === template.id;
-                return (
-                  <button
-                    key={template.id}
-                    onClick={() => {
-                      onTemplateChange(template.id);
-                    }}
-                    className={`
-                      aspect-square
-                      flex flex-col items-center justify-center gap-1
-                      p-2
-                      rounded-md
-                      transition-all duration-200
-                      ${isSelected
-                        ? 'bg-gh-accent-emphasis text-white shadow-md scale-105'
-                        : 'bg-gh-canvas-default text-gh-fg-muted hover:text-gh-fg-default hover:bg-gh-canvas-inset border border-gh-border-default'
-                      }
-                    `}
-                  >
-                    <svg
-                      className="w-5 h-5 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                    >
-                      {icons[template.icon]}
+            {navigationItems.map((item) => {
+              const isActive = activeView === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    onViewChange(item.id);
+                    handleClose();
+                  }}
+                  className={`
+                    w-full px-5 py-4 rounded-lg
+                    flex items-center gap-4
+                    font-semibold text-base
+                    transition-all duration-200
+                    ${isActive
+                      ? 'bg-gh-accent-emphasis text-white shadow-lg scale-[1.02] ring-2 ring-gh-accent-muted ring-offset-2 ring-offset-gh-canvas-subtle'
+                      : 'bg-gh-canvas-default text-gh-fg-default hover:bg-gh-canvas-inset border-2 border-gh-border-default hover:border-gh-border-muted hover:scale-[1.01]'
+                    }
+                  `}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <div className="flex-shrink-0">
+                    {item.icon}
+                  </div>
+                  <span className="flex-1 text-left">{item.label}</span>
+                  {isActive && (
+                    <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-[9px] font-semibold text-center line-clamp-2 leading-tight">
-                      {template.label}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           {/* Divider */}
@@ -356,7 +313,7 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
 
           {/* Category Filter Section */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-gh-fg-muted uppercase tracking-wider">
+            <h3 className="text-xs font-bold text-gh-fg-muted uppercase tracking-wider px-1">
               {t('menu.category', 'Category')}
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -369,12 +326,12 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({
                       onCategoryChange(category);
                     }}
                     className={`
-                      px-3 py-1.5 rounded-md
-                      text-xs font-semibold
+                      px-4 py-2 rounded-lg
+                      text-sm font-semibold
                       transition-all duration-200
                       ${isSelected
-                        ? 'bg-gh-accent-emphasis text-white shadow-md'
-                        : 'bg-gh-canvas-default text-gh-fg-default hover:bg-gh-canvas-inset border border-gh-border-default'
+                        ? 'bg-gh-accent-emphasis text-white shadow-md ring-2 ring-gh-accent-muted'
+                        : 'bg-gh-canvas-default text-gh-fg-default hover:bg-gh-canvas-inset border border-gh-border-default hover:border-gh-border-muted'
                       }
                     `}
                   >

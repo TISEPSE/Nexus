@@ -89,16 +89,131 @@
     "settings": "Paramètres"
   },
   "settings": {
+    "title": "Paramètres",
+    "subtitle": "Personnalisez votre expérience",
+    "close": "Fermer",
     "theme": "Thème",
     "dark": "Sombre",
     "light": "Clair",
-    "language": "Langue"
+    "language": "Langue",
+    "groups": {
+      "interface": "Interface",
+      "system": "Système",
+      "info": "Informations"
+    },
+    "tabs": {
+      "appearance": "Apparence",
+      "data": "Données & Synchro",
+      "collections": "Collections",
+      "tools": "Outils & Catégories",
+      "updates": "Mises à jour",
+      "privacy": "Confidentialité",
+      "advanced": "Avancé",
+      "about": "À propos"
+    },
+    "appearance": {
+      "title": "Paramètres d'apparence",
+      "description": "Personnalisez l'apparence de Nexus",
+      "themeDesc": "Choisissez entre les thèmes sombre et clair",
+      "languageDesc": "Sélectionnez votre langue préférée",
+      "fontSize": "Taille de police",
+      "fontSizeDesc": "Ajustez la taille du texte dans l'application",
+      "fontSmall": "Petite",
+      "fontMedium": "Moyenne",
+      "fontLarge": "Grande",
+      "compactMode": "Mode compact",
+      "compactModeDesc": "Réduire l'espacement pour une mise en page plus dense",
+      "reducedMotion": "Mouvement réduit",
+      "reducedMotionDesc": "Minimiser les animations pour de meilleures performances"
+    },
+    "data": {
+      "title": "Données & Synchronisation",
+      "description": "Gérez vos données, importez et exportez des configurations",
+      "dangerZone": "Zone dangereuse",
+      "dangerZoneDesc": "Actions irréversibles qui affectent vos données",
+      "resetTitle": "Réinitialiser aux valeurs par défaut",
+      "resetDesc": "Réinitialiser tous les paramètres aux valeurs par défaut (conserve vos données)",
+      "resetButton": "Réinitialiser les paramètres",
+      "clearTitle": "Effacer toutes les données",
+      "clearDesc": "Supprimer définitivement toutes vos données y compris les favoris, outils personnalisés et collections",
+      "clearButton": "Effacer toutes les données"
+    },
+    "collections": {
+      "title": "Paramètres des collections",
+      "description": "Gérez l'organisation et l'affichage des collections",
+      "defaultSort": "Ordre de tri par défaut",
+      "defaultSortDesc": "Choisissez comment les collections sont triées par défaut"
+    },
+    "tools": {
+      "title": "Outils & Catégories",
+      "description": "Personnalisez l'affichage et l'organisation des outils",
+      "defaultView": "Vue par défaut",
+      "defaultViewDesc": "Choisissez quelle vue afficher lors de l'ouverture de l'espace de travail"
+    },
+    "updates": {
+      "title": "Mises à jour & Notifications",
+      "description": "Gérez les mises à jour de l'application et les notifications",
+      "autoUpdate": "Mises à jour automatiques",
+      "autoUpdateDesc": "Télécharger et installer automatiquement les mises à jour",
+      "checkNow": "Vérifier les mises à jour",
+      "checkingUpdates": "Vérification des mises à jour..."
+    },
+    "privacy": {
+      "title": "Confidentialité & Sécurité",
+      "description": "Vos paramètres de confidentialité et l'emplacement des données",
+      "localOnly": "Toutes vos données sont stockées localement sur votre appareil. Nexus ne collecte ni ne transmet aucune information personnelle."
+    },
+    "advanced": {
+      "title": "Paramètres avancés",
+      "description": "Options développeur et fonctionnalités avancées",
+      "developerMode": "Mode développeur",
+      "developerModeDesc": "Activer les fonctionnalités de débogage avancées",
+      "resetConfirm": "Êtes-vous sûr de vouloir réinitialiser tous les paramètres aux valeurs par défaut ?"
+    },
+    "about": {
+      "title": "À propos de Nexus",
+      "description": "Informations sur la version et crédits",
+      "version": "Version",
+      "github": "Voir sur GitHub",
+      "credits": "Créé avec Claude Code par Anthropic"
+    },
+    "stats": {
+      "favorites": "Favoris",
+      "customTools": "Outils personnalisés",
+      "collections": "Collections",
+      "total": "Total d'éléments"
+    },
+    "export": {
+      "button": "Exporter la configuration",
+      "success": "Configuration exportée avec succès",
+      "error": "Échec de l'exportation de la configuration"
+    },
+    "import": {
+      "button": "Importer la configuration",
+      "success": "Configuration importée avec succès",
+      "error": "Échec de l'importation de la configuration",
+      "errorTitle": "Erreur d'importation",
+      "invalidJson": "Le fichier n'est pas un JSON valide",
+      "previewTitle": "Importer la configuration",
+      "previewDescription": "Vérifiez la configuration avant de l'importer",
+      "exportedAt": "Exporté le",
+      "version": "Version",
+      "warnings": "Avertissements",
+      "modeTitle": "Mode d'importation",
+      "modeMerge": "Fusionner avec les données existantes",
+      "modeMergeDesc": "Ajouter les données importées à vos données actuelles sans rien supprimer",
+      "modeReplace": "Remplacer toutes les données",
+      "modeReplaceDesc": "Supprimer toutes les données actuelles et les remplacer par les données importées",
+      "cancel": "Annuler",
+      "confirm": "Importer",
+      "importing": "Importation..."
+    }
   },
   "card": {
     "addToFavorites": "Ajouter aux favoris",
     "removeFromFavorites": "Retirer des favoris",
-    "editCustomTool": "Modifier l'outil personnalisé",
-    "deleteCustomTool": "Supprimer l'outil personnalisé",
+    "editCustomTool": "Modifier",
+    "deleteCustomTool": "Supprimer",
     "custom": "Perso"
   },
   "addTool": {

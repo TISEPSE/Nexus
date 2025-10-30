@@ -55,8 +55,10 @@ export function AddToCollectionModal({
 
   const handleCreateNew = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('🎯 Creating new collection:', newCollectionName.trim());
     if (newCollectionName.trim()) {
       const newId = onCreateCollection(newCollectionName.trim());
+      console.log('✅ Collection created with ID:', newId);
       setNewCollectionName('');
       setIsCreating(false);
       if (newId) {
@@ -122,19 +124,19 @@ export function AddToCollectionModal({
                           handleAddToCollection(collection.id);
                         }
                       }}
-                      className={`group relative flex flex-col items-start p-4 rounded-lg border transition-all duration-200 min-h-[110px] text-left ${
+                      className={`group relative flex flex-col items-start p-3 rounded-lg border transition-all duration-200 min-h-[80px] text-left ${
                         isInCollection
                           ? 'bg-gh-accent-subtle/40 border-gh-accent-emphasis shadow-sm hover:bg-gh-accent-subtle/60 hover:shadow-md hover:scale-105'
                           : 'bg-gh-canvas-subtle border-gh-border-default hover:border-gh-accent-fg hover:shadow-md hover:scale-105'
                       } ${wasJustAdded ? 'animate-success-pulse' : ''}`}
                     >
                       {/* Collection Header */}
-                      <div className="flex items-start gap-2.5 mb-3 w-full">
-                        <div className={`p-2 rounded-md transition-colors ${
+                      <div className="flex items-start gap-2 mb-2 w-full">
+                        <div className={`p-1.5 rounded-md transition-colors ${
                           isInCollection ? 'bg-gh-accent-emphasis/20' : 'bg-gh-canvas-default group-hover:bg-gh-accent-subtle/30'
                         }`}>
                           <svg
-                            className={`w-4 h-4 ${isInCollection ? 'text-gh-accent-fg' : 'text-gh-fg-muted group-hover:text-gh-accent-fg'}`}
+                            className={`w-3.5 h-3.5 ${isInCollection ? 'text-gh-accent-fg' : 'text-gh-fg-muted group-hover:text-gh-accent-fg'}`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -152,7 +154,7 @@ export function AddToCollectionModal({
                         {isInCollection && (
                           <div className={`ml-auto p-1 rounded-full bg-green-500/10 ${wasJustAdded ? 'animate-checkmark-appear' : ''}`}>
                             <svg
-                              className="w-4 h-4 text-green-500"
+                              className="w-3.5 h-3.5 text-green-500"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -165,7 +167,7 @@ export function AddToCollectionModal({
                       </div>
 
                       {/* Collection Name */}
-                      <h4 className={`font-semibold text-sm mb-1.5 line-clamp-2 ${
+                      <h4 className={`font-semibold text-sm mb-1 line-clamp-2 ${
                         isInCollection ? 'text-gh-accent-fg' : 'text-gh-fg-default'
                       }`}>
                         {collection.name}
@@ -237,15 +239,18 @@ export function AddToCollectionModal({
               </form>
             ) : (
               <button
-                onClick={() => setIsCreating(true)}
-                className="group w-full flex items-center justify-center gap-3 p-5 border-2 border-dashed border-gh-border-muted rounded-lg text-gh-accent-fg hover:border-gh-accent-fg hover:bg-gh-accent-subtle/20 transition-all duration-200 hover:shadow-sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('🔵 Bouton "Nouvelle collection" cliqué');
+                  setIsCreating(true);
+                }}
+                className="group inline-flex items-center gap-2 px-3 py-2 border border-dashed border-gh-border-muted rounded-md text-gh-fg-muted hover:border-gh-accent-fg hover:text-gh-accent-fg hover:bg-gh-accent-subtle/10 transition-all duration-200"
               >
-                <div className="p-2 rounded-md bg-gh-accent-subtle/30 group-hover:bg-gh-accent-subtle/50 transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                  </svg>
-                </div>
-                <span className="text-sm font-semibold">Créer une nouvelle collection</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <span className="text-sm font-medium">Nouvelle collection</span>
               </button>
             )}
           </div>

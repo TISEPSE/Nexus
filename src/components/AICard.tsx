@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AITool } from '../data/aiData';
 import { buildLogoSources, extractDomain } from '../utils/logoUtils';
@@ -8,7 +8,7 @@ import { Collection } from '../types/collection';
 interface AICardProps {
   tool: AITool;
   isFavorite: boolean;
-  onToggleFavorite: (toolId: string) => void;
+  onToggleFavorite?: (toolId: string) => void;
   isCustom?: boolean;
   showEditDelete?: boolean;
   onEdit?: () => void;
@@ -65,11 +65,33 @@ const AICardComponent: React.FC<AICardProps> = ({
   const [showFallback, setShowFallback] = useState(false);
   const currentLogo = logoSources[currentLogoIndex];
 
+  // State for context menu
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
   // Reset logo index when tool changes
   useEffect(() => {
     setCurrentLogoIndex(0);
     setShowFallback(false);
   }, [tool.id]);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
 
   // Handle logo loading error - try next source
   const handleLogoError = useCallback(() => {
@@ -105,7 +127,7 @@ const AICardComponent: React.FC<AICardProps> = ({
       onClick={handleClick}
       className={`group relative bg-gh-canvas-subtle border border-gh-border-default rounded-lg p-3 sm:p-4
                  hover:bg-gh-canvas-default hover:border-gh-accent-fg hover:shadow-md
-                 active:scale-[0.98] transition-all duration-150 text-left w-full cursor-pointer
+                 active:scale-[0.98] transition-all duration-100 text-left w-full cursor-pointer
                  focus:outline-none focus:ring-2 focus:ring-gh-accent-fg focus:ring-offset-2 focus:ring-offset-gh-canvas-default
                  touch-manipulation aspect-[0.7] sm:aspect-auto sm:h-[200px] md:h-[220px]
                  template-transition
@@ -197,7 +219,7 @@ const AICardComponent: React.FC<AICardProps> = ({
             )}
           </div>
         </button>
-      ) : (
+      ) : onToggleFavorite ? (
         /* Favorite button - Top left, larger touch target on mobile */
         <button
           onClick={(e) => {
@@ -223,7 +245,7 @@ const AICardComponent: React.FC<AICardProps> = ({
             />
           </svg>
         </button>
-      )}
+      ) : null}
 
 
       {/* Collection indicator - Top right, when tool is in collection */}
@@ -265,54 +287,29 @@ const AICardComponent: React.FC<AICardProps> = ({
         </div>
       )}
 
-      {/* Edit button - Top right */}
-      {showEditDelete && onEdit && (
+      {/* Three-dot menu button - Top right */}
+      {showEditDelete && (onEdit || onDelete) && (
         <button
           onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation();
-            onEdit();
-          }}
-          className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 p-1.5 rounded hover:bg-gh-accent-subtle/50 active:bg-gh-accent-subtle transition-colors touch-manipulation"
-          aria-label={t('card.editCustomTool')}
-        >
-          <svg
-            className="w-4 h-4 text-gh-accent-fg"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-            />
-          </svg>
-        </button>
-      )}
+            const button = e.currentTarget;
+            const rect = button.getBoundingClientRect();
+            const menuHeight = 80; // Approximate menu height
+            const windowHeight = window.innerHeight;
+            const shouldFlipUp = rect.bottom + menuHeight > windowHeight;
 
-      {/* Delete button - Bottom right */}
-      {showEditDelete && onDelete && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete();
+            setMenuPosition({
+              top: shouldFlipUp ? rect.top - menuHeight - 4 : rect.bottom + 4,
+              left: rect.right - 128 // 128px = w-32, right-align menu with button
+            });
+            setMenuOpen(!menuOpen);
           }}
-          className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-10 p-1.5 rounded hover:bg-red-500/10 active:bg-red-500/20 transition-colors touch-manipulation"
-          aria-label={t('card.deleteCustomTool')}
+          className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 p-1.5 rounded hover:bg-gh-canvas-inset transition-colors touch-manipulation focus:outline-none"
+          aria-label="Options"
         >
-          <svg
-            className="w-4 h-4 text-red-500 hover:text-red-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
+          <svg className="w-5 h-5 text-gh-fg-muted transition-colors" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
           </svg>
         </button>
       )}
@@ -357,6 +354,58 @@ const AICardComponent: React.FC<AICardProps> = ({
             )}
           </svg>
         </button>
+      )}
+
+      {/* Context Menu - Rendered as portal at bottom of card */}
+      {menuOpen && menuPosition && (
+        <div
+          ref={menuRef}
+          className="fixed w-32 bg-gh-canvas-default border border-gh-border-default rounded-md shadow-xl z-[9999] animate-menu-appear overflow-hidden"
+          style={{
+            top: `${menuPosition.top}px`,
+            left: `${menuPosition.left}px`
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {onEdit && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setMenuOpen(false);
+                onEdit();
+              }}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gh-fg-default hover:bg-gh-accent-emphasis/10 hover:text-gh-accent-fg transition-colors text-left"
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+              <span>{t('card.editCustomTool')}</span>
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setMenuOpen(false);
+                onDelete();
+              }}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-500/10 transition-colors text-left"
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+              <span>{t('card.deleteCustomTool')}</span>
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

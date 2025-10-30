@@ -89,16 +89,131 @@
     "settings": "Settings"
   },
   "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your experience",
+    "close": "Close",
     "theme": "Theme",
     "dark": "Dark",
     "light": "Light",
-    "language": "Language"
+    "language": "Language",
+    "groups": {
+      "interface": "Interface",
+      "system": "System",
+      "info": "Information"
+    },
+    "tabs": {
+      "appearance": "Appearance",
+      "data": "Data & Sync",
+      "collections": "Collections",
+      "tools": "Tools & Categories",
+      "updates": "Updates",
+      "privacy": "Privacy",
+      "advanced": "Advanced",
+      "about": "About"
+    },
+    "appearance": {
+      "title": "Appearance Settings",
+      "description": "Customize how Nexus looks and feels",
+      "themeDesc": "Choose between dark and light themes",
+      "languageDesc": "Select your preferred language",
+      "fontSize": "Font Size",
+      "fontSizeDesc": "Adjust text size throughout the app",
+      "fontSmall": "Small",
+      "fontMedium": "Medium",
+      "fontLarge": "Large",
+      "compactMode": "Compact Mode",
+      "compactModeDesc": "Reduce spacing for a denser layout",
+      "reducedMotion": "Reduced Motion",
+      "reducedMotionDesc": "Minimize animations for better performance"
+    },
+    "data": {
+      "title": "Data & Synchronization",
+      "description": "Manage your data, import and export configurations",
+      "dangerZone": "Danger Zone",
+      "dangerZoneDesc": "Irreversible actions that affect your data",
+      "resetTitle": "Reset to Defaults",
+      "resetDesc": "Reset all settings to default values (preserves your data)",
+      "resetButton": "Reset Settings",
+      "clearTitle": "Clear All Data",
+      "clearDesc": "Permanently delete all your data including favorites, custom tools, and collections",
+      "clearButton": "Clear All Data"
+    },
+    "collections": {
+      "title": "Collections Settings",
+      "description": "Manage how collections are organized and displayed",
+      "defaultSort": "Default Sort Order",
+      "defaultSortDesc": "Choose how collections are sorted by default"
+    },
+    "tools": {
+      "title": "Tools & Categories",
+      "description": "Customize tool display and organization",
+      "defaultView": "Default View",
+      "defaultViewDesc": "Choose which view to show when opening workspace"
+    },
+    "updates": {
+      "title": "Updates & Notifications",
+      "description": "Manage app updates and notifications",
+      "autoUpdate": "Automatic Updates",
+      "autoUpdateDesc": "Automatically download and install updates",
+      "checkNow": "Check for Updates",
+      "checkingUpdates": "Checking for updates..."
+    },
+    "privacy": {
+      "title": "Privacy & Security",
+      "description": "Your privacy settings and data location",
+      "localOnly": "All your data is stored locally on your device. Nexus does not collect or transmit any personal information."
+    },
+    "advanced": {
+      "title": "Advanced Settings",
+      "description": "Developer options and advanced features",
+      "developerMode": "Developer Mode",
+      "developerModeDesc": "Enable advanced debugging features",
+      "resetConfirm": "Are you sure you want to reset all settings to defaults?"
+    },
+    "about": {
+      "title": "About Nexus",
+      "description": "Version information and credits",
+      "version": "Version",
+      "github": "View on GitHub",
+      "credits": "Built with Claude Code by Anthropic"
+    },
+    "stats": {
+      "favorites": "Favorites",
+      "customTools": "Custom Tools",
+      "collections": "Collections",
+      "total": "Total Items"
+    },
+    "export": {
+      "button": "Export Configuration",
+      "success": "Configuration exported successfully",
+      "error": "Failed to export configuration"
+    },
+    "import": {
+      "button": "Import Configuration",
+      "success": "Configuration imported successfully",
+      "error": "Failed to import configuration",
+      "errorTitle": "Import Error",
+      "invalidJson": "The file is not valid JSON",
+      "previewTitle": "Import Configuration",
+      "previewDescription": "Review the configuration before importing",
+      "exportedAt": "Exported At",
+      "version": "Version",
+      "warnings": "Warnings",
+      "modeTitle": "Import Mode",
+      "modeMerge": "Merge with existing data",
+      "modeMergeDesc": "Add imported data to your current data without removing anything",
+      "modeReplace": "Replace all data",
+      "modeReplaceDesc": "Delete all current data and replace with imported data",
+      "cancel": "Cancel",
+      "confirm": "Import",
+      "importing": "Importing..."
+    }
   },
   "card": {
     "addToFavorites": "Add to favorites",
     "removeFromFavorites": "Remove from favorites",
-    "editCustomTool": "Edit custom tool",
-    "deleteCustomTool": "Delete custom tool",
+    "editCustomTool": "Edit",
+    "deleteCustomTool": "Delete",
     "custom": "Custom"
   },
   "addTool": {

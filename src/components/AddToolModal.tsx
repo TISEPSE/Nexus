@@ -149,7 +149,7 @@ export function AddToolModal({ isOpen, onClose, onAdd, onEdit, availableCategori
       className="fixed inset-0 backdrop-blur-md bg-black/20 flex items-center justify-center z-50 p-4 overflow-hidden"
       onClick={handleBackdropClick}
     >
-      <div className="bg-gh-canvas-default border border-gh-border-default rounded-lg max-w-md w-full p-6 shadow-2xl min-h-[85vh] max-h-[98vh] overflow-y-auto">
+      <div className="bg-gh-canvas-default border border-gh-border-default rounded-lg max-w-3xl w-full p-8 shadow-2xl min-h-[85vh] max-h-[98vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-gh-fg-default">
             {mode === 'edit' ? t('addTool.editTitle') : t('addTool.title')}
@@ -176,7 +176,7 @@ export function AddToolModal({ isOpen, onClose, onAdd, onEdit, availableCategori
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 bg-gh-canvas-subtle border border-gh-border-default rounded text-gh-fg-default focus:outline-none focus:border-gh-accent-emphasis"
+                className="w-full px-3 py-2 bg-gh-canvas-subtle border border-gh-border-default rounded text-gh-fg-default placeholder:text-gh-fg-default/60 focus:outline-none focus:border-gh-accent-emphasis"
                 placeholder={t('addTool.namePlaceholder')}
                 required
               />
@@ -190,7 +190,7 @@ export function AddToolModal({ isOpen, onClose, onAdd, onEdit, availableCategori
                 type="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="w-full px-3 py-2 bg-gh-canvas-subtle border border-gh-border-default rounded text-gh-fg-default focus:outline-none focus:border-gh-accent-emphasis transition-colors"
+                className="w-full px-3 py-2 bg-gh-canvas-subtle border border-gh-border-default rounded text-gh-fg-default placeholder:text-gh-fg-default/60 focus:outline-none focus:border-gh-accent-emphasis transition-colors"
                 placeholder={t('addTool.urlPlaceholder')}
                 required
               />
@@ -208,7 +208,7 @@ export function AddToolModal({ isOpen, onClose, onAdd, onEdit, availableCategori
                   setLogoUrl(e.target.value);
                   setLogoPreviewError(false);
                 }}
-                className="w-full px-3 py-2 bg-gh-canvas-subtle border border-gh-border-default rounded text-gh-fg-default focus:outline-none focus:border-gh-accent-emphasis transition-colors"
+                className="w-full px-3 py-2 bg-gh-canvas-subtle border border-gh-border-default rounded text-gh-fg-default placeholder:text-gh-fg-default/60 focus:outline-none focus:border-gh-accent-emphasis transition-colors"
                 placeholder={t('addTool.logoUrlPlaceholder')}
               />
               <p className="text-xs text-gh-fg-muted mt-1">
@@ -223,7 +223,7 @@ export function AddToolModal({ isOpen, onClose, onAdd, onEdit, availableCategori
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3 py-2 bg-gh-canvas-subtle border border-gh-border-default rounded text-gh-fg-default focus:outline-none focus:border-gh-accent-emphasis resize-none"
+                className="w-full px-3 py-2 bg-gh-canvas-subtle border border-gh-border-default rounded text-gh-fg-default placeholder:text-gh-fg-default/60 focus:outline-none focus:border-gh-accent-emphasis resize-none"
                 placeholder={t('addTool.descriptionPlaceholder')}
                 rows={3}
               />
