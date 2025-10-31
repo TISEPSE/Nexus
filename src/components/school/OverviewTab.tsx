@@ -6,7 +6,7 @@ interface OverviewTabProps {
   schoolData: any;
 }
 
-export function OverviewTab({ searchQuery, schoolData }: OverviewTabProps) {
+export function OverviewTab({ searchQuery: _searchQuery, schoolData }: OverviewTabProps) {
   const { t } = useTranslation();
 
   // Calculate stats

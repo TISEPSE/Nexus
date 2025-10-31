@@ -21,7 +21,7 @@ export function AddToCollectionModal({
   onAddToCollection,
   onRemoveFromCollection,
   onCreateCollection,
-  onSelectCollection
+  onSelectCollection: _onSelectCollection
 }: AddToCollectionModalProps) {
   const [isCreating, setIsCreating] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');

@@ -5,7 +5,7 @@ interface SettingsSectionProps {
   title: string;
   description?: string;
   icon?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
 }
 

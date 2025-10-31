@@ -429,7 +429,7 @@ function ExamCard({ exam, onEdit, onDelete }: {
 }
 
 // Calendar View (simplified)
-function CalendarView({ exams }: { exams: Exam[] }) {
+function CalendarView({ exams: _exams }: { exams: Exam[] }) {
   return (
     <div className="bg-gh-canvas-subtle border border-gh-border-default rounded-lg p-8 text-center">
       <div className="inline-flex p-4 rounded-full bg-blue-500/10 mb-4">
