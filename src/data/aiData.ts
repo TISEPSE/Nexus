@@ -1568,6 +1568,36 @@ export const aiTools: AITool[] = [
     domain: 'traderepublic.com',
     tags: ['trading', 'stocks', 'finance', 'investing', 'broker']
   },
+  {
+    id: 'caisse-epargne',
+    name: 'Caisse d\'Épargne',
+    description: 'Banque en ligne française avec services bancaires complets',
+    url: 'https://www.caisse-epargne.fr',
+    category: ['Finance'],
+    logo: [
+      'https://www.caisse-epargne.fr/favicon.ico',
+    ],
+    domain: 'caisse-epargne.fr',
+    tags: ['banque', 'finance', 'épargne', 'compte', 'carte', 'crédit', 'assurance']
+  },
+  {
+    id: 'docker-desktop',
+    name: 'Docker Desktop',
+    description: 'Containerization platform for building, sharing, and running applications',
+    url: 'https://www.docker.com/products/docker-desktop',
+    category: ['Développement', 'Cloud', 'Automation'],
+    logo: [
+      'https://www.docker.com/wp-content/uploads/2023/04/cropped-docker-logo-favicon-192x192.png',
+      'https://www.docker.com/favicon.ico',
+    ],
+    domain: 'docker.com',
+    tags: ['docker', 'containers', 'devops', 'kubernetes', 'deployment', 'virtualization'],
+    executables: {
+      windows: ['Docker Desktop.exe', 'docker.exe'],
+      macos: ['Docker.app', 'docker'],
+      linux: ['docker', 'docker-desktop']
+    }
+  },
 ];
 
 export const categories = [

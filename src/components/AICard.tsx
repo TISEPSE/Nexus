@@ -19,6 +19,7 @@ interface AICardProps {
   onToggleSelect?: (toolId: string) => void;
   collections?: Collection[];
   onOpenCollectionModal?: (tool: AITool) => void;
+  showCollectionIndicator?: boolean;
 }
 
 const AICardComponent: React.FC<AICardProps> = ({
@@ -34,13 +35,21 @@ const AICardComponent: React.FC<AICardProps> = ({
   isSelected = false,
   onToggleSelect,
   collections = [],
-  onOpenCollectionModal
+  onOpenCollectionModal,
+  showCollectionIndicator = true
 }) => {
   const { t, i18n } = useTranslation();
 
   // Count how many collections contain this tool
   const collectionCount = useMemo(() => {
     return collections.filter(collection => collection.toolIds.includes(tool.id)).length;
+  }, [collections, tool.id]);
+
+  // Get collection names for tooltip
+  const collectionNames = useMemo(() => {
+    return collections
+      .filter(collection => collection.toolIds.includes(tool.id))
+      .map(collection => collection.name);
   }, [collections, tool.id]);
 
   // Build complete list of logo sources (primary + fallbacks)
@@ -70,25 +79,34 @@ const AICardComponent: React.FC<AICardProps> = ({
   const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // State for collection tooltip
+  const [showCollectionTooltip, setShowCollectionTooltip] = useState(false);
+
   // Reset logo index when tool changes
   useEffect(() => {
     setCurrentLogoIndex(0);
-    setShowFallback(false);
-  }, [tool.id]);
+    // Force fallback for localhost URLs
+    const isLocalhost = tool.url.includes('localhost') || tool.url.includes('127.0.0.1');
+    setShowFallback(isLocalhost);
+  }, [tool.id, tool.url]);
 
   // Close menu when clicking outside
   useEffect(() => {
+    if (!menuOpen) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setMenuOpen(false);
       }
     };
 
-    if (menuOpen) {
+    // Delay adding listener to avoid immediate closure
+    const timeoutId = setTimeout(() => {
       document.addEventListener('mousedown', handleClickOutside);
-    }
+    }, 0);
 
     return () => {
+      clearTimeout(timeoutId);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [menuOpen]);
@@ -104,7 +122,14 @@ const AICardComponent: React.FC<AICardProps> = ({
     }
   }, [currentLogoIndex, logoSources.length]);
 
-  const handleClick = async () => {
+  const handleClick = useCallback(async (e: React.MouseEvent) => {
+    // Don't launch if menu is open
+    if (menuOpen) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
     // In multi-select mode, clicking toggles selection instead of launching
     if (isMultiSelectMode && onToggleSelect) {
       onToggleSelect(tool.id);
@@ -120,7 +145,7 @@ const AICardComponent: React.FC<AICardProps> = ({
       // Last resort fallback
       window.open(tool.url, '_blank', 'noopener,noreferrer');
     }
-  };
+  }, [menuOpen, isMultiSelectMode, onToggleSelect, tool.id, tool.name, tool.url]);
 
   return (
     <div
@@ -137,7 +162,7 @@ const AICardComponent: React.FC<AICardProps> = ({
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          handleClick();
+          handleClick(e as any);
         }
       }}
     >
@@ -154,8 +179,8 @@ const AICardComponent: React.FC<AICardProps> = ({
               loading="lazy"
             />
           ) : (
-            <div className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center text-gh-accent-fg text-xl sm:text-2xl font-bold">
-              {tool.name.charAt(0)}
+            <div className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center bg-blue-900 text-white text-xl sm:text-2xl font-bold rounded-md">
+              {tool.name.charAt(0).toUpperCase()}
             </div>
           )}
         </div>
@@ -249,8 +274,12 @@ const AICardComponent: React.FC<AICardProps> = ({
 
 
       {/* Collection indicator - Top right, when tool is in collection */}
-      {!showEditDelete && collectionCount > 0 && (
-        <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded bg-gh-accent-subtle/90 border border-gh-accent-emphasis/50 backdrop-blur-sm">
+      {!showEditDelete && showCollectionIndicator && collectionCount > 0 && (
+        <div
+          className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded bg-gh-accent-subtle/90 border border-gh-accent-emphasis/50 backdrop-blur-sm"
+          onMouseEnter={() => setShowCollectionTooltip(true)}
+          onMouseLeave={() => setShowCollectionTooltip(false)}
+        >
           <svg
             className="w-3 h-3 text-gh-accent-fg"
             fill="none"
@@ -265,11 +294,20 @@ const AICardComponent: React.FC<AICardProps> = ({
             />
           </svg>
           <span className="text-xs font-medium text-gh-accent-fg">{collectionCount}</span>
+
+          {/* Tooltip with collection names */}
+          {showCollectionTooltip && collectionNames.length > 0 && (
+            <div className="absolute bottom-full right-0 mb-1 px-2 py-1 bg-gh-canvas-default border border-gh-border-default rounded shadow-lg z-[10000] whitespace-nowrap animate-menu-appear">
+              <div className="text-xs text-gh-fg-default">
+                {collectionNames.join(', ')}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
       {/* External link icon - Top right, hidden on very small mobile and when edit button or collection indicator is shown */}
-      {!showEditDelete && collectionCount === 0 && (
+      {!showEditDelete && (!showCollectionIndicator || collectionCount === 0) && (
         <div className="hidden sm:block absolute top-2 right-2 opacity-0 group-hover:opacity-60 transition-opacity">
           <svg
             className="w-3.5 h-3.5 text-gh-fg-muted"
@@ -365,11 +403,11 @@ const AICardComponent: React.FC<AICardProps> = ({
             top: `${menuPosition.top}px`,
             left: `${menuPosition.left}px`
           }}
-          onClick={(e) => e.stopPropagation()}
         >
           {onEdit && (
             <button
-              onClick={(e) => {
+              onMouseDown={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 setMenuOpen(false);
                 onEdit();
@@ -388,7 +426,8 @@ const AICardComponent: React.FC<AICardProps> = ({
           )}
           {onDelete && (
             <button
-              onClick={(e) => {
+              onMouseDown={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 setMenuOpen(false);
                 onDelete();

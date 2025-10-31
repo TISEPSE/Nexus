@@ -101,7 +101,7 @@ function App({
   return (
     <>
       {/* Tile Grid View */}
-      <div className="grid grid-cols-3 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-3 md:gap-3">
+      <div id="dashboard-content" className="grid grid-cols-3 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-3 md:gap-3">
           {/* Add Tool Card - Only show in "All" category */}
           {selectedCategory === 'All' && (
             <AddToolCard onClick={() => setIsModalOpen(true)} />

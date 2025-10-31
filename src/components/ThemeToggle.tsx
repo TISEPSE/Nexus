@@ -31,30 +31,10 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) =>
     >
       {/* Icon Container with Animation */}
       <div className="relative w-5 h-5 flex-shrink-0 sm:flex-shrink">
-        {/* Sun Icon - Visible in Dark Mode */}
+        {/* Moon Icon - Visible in Dark Mode (current state) */}
         <svg
           className={`absolute inset-0 w-5 h-5 text-gh-fg-default group-hover:text-gh-accent-fg transition-all duration-300 ${
             isDark
-              ? 'opacity-100 rotate-0 scale-100'
-              : 'opacity-0 -rotate-90 scale-0'
-          }`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-          />
-        </svg>
-
-        {/* Moon Icon - Visible in Light Mode */}
-        <svg
-          className={`absolute inset-0 w-5 h-5 text-gh-fg-default group-hover:text-gh-accent-fg transition-all duration-300 ${
-            !isDark
               ? 'opacity-100 rotate-0 scale-100'
               : 'opacity-0 rotate-90 scale-0'
           }`}
@@ -70,11 +50,31 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) =>
             d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
           />
         </svg>
+
+        {/* Sun Icon - Visible in Light Mode (current state) */}
+        <svg
+          className={`absolute inset-0 w-5 h-5 text-gh-fg-default group-hover:text-gh-accent-fg transition-all duration-300 ${
+            !isDark
+              ? 'opacity-100 rotate-0 scale-100'
+              : 'opacity-0 -rotate-90 scale-0'
+          }`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          />
+        </svg>
       </div>
 
-      {/* Text Label - Descriptive and Clear */}
+      {/* Text Label - Shows Current Mode */}
       <span className="text-sm font-medium text-gh-fg-default group-hover:text-gh-accent-fg transition-colors whitespace-nowrap hidden sm:inline">
-        {isDark ? 'Light' : 'Dark'}
+        {isDark ? 'Dark' : 'Light'}
       </span>
 
       {/* Hover Tooltip Enhancement - Shows Future State */}

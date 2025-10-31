@@ -63,8 +63,7 @@ export function AddToCollectionModal({
       setIsCreating(false);
       if (newId) {
         handleAddToCollection(newId);
-        // Auto-select the newly created collection if callback is provided
-        onSelectCollection?.(newId);
+        // Don't auto-select when creating from this modal
       }
     }
   };

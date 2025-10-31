@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   SettingsSection,
@@ -88,11 +88,19 @@ interface TabGroup {
 export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
   const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState<SettingsTab>('appearance');
-  const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium');
+  const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>(() => {
+    try {
+      const saved = localStorage.getItem('nexus_font_size');
+      return (saved as 'small' | 'medium' | 'large') || 'medium';
+    } catch {
+      return 'medium';
+    }
+  });
   const [compactMode, setCompactMode] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [autoUpdate, setAutoUpdate] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [developerMode, setDeveloperMode] = useState(false);
 
   const tabGroups: TabGroup[] = [
     {
@@ -181,6 +189,12 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
     // This would integrate with Tauri updater
     alert(t('settings.updates.checkingUpdates'));
   };
+
+  // Apply font size when it changes
+  useEffect(() => {
+    localStorage.setItem('nexus_font_size', fontSize);
+    document.documentElement.setAttribute('data-font-size', fontSize);
+  }, [fontSize]);
 
   return (
     <div className="flex h-full">
@@ -494,20 +508,7 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
                 description={t('settings.collections.description')}
                 icon={<FolderIcon />}
               >
-                <SettingItem
-                  label={t('settings.collections.defaultSort')}
-                  description={t('settings.collections.defaultSortDesc')}
-                >
-                  <SettingSelect
-                    value="name"
-                    onChange={() => {}}
-                    options={[
-                      { value: 'name', label: t('collections.sortName') },
-                      { value: 'date', label: t('collections.sortDate') },
-                      { value: 'size', label: t('collections.sortSize') },
-                    ]}
-                  />
-                </SettingItem>
+                {/* Future collection settings will go here */}
               </SettingsSection>
             )}
 
@@ -595,8 +596,8 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
                   description={t('settings.advanced.developerModeDesc')}
                 >
                   <SettingToggle
-                    checked={false}
-                    onChange={() => {}}
+                    checked={developerMode}
+                    onChange={setDeveloperMode}
                   />
                 </SettingItem>
               </SettingsSection>

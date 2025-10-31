@@ -168,7 +168,7 @@ export function SettingToggle({
       className={`
         relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent
         transition-colors duration-200 ease-in-out
-        focus:outline-none focus:ring-2 focus:ring-gh-accent-fg focus:ring-offset-2
+        focus:outline-none
         disabled:opacity-50 disabled:cursor-not-allowed
         ${checked ? 'bg-gh-accent-emphasis' : 'bg-gh-border-muted'}
       `}
@@ -210,7 +210,7 @@ export function SettingSelect({
         block w-full sm:w-auto
         px-3 py-2 rounded-md
         text-base
-        bg-gh-canvas-default
+        bg-gh-canvas-subtle hover:bg-gh-canvas-inset
         border border-gh-border-default
         text-gh-fg-default
         focus:outline-none focus:ring-2 focus:ring-gh-accent-fg focus:border-transparent

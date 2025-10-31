@@ -208,7 +208,8 @@ export function MyWorkspace({
               onDelete={showEditDelete ? () => handleDeleteClick(tool) : undefined}
               matchesTemplate={false}
               collections={collections}
-              onOpenCollectionModal={view === 'all' || isInCollectionView ? undefined : (tool) => setCollectionModalTool(tool)}
+              onOpenCollectionModal={isInCollectionView ? undefined : (tool) => setCollectionModalTool(tool)}
+              showCollectionIndicator={true}
             />
           );
         })}

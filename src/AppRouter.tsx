@@ -40,6 +40,12 @@ export function AppRouter() {
     localStorage.setItem('customTools', JSON.stringify(customTools));
   }, [customTools]);
 
+  // Apply font size on mount
+  useEffect(() => {
+    const savedFontSize = localStorage.getItem('nexus_font_size') || 'medium';
+    document.documentElement.setAttribute('data-font-size', savedFontSize);
+  }, []);
+
   const toggleFavorite = useCallback((toolId: string) => {
     setFavorites((prev) =>
       prev.includes(toolId)

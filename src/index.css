@@ -75,6 +75,10 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  .border-l-3 {
+    border-left-width: 3px;
+  }
 }
 
 /* Minimalistic Theme Toggle Switch */
@@ -734,4 +738,143 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
 
 .animate-menu-appear {
   animation: menu-appear 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ========================================
+   FONT SIZE SETTINGS
+   Responsive font scaling based on user preference
+   ======================================== */
+
+/* Base font sizes (medium - default) */
+:root {
+  --font-scale: 1;
+}
+
+/* Small font size */
+html[data-font-size="small"] {
+  --font-scale: 0.875;
+}
+
+/* Medium font size (default) */
+html[data-font-size="medium"] {
+  --font-scale: 1;
+}
+
+/* Large font size */
+html[data-font-size="large"] {
+  --font-scale: 1.125;
+}
+
+/* Apply font scaling to body */
+html[data-font-size="small"] body {
+  font-size: calc(1rem * 0.875);
+}
+
+html[data-font-size="large"] body {
+  font-size: calc(1rem * 1.125);
+}
+
+/* Scale headings proportionally */
+html[data-font-size="small"] h1 {
+  font-size: calc(2rem * 0.875);
+}
+
+html[data-font-size="large"] h1 {
+  font-size: calc(2rem * 1.125);
+}
+
+html[data-font-size="small"] h2 {
+  font-size: calc(1.5rem * 0.875);
+}
+
+html[data-font-size="large"] h2 {
+  font-size: calc(1.5rem * 1.125);
+}
+
+html[data-font-size="small"] h3 {
+  font-size: calc(1.25rem * 0.875);
+}
+
+html[data-font-size="large"] h3 {
+  font-size: calc(1.25rem * 1.125);
+}
+
+/* Scale text utilities */
+html[data-font-size="small"] .text-xs {
+  font-size: calc(0.75rem * 0.875);
+}
+
+html[data-font-size="large"] .text-xs {
+  font-size: calc(0.75rem * 1.125);
+}
+
+html[data-font-size="small"] .text-sm {
+  font-size: calc(0.875rem * 0.875);
+}
+
+html[data-font-size="large"] .text-sm {
+  font-size: calc(0.875rem * 1.125);
+}
+
+html[data-font-size="small"] .text-base {
+  font-size: calc(1rem * 0.875);
+}
+
+html[data-font-size="large"] .text-base {
+  font-size: calc(1rem * 1.125);
+}
+
+html[data-font-size="small"] .text-lg {
+  font-size: calc(1.125rem * 0.875);
+}
+
+html[data-font-size="large"] .text-lg {
+  font-size: calc(1.125rem * 1.125);
+}
+
+html[data-font-size="small"] .text-xl {
+  font-size: calc(1.25rem * 0.875);
+}
+
+html[data-font-size="large"] .text-xl {
+  font-size: calc(1.25rem * 1.125);
+}
+
+html[data-font-size="small"] .text-2xl {
+  font-size: calc(1.5rem * 0.875);
+}
+
+html[data-font-size="large"] .text-2xl {
+  font-size: calc(1.5rem * 1.125);
+}
+
+/* ========================================
+   DASHBOARD TOOLS FONT SIZE OVERRIDE
+   Larger text for tool cards on dashboard
+   ======================================== */
+
+/* Dashboard tool cards - Medium size uses Large scaling */
+html[data-font-size="medium"] #dashboard-content .text-xs {
+  font-size: calc(0.75rem * 1.125);
+}
+
+html[data-font-size="medium"] #dashboard-content .text-sm {
+  font-size: calc(0.875rem * 1.125);
+}
+
+html[data-font-size="medium"] #dashboard-content .text-base {
+  font-size: calc(1rem * 1.125);
+}
+
+/* Dashboard tool cards - Large size uses extra large scaling */
+html[data-font-size="large"] #dashboard-content .text-xs {
+  font-size: calc(0.75rem * 1.25);
+}
+
+html[data-font-size="large"] #dashboard-content .text-sm {
+  font-size: calc(0.875rem * 1.25);
+}
+
+html[data-font-size="large"] #dashboard-content .text-base {
+  font-size: calc(1rem * 1.25);
 }

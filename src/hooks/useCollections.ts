@@ -37,52 +37,57 @@ export function useCollections() {
   }, []);
 
   // Save collections to localStorage
-  const saveCollections = useCallback((newCollections: Collection[]) => {
-    const data: StoredCollections = {
-      version: 1,
-      collections: newCollections
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    setCollections(newCollections);
+  const saveCollections = useCallback((updater: Collection[] | ((prev: Collection[]) => Collection[])) => {
+    setCollections(prev => {
+      const newCollections = typeof updater === 'function' ? updater(prev) : updater;
+      const data: StoredCollections = {
+        version: 1,
+        collections: newCollections
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      return newCollections;
+    });
   }, []);
 
   // Create collection
   const createCollection = useCallback((name: string, description?: string) => {
-    const newCollection: Collection = {
-      id: `collection-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      name,
-      description,
-      toolIds: [],
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      order: collections.length
-    };
-    saveCollections([...collections, newCollection]);
-    return newCollection.id;
-  }, [collections, saveCollections]);
+    let newId = '';
+    saveCollections(prev => {
+      const newCollection: Collection = {
+        id: `collection-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        name,
+        description,
+        toolIds: [],
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        order: prev.length
+      };
+      newId = newCollection.id;
+      return [...prev, newCollection];
+    });
+    return newId;
+  }, [saveCollections]);
 
   // Rename collection
   const renameCollection = useCallback((collectionId: string, newName: string) => {
-    const updated = collections.map(c =>
+    saveCollections(prev => prev.map(c =>
       c.id === collectionId
         ? { ...c, name: newName, updatedAt: Date.now() }
         : c
-    );
-    saveCollections(updated);
-  }, [collections, saveCollections]);
+    ));
+  }, [saveCollections]);
 
   // Delete collection
   const deleteCollection = useCallback((collectionId: string) => {
-    const updated = collections.filter(c => c.id !== collectionId);
-    saveCollections(updated);
+    saveCollections(prev => prev.filter(c => c.id !== collectionId));
     if (selectedCollectionId === collectionId) {
       setSelectedCollectionId(null);
     }
-  }, [collections, selectedCollectionId, saveCollections]);
+  }, [selectedCollectionId, saveCollections]);
 
   // Add tools to collection
   const addToolsToCollection = useCallback((collectionId: string, toolIds: string[]) => {
-    const updated = collections.map(c =>
+    saveCollections(prev => prev.map(c =>
       c.id === collectionId
         ? {
             ...c,
@@ -90,13 +95,12 @@ export function useCollections() {
             updatedAt: Date.now()
           }
         : c
-    );
-    saveCollections(updated);
-  }, [collections, saveCollections]);
+    ));
+  }, [saveCollections]);
 
   // Remove tools from collection
   const removeToolsFromCollection = useCallback((collectionId: string, toolIds: string[]) => {
-    const updated = collections.map(c =>
+    saveCollections(prev => prev.map(c =>
       c.id === collectionId
         ? {
             ...c,
@@ -104,9 +108,8 @@ export function useCollections() {
             updatedAt: Date.now()
           }
         : c
-    );
-    saveCollections(updated);
-  }, [collections, saveCollections]);
+    ));
+  }, [saveCollections]);
 
   // Get collection by ID
   const getCollection = useCallback((collectionId: string | null): Collection | null => {

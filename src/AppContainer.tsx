@@ -4,10 +4,11 @@ import { UnifiedHeader } from './components/UnifiedHeader';
 import { FloatingMenu } from './components/FloatingMenu';
 import App from './App';
 import { MyWorkspace } from './pages/MyWorkspace';
+import { School } from './pages/School';
 import { Settings } from './pages/Settings';
 import { AITool, categories as allCategories, aiTools } from './data/aiData';
 
-type ViewMode = 'dashboard' | 'workspace' | 'settings';
+type ViewMode = 'dashboard' | 'workspace' | 'school' | 'settings';
 
 interface AppContainerProps {
   favorites: string[];
@@ -48,6 +49,8 @@ export function AppContainer({
       announcement = t('navigation.switchedToDashboard', 'Switched to Dashboard');
     } else if (newView === 'workspace') {
       announcement = t('navigation.switchedToWorkspace', 'Switched to Workspace');
+    } else if (newView === 'school') {
+      announcement = t('navigation.switchedToSchool', 'Switched to School');
     } else if (newView === 'settings') {
       announcement = t('navigation.switchedToSettings', 'Switched to Settings');
     }
@@ -79,6 +82,9 @@ export function AppContainer({
       custom: customTools.length,
     });
     searchPlaceholder = t('workspace.searchPlaceholder');
+  } else if (activeView === 'school') {
+    subtitle = t('school.subtitle', 'Gérez vos cours, devoirs et examens');
+    searchPlaceholder = t('school.searchPlaceholder', 'Rechercher...');
   } else if (activeView === 'settings') {
     subtitle = t('settings.subtitle', 'Customize your experience');
     searchPlaceholder = '';
@@ -144,6 +150,10 @@ export function AppContainer({
             onAddTool={onAddTool}
             onEditTool={onEditTool}
             onDeleteTool={onDeleteTool}
+          />
+        ) : activeView === 'school' ? (
+          <School
+            searchQuery={searchQuery}
           />
         ) : (
           <Settings

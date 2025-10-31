@@ -4,8 +4,9 @@ import { LanguageToggle } from './LanguageToggle';
 import { ThemeToggle } from './ThemeToggle';
 import { HomeButton } from './HomeButton';
 import { MyWorkspaceButton } from './MyWorkspaceButton';
+import { SchoolButton } from './SchoolButton';
 
-type ViewMode = 'dashboard' | 'workspace' | 'settings';
+type ViewMode = 'dashboard' | 'workspace' | 'school' | 'settings';
 
 interface UnifiedHeaderProps {
   // View state
@@ -74,7 +75,7 @@ export function UnifiedHeader({
               {onOpenSettings && (
                 <button
                   onClick={onOpenSettings}
-                  className={`group relative flex items-center justify-center gap-1.5 px-2 py-2 min-h-[44px] min-w-[44px] rounded-md border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gh-accent-fg ${
+                  className={`group relative flex items-center justify-center gap-1.5 px-2 py-2 min-h-[44px] min-w-[44px] rounded-md border transition-all duration-200 focus:outline-none ${
                     activeView === 'settings'
                       ? 'bg-gh-accent-subtle border-gh-accent-emphasis text-gh-accent-fg'
                       : 'bg-gh-canvas-subtle border-gh-border-default hover:bg-gh-canvas-inset hover:border-gh-accent-fg'
@@ -103,6 +104,10 @@ export function UnifiedHeader({
                   isActive={activeView === 'workspace'}
                   onClick={() => onViewChange('workspace')}
                 />
+                <SchoolButton
+                  isActive={activeView === 'school'}
+                  onClick={() => onViewChange('school')}
+                />
               </div>
 
               {/* Filter Group */}
@@ -126,7 +131,7 @@ export function UnifiedHeader({
                 {onOpenSettings && (
                   <button
                     onClick={onOpenSettings}
-                    className={`group relative flex items-center justify-center gap-1.5 px-2 sm:px-3 py-2 min-h-[44px] min-w-[44px] rounded-md border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gh-accent-fg focus:ring-offset-2 focus:ring-offset-gh-canvas-default ${
+                    className={`group relative flex items-center justify-center gap-1.5 px-2 sm:px-3 py-2 min-h-[44px] min-w-[44px] rounded-md border transition-all duration-200 focus:outline-none ${
                       activeView === 'settings'
                         ? 'bg-gh-accent-subtle border-gh-accent-emphasis text-gh-accent-fg'
                         : 'bg-gh-canvas-subtle border-gh-border-default hover:bg-gh-canvas-inset hover:border-gh-accent-fg'
