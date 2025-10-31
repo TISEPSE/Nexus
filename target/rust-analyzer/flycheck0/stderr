@@ -1,13 +1,185 @@
-   0.240468379s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint: stale: missing "/home/baptiste/VsCode/Nexus/src-tauri/../.env"
-   0.287347840s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint: fingerprint dirty for nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri)/Check { test: false }/TargetInner { ..: lib_target("nexus_lib", ["staticlib", "cdylib", "rlib"], "/home/baptiste/VsCode/Nexus/src-tauri/src/lib.rs", Edition2021) }
-   0.287376994s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
-   0.291311503s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri)/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "/home/baptiste/VsCode/Nexus/src-tauri/build.rs", Edition2021) }
-   0.291334235s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(MissingFile("/home/baptiste/VsCode/Nexus/src-tauri/../.env")))
-   0.339715973s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint: fingerprint dirty for nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri)/Check { test: true }/TargetInner { ..: lib_target("nexus_lib", ["staticlib", "cdylib", "rlib"], "/home/baptiste/VsCode/Nexus/src-tauri/src/lib.rs", Edition2021) }
-   0.339736522s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
-   0.342013632s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus"}: cargo::core::compiler::fingerprint: fingerprint dirty for nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri)/Check { test: false }/TargetInner { name: "nexus", doc: true, ..: with_path("/home/baptiste/VsCode/Nexus/src-tauri/src/main.rs", Edition2021) }
-   0.342027578s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "nexus_lib" })
-   0.343740069s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus"}: cargo::core::compiler::fingerprint: fingerprint dirty for nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri)/Check { test: true }/TargetInner { name: "nexus", doc: true, ..: with_path("/home/baptiste/VsCode/Nexus/src-tauri/src/main.rs", Edition2021) }
-   0.343751641s  INFO prepare_target{force=false package_id=nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "nexus_lib" })
-   Compiling nexus v0.0.1 (/home/baptiste/VsCode/Nexus/src-tauri)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.14s
+   0.263279030s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint: stale: missing "/home/baptiste/VsCode/Nexus/src-tauri/../.env"
+   0.273085122s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint: fingerprint error for nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri)/Check { test: false }/TargetInner { ..: lib_target("nexus_lib", ["staticlib", "cdylib", "rlib"], "/home/baptiste/VsCode/Nexus/src-tauri/src/lib.rs", Edition2021) }
+   0.273113130s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/baptiste/VsCode/Nexus/src-tauri/target/debug/.fingerprint/nexus-9a15be75b88e7818/lib-nexus_lib`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   6: cargo::ops::cargo_compile::compile_ws
+   7: cargo::ops::cargo_compile::compile_with_exec
+   8: cargo::ops::cargo_compile::compile
+   9: cargo::commands::check::exec
+  10: <cargo::cli::Exec>::exec
+  11: cargo::main
+  12: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  13: std::rt::lang_start::<()>::{closure#0}
+  14: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/core/src/ops/function.rs:290:21
+  15: std::panicking::catch_unwind::do_call
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:589:40
+  16: std::panicking::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:552:19
+  17: std::panic::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panic.rs:359:14
+  18: std::rt::lang_start_internal::{{closure}}
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/rt.rs:175:24
+  19: std::panicking::catch_unwind::do_call
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:589:40
+  20: std::panicking::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/rt.rs:171:5
+  23: main
+  24: __libc_start_call_main
+             at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  25: __libc_start_main_impl
+             at ./csu/../csu/libc-start.c:360:3
+  26: <unknown>
+   0.338072099s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri)/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "/home/baptiste/VsCode/Nexus/src-tauri/build.rs", Edition2021) }
+   0.338098040s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(MissingFile("/home/baptiste/VsCode/Nexus/src-tauri/../.env")))
+   0.358537115s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint: fingerprint error for nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri)/Check { test: true }/TargetInner { ..: lib_target("nexus_lib", ["staticlib", "cdylib", "rlib"], "/home/baptiste/VsCode/Nexus/src-tauri/src/lib.rs", Edition2021) }
+   0.358556051s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus_lib"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/baptiste/VsCode/Nexus/src-tauri/target/debug/.fingerprint/nexus-b821d7c3d96ab803/test-lib-nexus_lib`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   6: cargo::ops::cargo_compile::compile_ws
+   7: cargo::ops::cargo_compile::compile_with_exec
+   8: cargo::ops::cargo_compile::compile
+   9: cargo::commands::check::exec
+  10: <cargo::cli::Exec>::exec
+  11: cargo::main
+  12: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  13: std::rt::lang_start::<()>::{closure#0}
+  14: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/core/src/ops/function.rs:290:21
+  15: std::panicking::catch_unwind::do_call
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:589:40
+  16: std::panicking::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:552:19
+  17: std::panic::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panic.rs:359:14
+  18: std::rt::lang_start_internal::{{closure}}
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/rt.rs:175:24
+  19: std::panicking::catch_unwind::do_call
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:589:40
+  20: std::panicking::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/rt.rs:171:5
+  23: main
+  24: __libc_start_call_main
+             at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  25: __libc_start_main_impl
+             at ./csu/../csu/libc-start.c:360:3
+  26: <unknown>
+   0.360553506s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus"}: cargo::core::compiler::fingerprint: fingerprint error for nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri)/Check { test: false }/TargetInner { name: "nexus", doc: true, ..: with_path("/home/baptiste/VsCode/Nexus/src-tauri/src/main.rs", Edition2021) }
+   0.360560431s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/baptiste/VsCode/Nexus/src-tauri/target/debug/.fingerprint/nexus-eb6b1c9a550bb768/bin-nexus`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   6: cargo::ops::cargo_compile::compile_ws
+   7: cargo::ops::cargo_compile::compile_with_exec
+   8: cargo::ops::cargo_compile::compile
+   9: cargo::commands::check::exec
+  10: <cargo::cli::Exec>::exec
+  11: cargo::main
+  12: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  13: std::rt::lang_start::<()>::{closure#0}
+  14: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/core/src/ops/function.rs:290:21
+  15: std::panicking::catch_unwind::do_call
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:589:40
+  16: std::panicking::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:552:19
+  17: std::panic::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panic.rs:359:14
+  18: std::rt::lang_start_internal::{{closure}}
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/rt.rs:175:24
+  19: std::panicking::catch_unwind::do_call
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:589:40
+  20: std::panicking::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/rt.rs:171:5
+  23: main
+  24: __libc_start_call_main
+             at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  25: __libc_start_main_impl
+             at ./csu/../csu/libc-start.c:360:3
+  26: <unknown>
+   0.361681822s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus"}: cargo::core::compiler::fingerprint: fingerprint error for nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri)/Check { test: true }/TargetInner { name: "nexus", doc: true, ..: with_path("/home/baptiste/VsCode/Nexus/src-tauri/src/main.rs", Edition2021) }
+   0.361687713s  INFO prepare_target{force=false package_id=nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri) target="nexus"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/baptiste/VsCode/Nexus/src-tauri/target/debug/.fingerprint/nexus-4c22bd803a6ccec8/test-bin-nexus`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   6: cargo::ops::cargo_compile::compile_ws
+   7: cargo::ops::cargo_compile::compile_with_exec
+   8: cargo::ops::cargo_compile::compile
+   9: cargo::commands::check::exec
+  10: <cargo::cli::Exec>::exec
+  11: cargo::main
+  12: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  13: std::rt::lang_start::<()>::{closure#0}
+  14: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/core/src/ops/function.rs:290:21
+  15: std::panicking::catch_unwind::do_call
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:589:40
+  16: std::panicking::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:552:19
+  17: std::panic::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panic.rs:359:14
+  18: std::rt::lang_start_internal::{{closure}}
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/rt.rs:175:24
+  19: std::panicking::catch_unwind::do_call
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:589:40
+  20: std::panicking::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panicking.rs:552:19
+  21: std::panic::catch_unwind
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal
+             at /rustc/1159e78c4747b02ef996e55082b704c09b970588/library/std/src/rt.rs:171:5
+  23: main
+  24: __libc_start_call_main
+             at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  25: __libc_start_main_impl
+             at ./csu/../csu/libc-start.c:360:3
+  26: <unknown>
+   Compiling nexus v0.0.3 (/home/baptiste/VsCode/Nexus/src-tauri)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.31s
