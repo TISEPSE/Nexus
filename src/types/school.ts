@@ -7,8 +7,7 @@ export interface Homework {
   subjectColor: string;
   description: string;
   dueDate: string; // ISO date string
-  priority: 'urgent' | 'important' | 'normal' | 'optional';
-  status: 'pending' | 'in-progress' | 'completed';
+  status: 'pending' | 'completed';
   estimatedTime?: number; // in minutes
   attachments?: string[];
   createdAt: string;

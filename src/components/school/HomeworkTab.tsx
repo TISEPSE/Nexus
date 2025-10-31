@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Homework } from '../../types/school';
-import { priorityColors, statusColors } from '../../data/subjectColors';
+import { statusColors } from '../../data/subjectColors';
 import { ContextMenu } from '../ContextMenu';
 
 interface HomeworkTabProps {
@@ -10,12 +10,10 @@ interface HomeworkTabProps {
 }
 
 type FilterStatus = 'all' | 'pending' | 'completed';
-type FilterPriority = 'all' | 'urgent' | 'important' | 'normal' | 'optional';
 
 export function HomeworkTab({ searchQuery, schoolData }: HomeworkTabProps) {
   const { t } = useTranslation();
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
-  const [filterPriority, setFilterPriority] = useState<FilterPriority>('all');
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingHomework, setEditingHomework] = useState<Homework | null>(null);
 
@@ -38,44 +36,34 @@ export function HomeworkTab({ searchQuery, schoolData }: HomeworkTabProps) {
       filtered = filtered.filter((hw: Homework) => hw.status === filterStatus);
     }
 
-    // Priority filter
-    if (filterPriority !== 'all') {
-      filtered = filtered.filter((hw: Homework) => hw.priority === filterPriority);
-    }
-
-    // Sort by due date (closest first), then by priority
+    // Sort by due date (closest first)
     return filtered.sort((a: Homework, b: Homework) => {
       const dateA = new Date(a.dueDate).getTime();
       const dateB = new Date(b.dueDate).getTime();
-      if (dateA !== dateB) return dateA - dateB;
-
-      const priorityOrder = { urgent: 0, important: 1, normal: 2, optional: 3 };
-      return priorityOrder[a.priority] - priorityOrder[b.priority];
+      return dateA - dateB;
     });
-  }, [schoolData.homework, searchQuery, filterStatus, filterPriority]);
+  }, [schoolData.homework, searchQuery, filterStatus]);
 
-  // Calculate stats (removed in-progress)
+  // Calculate stats
   const stats = useMemo(() => {
     const pending = schoolData.homework.filter((hw: Homework) => hw.status === 'pending').length;
     const completed = schoolData.homework.filter((hw: Homework) => hw.status === 'completed').length;
-    const urgent = schoolData.homework.filter((hw: Homework) => hw.priority === 'urgent' && hw.status !== 'completed').length;
 
-    return { pending, completed, urgent };
+    return { pending, completed };
   }, [schoolData.homework]);
 
   return (
     <div className="space-y-4">
-      {/* Stats Row - removed "En cours" */}
-      <div className="grid grid-cols-3 gap-3">
+      {/* Stats Row */}
+      <div className="grid grid-cols-2 gap-3">
         <StatCard label="À faire" value={stats.pending} color="orange" />
         <StatCard label="Terminés" value={stats.completed} color="green" />
-        <StatCard label="Urgents" value={stats.urgent} color="red" />
       </div>
 
       {/* Filters and Actions */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div className="flex flex-wrap gap-2">
-          {/* Status Filter - removed in-progress option */}
+          {/* Status Filter */}
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
@@ -84,19 +72,6 @@ export function HomeworkTab({ searchQuery, schoolData }: HomeworkTabProps) {
             <option value="all">Tous les statuts</option>
             <option value="pending">À faire</option>
             <option value="completed">Terminés</option>
-          </select>
-
-          {/* Priority Filter */}
-          <select
-            value={filterPriority}
-            onChange={(e) => setFilterPriority(e.target.value as FilterPriority)}
-            className="px-3 py-2 bg-gh-canvas-subtle hover:bg-gh-canvas-inset border border-gh-border-default rounded-md text-sm text-gh-fg-default focus:outline-none"
-          >
-            <option value="all">Toutes les priorités</option>
-            <option value="urgent">Urgent</option>
-            <option value="important">Important</option>
-            <option value="normal">Normal</option>
-            <option value="optional">Optionnel</option>
           </select>
         </div>
 
@@ -124,12 +99,12 @@ export function HomeworkTab({ searchQuery, schoolData }: HomeworkTabProps) {
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gh-fg-default mb-2">
-            {filterStatus === 'all' && filterPriority === 'all'
+            {filterStatus === 'all'
               ? t('school.homework.noHomework')
               : 'Aucun devoir correspondant'}
           </h3>
           <p className="text-sm text-gh-fg-muted">
-            {filterStatus === 'all' && filterPriority === 'all'
+            {filterStatus === 'all'
               ? t('school.homework.addFirstHomework')
               : 'Essayez de modifier les filtres'}
           </p>
@@ -197,7 +172,6 @@ function HomeworkCard({ homework, onEdit, onDelete, onStatusChange }: {
   onDelete: (id: string) => void;
   onStatusChange: (id: string, updates: Partial<Homework>) => void;
 }) {
-  const priority = priorityColors[homework.priority];
   const status = statusColors[homework.status];
 
   // Calculate days until due
@@ -215,9 +189,9 @@ function HomeworkCard({ homework, onEdit, onDelete, onStatusChange }: {
 
   return (
     <div
-      className={`relative bg-gh-canvas-subtle border rounded-lg p-4 hover:border-gh-accent-fg hover:shadow-md transition-all ${
-        priority.border
-      } ${homework.status === 'completed' ? 'opacity-60' : ''}`}
+      className={`relative bg-gh-canvas-subtle border border-gh-border-default rounded-lg p-4 hover:border-gh-accent-fg hover:shadow-md transition-all ${
+        homework.status === 'completed' ? 'opacity-60' : ''
+      }`}
     >
       <div className="flex gap-3">
         {/* Checkbox */}
@@ -252,9 +226,6 @@ function HomeworkCard({ homework, onEdit, onDelete, onStatusChange }: {
                 </span>
                 <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${status.bg} ${status.text}`}>
                   {status.label}
-                </span>
-                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${priority.bg} ${priority.text}`}>
-                  {priority.label}
                 </span>
               </div>
             </div>
@@ -341,7 +312,6 @@ function HomeworkModal({ homework, onClose, onSave }: {
     subjectColor: homework?.subjectColor || '#2F81F7',
     description: homework?.description || '',
     dueDate: homework?.dueDate || new Date().toISOString().split('T')[0],
-    priority: homework?.priority || 'normal' as const,
     status: homework?.status || 'pending' as const,
     estimatedTime: homework?.estimatedTime || undefined
   });
@@ -462,36 +432,19 @@ function HomeworkModal({ homework, onClose, onSave }: {
             </div>
           </div>
 
-          {/* Priority & Status - removed in-progress option */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gh-fg-default mb-1">
-                {t('school.homework.priority')} *
-              </label>
-              <select
-                value={formData.priority}
-                onChange={(e) => setFormData(prev => ({ ...prev, priority: e.target.value as any }))}
-                className="w-full px-3 py-2 bg-gh-canvas-subtle hover:bg-gh-canvas-inset border border-gh-border-default rounded-md text-gh-fg-default focus:outline-none"
-              >
-                <option value="urgent">Urgent</option>
-                <option value="important">Important</option>
-                <option value="normal">Normal</option>
-                <option value="optional">Optionnel</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gh-fg-default mb-1">
-                {t('school.homework.status')} *
-              </label>
-              <select
-                value={formData.status}
-                onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
-                className="w-full px-3 py-2 bg-gh-canvas-subtle hover:bg-gh-canvas-inset border border-gh-border-default rounded-md text-gh-fg-default focus:outline-none"
-              >
-                <option value="pending">À faire</option>
-                <option value="completed">Terminé</option>
-              </select>
-            </div>
+          {/* Status */}
+          <div>
+            <label className="block text-sm font-medium text-gh-fg-default mb-1">
+              {t('school.homework.status')} *
+            </label>
+            <select
+              value={formData.status}
+              onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
+              className="w-full px-3 py-2 bg-gh-canvas-subtle hover:bg-gh-canvas-inset border border-gh-border-default rounded-md text-gh-fg-default focus:outline-none"
+            >
+              <option value="pending">À faire</option>
+              <option value="completed">Terminé</option>
+            </select>
           </div>
 
           {/* Actions */}
