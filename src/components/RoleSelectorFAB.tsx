@@ -1,7 +1,7 @@
-import React from 'react';
+import { ReactNode } from 'react';
 
 interface RoleSelectorFABProps {
-  selectedIcon: React.ReactNode;
+  selectedIcon: ReactNode;
   isFilterActive: boolean;
   onClick: () => void;
 }
@@ -17,11 +17,11 @@ interface RoleSelectorFABProps {
  * - Smooth entry and pulse animations
  * - Touch-optimized with haptic-style feedback
  */
-export const RoleSelectorFAB: React.FC<RoleSelectorFABProps> = ({
+export const RoleSelectorFAB = ({
   selectedIcon,
   isFilterActive,
   onClick,
-}) => {
+}: RoleSelectorFABProps) => {
   return (
     <button
       onClick={onClick}

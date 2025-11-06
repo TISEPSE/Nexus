@@ -4,9 +4,9 @@ import { LanguageToggle } from './LanguageToggle';
 import { ThemeToggle } from './ThemeToggle';
 import { HomeButton } from './HomeButton';
 import { MyWorkspaceButton } from './MyWorkspaceButton';
-import { SchoolButton } from './SchoolButton';
+import { logger } from '../utils/logger';
 
-type ViewMode = 'dashboard' | 'workspace' | 'school' | 'settings';
+type ViewMode = 'dashboard' | 'workspace' | 'settings';
 
 interface UnifiedHeaderProps {
   // View state
@@ -49,10 +49,10 @@ export function UnifiedHeader({
   subtitle,
   onOpenSettings,
 }: UnifiedHeaderProps) {
-  console.log('🎯 UnifiedHeader activeView:', activeView);
+  logger.log('🎯 UnifiedHeader activeView:', activeView);
 
   return (
-    <header className="mb-4 border-b border-gh-border-default pb-3">
+    <header className="pb-3">
       <div className="flex flex-col gap-2.5">
         {/* Top Row: Title + Buttons */}
         <div className="flex items-center justify-between gap-3">
@@ -103,10 +103,6 @@ export function UnifiedHeader({
                 <MyWorkspaceButton
                   isActive={activeView === 'workspace'}
                   onClick={() => onViewChange('workspace')}
-                />
-                <SchoolButton
-                  isActive={activeView === 'school'}
-                  onClick={() => onViewChange('school')}
                 />
               </div>
 

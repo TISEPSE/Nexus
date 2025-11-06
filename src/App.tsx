@@ -8,13 +8,14 @@ import { AddToCollectionModal } from './components/AddToCollectionModal';
 import { useCollections } from './hooks/useCollections';
 import { aiTools, categories, AITool } from './data/aiData';
 import { toolMatchesTemplate } from './data/templateMappings';
+import { ToolFormData } from './types/tool';
 
 interface AppProps {
   favorites: string[];
   customTools: AITool[];
   onToggleFavorite: (toolId: string) => void;
-  onAddTool: (toolData: any) => void;
-  onEditTool: (toolId: string, toolData: any) => void;
+  onAddTool: (toolData: ToolFormData) => void;
+  onEditTool: (toolId: string, toolData: ToolFormData) => void;
   onDeleteTool: (toolId: string) => void;
   searchQuery: string;
   selectedCategory: string;
@@ -51,7 +52,7 @@ function App({
     setDeletingTool(tool);
   }, []);
 
-  const handleEditSave = (toolId: string, toolData: any) => {
+  const handleEditSave = (toolId: string, toolData: ToolFormData) => {
     onEditTool(toolId, toolData);
     setEditingTool(null);
   };

@@ -8,10 +8,13 @@ import { CollectionSelector } from '../components/CollectionSelector';
 import { ManageCollectionsModal } from '../components/ManageCollectionsModal';
 import { AddToCollectionModal } from '../components/AddToCollectionModal';
 import { useCollections } from '../hooks/useCollections';
+import { useDebounce } from '../hooks/useDebounce';
 import { AITool, aiTools } from '../data/aiData';
 import { categories } from '../data/aiData';
+import { ToolFormData } from '../types/tool';
 
 const WORKSPACE_STATE_KEY = 'nexus_workspace_state';
+const DEBOUNCE_DELAY = 500; // 500ms delay for localStorage writes
 
 interface MyWorkspaceProps {
   favorites: string[];
@@ -20,8 +23,8 @@ interface MyWorkspaceProps {
   selectedCategory: string;
   selectedTemplate: string;
   onToggleFavorite: (toolId: string) => void;
-  onAddTool: (toolData: any) => void;
-  onEditTool: (toolId: string, toolData: any) => void;
+  onAddTool: (toolData: ToolFormData) => void;
+  onEditTool: (toolId: string, toolData: ToolFormData) => void;
   onDeleteTool: (toolId: string) => void;
 }
 
@@ -149,19 +152,24 @@ export function MyWorkspace({
     setDeletingTool(tool);
   }, []);
 
-  const handleEditSave = (toolId: string, toolData: any) => {
+  const handleEditSave = (toolId: string, toolData: ToolFormData) => {
     onEditTool(toolId, toolData);
     setEditingTool(null);
   };
 
-  // Save workspace state to localStorage when view changes
-  useEffect(() => {
+  // Debounced localStorage write for workspace state
+  const debouncedSaveWorkspaceState = useDebounce((currentView: ViewType) => {
     try {
-      localStorage.setItem(WORKSPACE_STATE_KEY, JSON.stringify({ view }));
+      localStorage.setItem(WORKSPACE_STATE_KEY, JSON.stringify({ view: currentView }));
     } catch (error) {
       console.error('Failed to save workspace state:', error);
     }
-  }, [view]);
+  }, DEBOUNCE_DELAY);
+
+  // Save workspace state to localStorage when view changes (debounced)
+  useEffect(() => {
+    debouncedSaveWorkspaceState(view);
+  }, [view, debouncedSaveWorkspaceState]);
 
   const handleSelectCollection = useCallback((collectionId: string | null) => {
     setSelectedCollectionId(collectionId);

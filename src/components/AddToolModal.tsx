@@ -94,7 +94,7 @@ export function AddToolModal({ isOpen, onClose, onAdd, onEdit, availableCategori
     e.preventDefault();
 
     if (!name || !url) {
-      alert('Name and URL are required');
+      alert(t('errors.requiredFields'));
       return;
     }
 
@@ -235,7 +235,7 @@ export function AddToolModal({ isOpen, onClose, onAdd, onEdit, availableCategori
             {/* Logo Preview */}
             <div>
               <label className="block text-sm font-medium text-gh-fg-default mb-1">
-                Logo Preview
+                {t('addToolModal.logoPreview')}
               </label>
               <div className="w-32 h-32 flex items-center justify-center bg-gh-canvas-subtle border-2 border-dashed border-gh-border-default rounded-lg overflow-hidden">
                 {logoUrl && !logoPreviewError ? (
@@ -250,7 +250,7 @@ export function AddToolModal({ isOpen, onClose, onAdd, onEdit, availableCategori
                     <svg className="w-12 h-12 mx-auto text-gh-fg-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <p className="text-xs text-gh-fg-muted mt-2">No logo</p>
+                    <p className="text-xs text-gh-fg-muted mt-2">{t('addToolModal.noLogo')}</p>
                   </div>
                 )}
               </div>

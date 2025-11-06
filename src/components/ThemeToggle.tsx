@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ThemeToggleProps {
   isDark: boolean;
   onToggle: () => void;

@@ -1,27 +1,39 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Collection, StoredCollections } from '../types/collection';
+import { useDebounce } from './useDebounce';
 
 const STORAGE_KEY = 'nexus_collections';
 const SELECTED_COLLECTION_KEY = 'nexus_selected_collection';
+const DEBOUNCE_DELAY = 500; // 500ms delay for localStorage writes
 
 export function useCollections() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(() => {
     try {
       return localStorage.getItem(SELECTED_COLLECTION_KEY);
-    } catch {
+    } catch (error) {
+      console.error('Failed to load selected collection:', error);
       return null;
     }
   });
 
-  // Save selectedCollectionId to localStorage when it changes
-  useEffect(() => {
-    if (selectedCollectionId) {
-      localStorage.setItem(SELECTED_COLLECTION_KEY, selectedCollectionId);
-    } else {
-      localStorage.removeItem(SELECTED_COLLECTION_KEY);
+  // Debounced localStorage write for selected collection
+  const debouncedSaveSelectedCollection = useDebounce((collectionId: string | null) => {
+    try {
+      if (collectionId) {
+        localStorage.setItem(SELECTED_COLLECTION_KEY, collectionId);
+      } else {
+        localStorage.removeItem(SELECTED_COLLECTION_KEY);
+      }
+    } catch (error) {
+      console.error('Failed to save selected collection:', error);
     }
-  }, [selectedCollectionId]);
+  }, DEBOUNCE_DELAY);
+
+  // Save selectedCollectionId to localStorage when it changes (debounced)
+  useEffect(() => {
+    debouncedSaveSelectedCollection(selectedCollectionId);
+  }, [selectedCollectionId, debouncedSaveSelectedCollection]);
 
   // Load collections from localStorage
   useEffect(() => {
@@ -36,18 +48,27 @@ export function useCollections() {
     }
   }, []);
 
-  // Save collections to localStorage
+  // Debounced localStorage write for collections
+  const debouncedSaveCollections = useDebounce((collections: Collection[]) => {
+    try {
+      const data: StoredCollections = {
+        version: 1,
+        collections
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error('Failed to save collections:', error);
+    }
+  }, DEBOUNCE_DELAY);
+
+  // Save collections to localStorage (debounced)
   const saveCollections = useCallback((updater: Collection[] | ((prev: Collection[]) => Collection[])) => {
     setCollections(prev => {
       const newCollections = typeof updater === 'function' ? updater(prev) : updater;
-      const data: StoredCollections = {
-        version: 1,
-        collections: newCollections
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      debouncedSaveCollections(newCollections);
       return newCollections;
     });
-  }, []);
+  }, [debouncedSaveCollections]);
 
   // Create collection
   const createCollection = useCallback((name: string, description?: string) => {

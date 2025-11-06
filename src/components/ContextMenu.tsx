@@ -80,11 +80,11 @@ export function ContextMenu({ items, buttonClassName, 'aria-label': ariaLabel = 
         </svg>
       </button>
 
-      {/* Context Menu - Rendered as portal */}
+      {/* Context Menu - Rendered as portal with maximum z-index */}
       {menuOpen && menuPosition && (
         <div
           ref={menuRef}
-          className="fixed w-32 bg-gh-canvas-default border border-gh-border-default rounded-md shadow-xl z-[9999] animate-menu-appear overflow-hidden"
+          className="fixed w-32 bg-gh-canvas-default border border-gh-border-default rounded-md shadow-xl z-[999999] animate-menu-appear overflow-hidden"
           style={{
             top: `${menuPosition.top}px`,
             left: `${menuPosition.left}px`
@@ -105,7 +105,7 @@ export function ContextMenu({ items, buttonClassName, 'aria-label': ariaLabel = 
                   : 'text-gh-fg-default hover:bg-gh-accent-emphasis/10 hover:text-gh-accent-fg'
               }`}
             >
-              <div className="w-4 h-4 flex-shrink-0">{item.icon}</div>
+              <div className="w-4 h-4 flex-shrink-0 text-current">{item.icon}</div>
               <span>{item.label}</span>
             </button>
           ))}

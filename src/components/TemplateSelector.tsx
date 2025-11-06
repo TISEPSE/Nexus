@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface TemplateSelectorProps {
@@ -19,12 +19,12 @@ interface TemplateSelectorProps {
  * UX PATTERN: Notion role selector + GitHub filter dropdown
  * PSYCHOLOGY: Role-based mental models help users find tools faster
  */
-export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
+export const TemplateSelector = ({
   selectedTemplate,
   onTemplateChange,
-}) => {
+}: TemplateSelectorProps) => {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const templates = [
     { id: 'all', icon: 'grid', label: t('templates.all') },

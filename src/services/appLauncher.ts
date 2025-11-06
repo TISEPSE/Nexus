@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-shell';
 import { aiTools } from '../data/aiData';
+import { logger } from '../utils/logger';
 
 /**
  * App Launch Service
@@ -56,7 +57,7 @@ export async function findNativeApp(toolId: string): Promise<string | null> {
       return null;
     }
 
-    console.log(`[App Launcher] Searching for ${toolId} with executables:`, executables);
+    logger.log(`[App Launcher] Searching for ${toolId} with executables:`, executables);
 
     // Call Rust backend to find the app
     const appPath = await invoke<string | null>('find_app', {
@@ -64,11 +65,11 @@ export async function findNativeApp(toolId: string): Promise<string | null> {
     });
 
     if (appPath) {
-      console.log(`[App Launcher] Found ${toolId} at: ${appPath}`);
+      logger.log(`[App Launcher] Found ${toolId} at: ${appPath}`);
       appCache.set(toolId, appPath);
       return appPath;
     } else {
-      console.log(`[App Launcher] Native app not found for ${toolId}`);
+      logger.log(`[App Launcher] Native app not found for ${toolId}`);
       appCache.set(toolId, null);
       return null;
     }
@@ -87,11 +88,11 @@ export async function findNativeApp(toolId: string): Promise<string | null> {
  */
 export async function launchNativeApp(appPath: string): Promise<boolean> {
   try {
-    console.log(`[App Launcher] Launching native app: ${appPath}`);
+    logger.log(`[App Launcher] Launching native app: ${appPath}`);
     const result = await invoke<boolean>('launch_app', {
       appPath,
     });
-    console.log(`[App Launcher] Launch result: ${result}`);
+    logger.log(`[App Launcher] Launch result: ${result}`);
     return result;
   } catch (error) {
     console.error('[App Launcher] Error launching app:', error);
@@ -118,21 +119,21 @@ export async function launchTool(toolId: string, webUrl: string): Promise<void> 
       const launched = await launchNativeApp(appPath);
 
       if (launched) {
-        console.log(`[App Launcher] Successfully launched native app for ${toolId}`);
+        logger.log(`[App Launcher] Successfully launched native app for ${toolId}`);
         return;
       }
 
-      console.log(`[App Launcher] Failed to launch native app, falling back to URL`);
+      logger.log(`[App Launcher] Failed to launch native app, falling back to URL`);
     }
 
     // Fallback to web URL
-    console.log(`[App Launcher] Opening web URL for ${toolId}: ${webUrl}`);
+    logger.log(`[App Launcher] Opening web URL for ${toolId}: ${webUrl}`);
     await open(webUrl);
   } catch (error) {
     console.error('[App Launcher] Error launching tool:', error);
 
     // Last resort fallback to window.open
-    console.log('[App Launcher] Using window.open as last resort');
+    logger.log('[App Launcher] Using window.open as last resort');
     window.open(webUrl, '_blank', 'noopener,noreferrer');
   }
 }
@@ -144,7 +145,7 @@ export async function launchTool(toolId: string, webUrl: string): Promise<void> 
  */
 export function clearAppCache(): void {
   appCache.clear();
-  console.log('[App Launcher] Cache cleared');
+  logger.log('[App Launcher] Cache cleared');
 }
 
 /**

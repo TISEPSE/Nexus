@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Template {
@@ -13,7 +13,7 @@ interface RoleSelectorModalProps {
   templates: Template[];
   selectedTemplate: string;
   onTemplateChange: (templateId: string) => void;
-  icons: Record<string, React.ReactNode>;
+  icons: Record<string, ReactNode>;
 }
 
 /**
@@ -27,17 +27,17 @@ interface RoleSelectorModalProps {
  * - Triple dismissal: backdrop tap, close button, ESC key
  * - Full accessibility support
  */
-export const RoleSelectorModal: React.FC<RoleSelectorModalProps> = ({
+export const RoleSelectorModal = ({
   isOpen,
   onClose,
   templates,
   selectedTemplate,
   onTemplateChange,
   icons,
-}) => {
+}: RoleSelectorModalProps) => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDivElement>(null);
-  const [isClosing, setIsClosing] = React.useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   // Close on ESC key
   useEffect(() => {

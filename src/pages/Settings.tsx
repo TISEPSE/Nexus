@@ -8,6 +8,7 @@ import {
   SettingSelect,
 } from '../components/SettingsSection';
 import { ImportExportPanel } from '../components/ImportExportPanel';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { clearAllData, resetToDefaults } from '../utils/configExport';
 
 interface SettingsProps {
@@ -101,6 +102,7 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
   const [autoUpdate, setAutoUpdate] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [developerMode, setDeveloperMode] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const tabGroups: TabGroup[] = [
     {
@@ -175,10 +177,8 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
   };
 
   const handleResetDefaults = () => {
-    if (confirm(t('settings.advanced.resetConfirm'))) {
-      resetToDefaults();
-      window.location.reload();
-    }
+    resetToDefaults();
+    window.location.reload();
   };
 
   const handleClearData = () => {
@@ -187,7 +187,8 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
 
   const handleCheckUpdates = () => {
     // This would integrate with Tauri updater
-    alert(t('settings.updates.checkingUpdates'));
+    // TODO: Replace with actual update checking logic
+    console.log(t('settings.updates.checkingUpdates'));
   };
 
   // Apply font size when it changes
@@ -475,7 +476,7 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
                         {t('settings.data.resetDesc')}
                       </p>
                       <SettingButton
-                        onClick={handleResetDefaults}
+                        onClick={() => setShowResetConfirm(true)}
                         variant="secondary"
                       >
                         {t('settings.data.resetButton')}
@@ -650,6 +651,16 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
           </div>
         </div>
       </main>
+
+      {/* Reset Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showResetConfirm}
+        onClose={() => setShowResetConfirm(false)}
+        onConfirm={handleResetDefaults}
+        title={t('settings.data.resetTitle')}
+        message={t('settings.advanced.resetConfirm')}
+        variant="warning"
+      />
     </div>
   );
 }

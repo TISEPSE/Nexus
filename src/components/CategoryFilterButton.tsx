@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface CategoryFilterButtonProps {
@@ -15,11 +15,11 @@ export function CategoryFilterButton({
   selectedCategory,
   onCategoryChange
 }: CategoryFilterButtonProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
 
   // Icon mapping for categories
-  const categoryIcons: Record<string, React.ReactElement> = {
+  const categoryIcons: Record<string, ReactElement> = {
     All: (
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
     ),

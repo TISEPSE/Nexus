@@ -668,6 +668,43 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
   background: var(--color-gh-accent-emphasis);
 }
 
+/* ========================================
+   SELECT AND OPTION ELEMENTS
+   Force theme colors on native select elements
+   ======================================== */
+
+/* Dark mode (default) */
+select {
+  background-color: var(--color-gh-canvas-subtle) !important;
+  color: var(--color-gh-fg-default) !important;
+  border-color: var(--color-gh-border-default) !important;
+}
+
+select option {
+  background-color: var(--color-gh-canvas-subtle) !important;
+  color: var(--color-gh-fg-default) !important;
+}
+
+select:hover {
+  background-color: var(--color-gh-canvas-inset) !important;
+}
+
+/* Light mode */
+body.light-theme select {
+  background-color: var(--color-gh-canvas-subtle) !important;
+  color: var(--color-gh-fg-default) !important;
+  border-color: var(--color-gh-border-default) !important;
+}
+
+body.light-theme select option {
+  background-color: var(--color-gh-canvas-subtle) !important;
+  color: var(--color-gh-fg-default) !important;
+}
+
+body.light-theme select:hover {
+  background-color: var(--color-gh-canvas-inset) !important;
+}
+
 /* Modal Animations */
 @keyframes modal-enter {
   from {
@@ -878,3 +915,4 @@ html[data-font-size="large"] #dashboard-content .text-sm {
 html[data-font-size="large"] #dashboard-content .text-base {
   font-size: calc(1rem * 1.25);
 }
+

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface CategoryFilterProps {
@@ -7,11 +7,11 @@ interface CategoryFilterProps {
   onSelectCategory: (category: string) => void;
 }
 
-export const CategoryFilter: React.FC<CategoryFilterProps> = ({
+export const CategoryFilter = ({
   categories,
   selectedCategory,
   onSelectCategory,
-}) => {
+}: CategoryFilterProps) => {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
 

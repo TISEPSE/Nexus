@@ -4,6 +4,8 @@ import { AITool } from '../data/aiData';
 import { buildLogoSources, extractDomain } from '../utils/logoUtils';
 import { launchTool } from '../services/appLauncher';
 import { Collection } from '../types/collection';
+import { logger } from '../utils/logger';
+import { validateUrl } from '../utils/urlValidator';
 
 interface AICardProps {
   tool: AITool;
@@ -136,14 +138,25 @@ const AICardComponent: React.FC<AICardProps> = ({
       return;
     }
 
+    // Validate URL before attempting to launch
+    const urlValidation = validateUrl(tool.url);
+    if (!urlValidation.isValid) {
+      console.error('Invalid URL for tool:', tool.name, urlValidation.error);
+      const errorMessage = t('errors.cannotOpen', { name: tool.name, error: urlValidation.error });
+      alert(errorMessage);
+      return;
+    }
+
     try {
-      console.log('Launching tool:', tool.name, 'with ID:', tool.id);
+      logger.log('Launching tool:', tool.name, 'with ID:', tool.id);
       await launchTool(tool.id, tool.url);
-      console.log('Tool launched successfully');
+      logger.log('Tool launched successfully');
     } catch (error) {
       console.error('Error launching tool:', error);
-      // Last resort fallback
-      window.open(tool.url, '_blank', 'noopener,noreferrer');
+      // Last resort fallback with validated URL
+      if (urlValidation.sanitizedUrl) {
+        window.open(urlValidation.sanitizedUrl, '_blank', 'noopener,noreferrer');
+      }
     }
   }, [menuOpen, isMultiSelectMode, onToggleSelect, tool.id, tool.name, tool.url]);
 
@@ -228,7 +241,7 @@ const AICardComponent: React.FC<AICardProps> = ({
             onToggleSelect?.(tool.id);
           }}
           className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-20 p-1 touch-manipulation"
-          aria-label={isSelected ? 'Deselect tool' : 'Select tool'}
+          aria-label={isSelected ? t('aiCard.deselectTool') : t('aiCard.selectTool')}
         >
           <div
             className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
@@ -344,7 +357,7 @@ const AICardComponent: React.FC<AICardProps> = ({
             setMenuOpen(!menuOpen);
           }}
           className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 p-1.5 rounded hover:bg-gh-canvas-inset transition-colors touch-manipulation focus:outline-none"
-          aria-label="Options"
+          aria-label={t('aiCard.options')}
         >
           <svg className="w-5 h-5 text-gh-fg-muted transition-colors" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
@@ -365,8 +378,8 @@ const AICardComponent: React.FC<AICardProps> = ({
                      focus:outline-none focus:ring-2 focus:ring-gh-accent-fg focus:ring-offset-2 focus:ring-offset-gh-canvas-subtle
                      touch-manipulation
                      ${showEditDelete ? 'bottom-1 left-1 sm:bottom-1.5 sm:left-1.5' : 'bottom-1 right-1 sm:bottom-1.5 sm:right-1.5'}`}
-          aria-label="Ajouter à une collection"
-          title="Ajouter à une collection"
+          aria-label={t('aiCard.addToCollection')}
+          title={t('aiCard.addToCollection')}
         >
           {/* Bookmark Plus Icon */}
           <svg
@@ -450,4 +463,65 @@ const AICardComponent: React.FC<AICardProps> = ({
   );
 };
 
-export const AICard = React.memo(AICardComponent);
+/**
+ * Custom comparison function for React.memo optimization
+ * Only re-render if these critical props change
+ */
+const arePropsEqual = (
+  prevProps: AICardProps,
+  nextProps: AICardProps
+): boolean => {
+  // Check tool identity (most important for re-renders)
+  if (prevProps.tool.id !== nextProps.tool.id) {
+    return false;
+  }
+
+  // Check favorite status
+  if (prevProps.isFavorite !== nextProps.isFavorite) {
+    return false;
+  }
+
+  // Check collections count (indicates tool was added/removed from collections)
+  const prevCollectionsCount = prevProps.collections?.length || 0;
+  const nextCollectionsCount = nextProps.collections?.length || 0;
+  if (prevCollectionsCount !== nextCollectionsCount) {
+    return false;
+  }
+
+  // Check if tool is in any collections (membership changed)
+  const prevInCollections = prevProps.collections?.some(c =>
+    c.toolIds.includes(prevProps.tool.id)
+  ) || false;
+  const nextInCollections = nextProps.collections?.some(c =>
+    c.toolIds.includes(nextProps.tool.id)
+  ) || false;
+  if (prevInCollections !== nextInCollections) {
+    return false;
+  }
+
+  // Check multi-select state
+  if (prevProps.isMultiSelectMode !== nextProps.isMultiSelectMode) {
+    return false;
+  }
+  if (prevProps.isSelected !== nextProps.isSelected) {
+    return false;
+  }
+
+  // Check template matching (visual highlighting)
+  if (prevProps.matchesTemplate !== nextProps.matchesTemplate) {
+    return false;
+  }
+
+  // Check custom tool flags
+  if (prevProps.isCustom !== nextProps.isCustom) {
+    return false;
+  }
+  if (prevProps.showEditDelete !== nextProps.showEditDelete) {
+    return false;
+  }
+
+  // All critical props are the same, no need to re-render
+  return true;
+};
+
+export const AICard = React.memo(AICardComponent, arePropsEqual);

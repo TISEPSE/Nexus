@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AITool } from './data/aiData';
 import { AppContainer } from './AppContainer';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { ToolFormData } from './types/tool';
 
 export function AppRouter() {
 
@@ -54,15 +56,7 @@ export function AppRouter() {
     );
   }, []);
 
-  const addCustomTool = (toolData: {
-    name: string;
-    description: string;
-    url: string;
-    category: string[];
-    tags: string[];
-    logo: string | string[];
-    domain: string;
-  }) => {
+  const addCustomTool = (toolData: ToolFormData) => {
     const newTool: AITool = {
       id: `custom-${Date.now()}`,
       name: toolData.name,
@@ -76,18 +70,7 @@ export function AppRouter() {
     setCustomTools((prev) => [...prev, newTool]);
   };
 
-  const editCustomTool = (
-    toolId: string,
-    toolData: {
-      name: string;
-      description: string;
-      url: string;
-      category: string[];
-      tags: string[];
-      logo: string | string[];
-      domain: string;
-    }
-  ) => {
+  const editCustomTool = (toolId: string, toolData: ToolFormData) => {
     setCustomTools((prev) =>
       prev.map((tool) =>
         tool.id === toolId ? { ...tool, ...toolData } : tool
@@ -101,15 +84,17 @@ export function AppRouter() {
   };
 
   return (
-    <AppContainer
-      favorites={favorites}
-      customTools={customTools}
-      onToggleFavorite={toggleFavorite}
-      onAddTool={addCustomTool}
-      onEditTool={editCustomTool}
-      onDeleteTool={deleteCustomTool}
-      isDarkTheme={isDarkTheme}
-      onToggleTheme={() => setIsDarkTheme(!isDarkTheme)}
-    />
+    <ErrorBoundary>
+      <AppContainer
+        favorites={favorites}
+        customTools={customTools}
+        onToggleFavorite={toggleFavorite}
+        onAddTool={addCustomTool}
+        onEditTool={editCustomTool}
+        onDeleteTool={deleteCustomTool}
+        isDarkTheme={isDarkTheme}
+        onToggleTheme={() => setIsDarkTheme(!isDarkTheme)}
+      />
+    </ErrorBoundary>
   );
 }

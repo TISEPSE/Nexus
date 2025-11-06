@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AITool } from '../data/aiData';
 import { Collection } from '../types/collection';
+import { logger } from '../utils/logger';
 
 interface AddToCollectionModalProps {
   isOpen: boolean;
@@ -23,6 +25,7 @@ export function AddToCollectionModal({
   onCreateCollection,
   onSelectCollection: _onSelectCollection
 }: AddToCollectionModalProps) {
+  const { t } = useTranslation();
   const [isCreating, setIsCreating] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');
   const [justAddedToId, setJustAddedToId] = useState<string | null>(null);
@@ -55,10 +58,10 @@ export function AddToCollectionModal({
 
   const handleCreateNew = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🎯 Creating new collection:', newCollectionName.trim());
+    logger.log('🎯 Creating new collection:', newCollectionName.trim());
     if (newCollectionName.trim()) {
       const newId = onCreateCollection(newCollectionName.trim());
-      console.log('✅ Collection created with ID:', newId);
+      logger.log('✅ Collection created with ID:', newId);
       setNewCollectionName('');
       setIsCreating(false);
       if (newId) {
@@ -84,7 +87,7 @@ export function AddToCollectionModal({
         <div className="flex items-start justify-between px-6 py-5 border-b border-gh-border-default bg-gh-canvas-subtle/30">
           <div className="flex-1">
             <h2 id="collection-modal-title" className="text-xl font-semibold text-gh-fg-default mb-1">
-              Ajouter à une collection
+              {t('addToCollection.title')}
             </h2>
             <p className="text-sm text-gh-fg-muted flex items-center gap-2">
               <span className="font-medium text-gh-accent-fg">{tool.name}</span>
@@ -93,7 +96,7 @@ export function AddToCollectionModal({
           <button
             onClick={onClose}
             className="text-gh-fg-muted hover:text-gh-fg-default hover:bg-gh-canvas-inset transition-all p-2 rounded-md ml-4 flex-shrink-0"
-            aria-label="Fermer"
+            aria-label={t('addToCollection.close')}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -106,7 +109,7 @@ export function AddToCollectionModal({
           {collections.length > 0 && (
             <div className="mb-5">
               <h3 className="text-xs font-semibold text-gh-fg-muted uppercase tracking-wider mb-3 px-1">
-                Vos Collections
+                {t('addToCollection.yourCollections')}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {collections.map((collection) => {
@@ -178,7 +181,7 @@ export function AddToCollectionModal({
                           <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                         <span className="text-xs text-gh-fg-muted font-medium">
-                          {collection.toolIds.length} {collection.toolIds.length === 1 ? 'outil' : 'outils'}
+                          {collection.toolIds.length} {t(`addToCollection.tools_${collection.toolIds.length === 1 ? 'one' : 'other'}`)}
                         </span>
                       </div>
 
@@ -197,18 +200,18 @@ export function AddToCollectionModal({
           <div className={collections.length > 0 ? 'border-t border-gh-border-default pt-5' : ''}>
             {collections.length > 0 && (
               <h3 className="text-xs font-semibold text-gh-fg-muted uppercase tracking-wider mb-3 px-1">
-                Nouvelle Collection
+                {t('addToCollection.newCollection')}
               </h3>
             )}
             {isCreating ? (
               <form onSubmit={handleCreateNew} className="border-2 border-dashed border-gh-accent-emphasis/50 bg-gh-accent-subtle/10 rounded-lg p-5">
                 <label className="block mb-2">
-                  <span className="text-xs font-medium text-gh-fg-muted uppercase tracking-wide">Nom de la collection</span>
+                  <span className="text-xs font-medium text-gh-fg-muted uppercase tracking-wide">{t('addToCollection.collectionName')}</span>
                   <input
                     type="text"
                     value={newCollectionName}
                     onChange={(e) => setNewCollectionName(e.target.value)}
-                    placeholder="Ex: Mes outils préférés..."
+                    placeholder={t('addToCollection.collectionPlaceholder')}
                     className="mt-1.5 w-full px-3 py-2.5 bg-gh-canvas-default border border-gh-border-default rounded-md text-gh-fg-default text-sm placeholder:text-gh-fg-muted/50 focus:outline-none focus:border-gh-accent-emphasis focus:ring-2 focus:ring-gh-accent-emphasis/20 transition-all"
                     autoFocus
                   />
@@ -222,7 +225,7 @@ export function AddToCollectionModal({
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    Créer et ajouter
+                    {t('addToCollection.createAndAdd')}
                   </button>
                   <button
                     type="button"
@@ -232,7 +235,7 @@ export function AddToCollectionModal({
                     }}
                     className="px-4 py-2.5 bg-gh-canvas-subtle border border-gh-border-default text-gh-fg-default text-sm font-medium rounded-md hover:bg-gh-canvas-inset active:bg-gh-canvas-subtle transition-all"
                   >
-                    Annuler
+                    {t('addToCollection.cancelButton')}
                   </button>
                 </div>
               </form>
@@ -241,7 +244,7 @@ export function AddToCollectionModal({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  console.log('🔵 Bouton "Nouvelle collection" cliqué');
+                  logger.log('🔵 Bouton "Nouvelle collection" cliqué');
                   setIsCreating(true);
                 }}
                 className="group inline-flex items-center gap-2 px-3 py-2 border border-dashed border-gh-border-muted rounded-md text-gh-fg-muted hover:border-gh-accent-fg hover:text-gh-accent-fg hover:bg-gh-accent-subtle/10 transition-all duration-200"
@@ -249,7 +252,7 @@ export function AddToCollectionModal({
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
-                <span className="text-sm font-medium">Nouvelle collection</span>
+                <span className="text-sm font-medium">{t('addToCollection.newCollection')}</span>
               </button>
             )}
           </div>

@@ -4,18 +4,19 @@ import { UnifiedHeader } from './components/UnifiedHeader';
 import { FloatingMenu } from './components/FloatingMenu';
 import App from './App';
 import { MyWorkspace } from './pages/MyWorkspace';
-import { School } from './pages/School';
 import { Settings } from './pages/Settings';
 import { AITool, categories as allCategories, aiTools } from './data/aiData';
+import { ToolFormData } from './types/tool';
+import { logger } from './utils/logger';
 
-type ViewMode = 'dashboard' | 'workspace' | 'school' | 'settings';
+type ViewMode = 'dashboard' | 'workspace' | 'settings';
 
 interface AppContainerProps {
   favorites: string[];
   customTools: AITool[];
   onToggleFavorite: (toolId: string) => void;
-  onAddTool: (toolData: any) => void;
-  onEditTool: (toolId: string, toolData: any) => void;
+  onAddTool: (toolData: ToolFormData) => void;
+  onEditTool: (toolId: string, toolData: ToolFormData) => void;
   onDeleteTool: (toolId: string) => void;
   isDarkTheme: boolean;
   onToggleTheme: () => void;
@@ -38,7 +39,7 @@ export function AppContainer({
 
 
   const handleViewChange = useCallback((newView: ViewMode) => {
-    console.log('🔄 View changing to:', newView);
+    logger.log('🔄 View changing to:', newView);
 
     // Scroll to top on view change
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -49,8 +50,6 @@ export function AppContainer({
       announcement = t('navigation.switchedToDashboard', 'Switched to Dashboard');
     } else if (newView === 'workspace') {
       announcement = t('navigation.switchedToWorkspace', 'Switched to Workspace');
-    } else if (newView === 'school') {
-      announcement = t('navigation.switchedToSchool', 'Switched to School');
     } else if (newView === 'settings') {
       announcement = t('navigation.switchedToSettings', 'Switched to Settings');
     }
@@ -60,7 +59,7 @@ export function AppContainer({
     if (liveRegion) liveRegion.textContent = announcement;
 
     setActiveView(newView);
-    console.log('✅ Active view set to:', newView);
+    logger.log('✅ Active view set to:', newView);
   }, [t]);
 
   // Calculate total tools count
@@ -82,9 +81,6 @@ export function AppContainer({
       custom: customTools.length,
     });
     searchPlaceholder = t('workspace.searchPlaceholder');
-  } else if (activeView === 'school') {
-    subtitle = t('school.subtitle', 'Gérez vos cours, devoirs et examens');
-    searchPlaceholder = t('school.searchPlaceholder', 'Rechercher...');
   } else if (activeView === 'settings') {
     subtitle = t('settings.subtitle', 'Customize your experience');
     searchPlaceholder = '';
@@ -116,7 +112,7 @@ export function AppContainer({
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           searchPlaceholder={searchPlaceholder}
-          categories={activeView === 'settings' ? undefined : categories}
+          categories={categories}
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
           isDarkTheme={isDarkTheme}
@@ -150,10 +146,6 @@ export function AppContainer({
             onAddTool={onAddTool}
             onEditTool={onEditTool}
             onDeleteTool={onDeleteTool}
-          />
-        ) : activeView === 'school' ? (
-          <School
-            searchQuery={searchQuery}
           />
         ) : (
           <Settings

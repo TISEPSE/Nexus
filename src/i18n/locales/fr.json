@@ -78,10 +78,9 @@
     "home": "Accueil",
     "dashboard": "Tableau de bord",
     "workspace": "Mon Espace",
-    "school": "École",
     "switchedToDashboard": "Revenu au tableau de bord",
     "switchedToWorkspace": "Basculé vers mon espace",
-    "switchedToSchool": "Basculé vers école"
+    "switchedToSettings": "Basculé vers les paramètres"
   },
   "menu": {
     "title": "Menu",
@@ -467,83 +466,50 @@
     "sortDate": "Date de création",
     "sortSize": "Nombre d'outils"
   },
-  "school": {
-    "subtitle": "Gérez vos cours, devoirs et examens",
-    "searchPlaceholder": "Rechercher...",
-    "tabs": {
-      "overview": "Vue d'ensemble",
-      "courses": "Cours",
-      "homework": "Devoirs",
-      "notes": "Notes",
-      "exams": "Examens"
-    },
-    "overview": {
-      "todayClasses": "Cours aujourd'hui",
-      "pendingHomework": "Devoirs en attente",
-      "upcomingExams": "Examens à venir",
-      "notesCount": "Notes",
-      "upcomingDeadlines": "Échéances à venir"
-    },
-    "courses": {
-      "viewCards": "Cartes",
-      "viewSchedule": "Emploi du temps",
-      "addCourse": "Ajouter un cours",
-      "editCourse": "Modifier le cours",
-      "noCourses": "Aucun cours",
-      "addFirstCourse": "Ajoutez votre premier cours pour commencer",
-      "courseName": "Nom du cours",
-      "teacher": "Professeur",
-      "room": "Salle",
-      "color": "Couleur",
-      "credits": "Crédits",
-      "semester": "Semestre",
-      "schedule": "Horaires",
-      "description": "Description"
-    },
-    "homework": {
-      "addHomework": "Ajouter un devoir",
-      "editHomework": "Modifier le devoir",
-      "noHomework": "Aucun devoir",
-      "addFirstHomework": "Ajoutez votre premier devoir pour commencer",
-      "title": "Titre",
-      "subject": "Matière",
-      "description": "Description",
-      "dueDate": "Date limite",
-      "priority": "Priorité",
-      "status": "Statut"
-    },
-    "notes": {
-      "allNotes": "Toutes les notes",
-      "selectNote": "Sélectionner une note",
-      "addNote": "Ajouter une note",
-      "editNote": "Modifier la note",
-      "noNotes": "Aucune note",
-      "addFirstNote": "Créez votre première note pour commencer",
-      "title": "Titre",
-      "content": "Contenu",
-      "subject": "Matière",
-      "tags": "Tags"
-    },
-    "exams": {
-      "addExam": "Ajouter un examen",
-      "editExam": "Modifier l'examen",
-      "noExams": "Aucun examen",
-      "addFirstExam": "Ajoutez votre premier examen pour commencer",
-      "title": "Titre",
-      "subject": "Matière",
-      "date": "Date",
-      "time": "Heure",
-      "duration": "Durée",
-      "room": "Salle",
-      "type": "Type"
-    }
-  },
   "common": {
     "save": "Enregistrer",
     "cancel": "Annuler",
     "create": "Créer",
     "edit": "Modifier",
     "delete": "Supprimer",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "errors": {
+    "requiredFields": "Le nom et l'URL sont obligatoires",
+    "cannotOpen": "Impossible d'ouvrir {{name}} : {{error}}",
+    "invalidUrl": "URL invalide"
+  },
+  "addToolModal": {
+    "logoPreview": "Aperçu du logo",
+    "noLogo": "Pas de logo"
+  },
+  "addToCollection": {
+    "title": "Ajouter à une collection",
+    "yourCollections": "Vos Collections",
+    "newCollection": "Nouvelle Collection",
+    "collectionName": "Nom de la collection",
+    "collectionPlaceholder": "Ex: Mes outils préférés...",
+    "createAndAdd": "Créer et ajouter",
+    "cancelButton": "Annuler",
+    "tools_one": "outil",
+    "tools_other": "outils",
     "close": "Fermer"
+  },
+  "collectionSelector": {
+    "all": "Tout",
+    "favorites": "Favoris",
+    "custom": "Personnalisé",
+    "collectionsHeader": "Collections",
+    "rename": "Renommer",
+    "deleteButton": "Supprimer"
+  },
+  "aiCard": {
+    "deselectTool": "Désélectionner l'outil",
+    "selectTool": "Sélectionner l'outil",
+    "options": "Options",
+    "addToCollection": "Ajouter à une collection"
   }
 }
