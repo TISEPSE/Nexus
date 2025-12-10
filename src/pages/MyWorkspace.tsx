@@ -62,6 +62,7 @@ export function MyWorkspace({
   // Collections state
   const {
     collections,
+    toolCollectionMap,
     selectedCollectionId,
     setSelectedCollectionId,
     createCollection,
@@ -192,7 +193,6 @@ export function MyWorkspace({
         {workspaceTools.map((tool) => {
           const isCustom = tool.id.startsWith('custom-');
           const showEditDelete = isCustom;
-          const isInCollectionView = !!selectedCollectionId;
 
           return (
             <AICard
@@ -204,7 +204,8 @@ export function MyWorkspace({
               onDelete={showEditDelete ? () => handleDeleteClick(tool) : undefined}
               matchesTemplate={false}
               collections={collections}
-              onOpenCollectionModal={isInCollectionView ? undefined : (tool) => setCollectionModalTool(tool)}
+              toolCollectionMap={toolCollectionMap}
+              onOpenCollectionModal={(tool) => setCollectionModalTool(tool)}
               showCollectionIndicator={true}
             />
           );

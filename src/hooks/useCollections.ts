@@ -165,36 +165,53 @@ export function useCollections() {
     ));
   }, [saveCollections]);
 
-  // Create system Favorites collection from favorites array
-  const favoritesSystemCollection: Collection = useMemo(() => ({
-    id: 'system-favorites',
-    name: 'system.favorites', // Translation key for i18n
-    description: 'System favorites collection',
-    toolIds: favoritesArray,
-    createdAt: 0,
-    updatedAt: Date.now(),
-    order: -1, // Always first
-    isSystemCollection: true,
-    systemType: 'favorites' as const
-  }), [favoritesArray]);
-
-  // Merge system collection with user collections
+  // Merge system favorites collection with user collections
+  // Combined into single memo to prevent reference instability
   const allCollections = useMemo(() => {
+    const favoritesSystemCollection: Collection = {
+      id: 'system-favorites',
+      name: 'system.favorites', // Translation key for i18n
+      description: 'System favorites collection',
+      toolIds: favoritesArray,
+      createdAt: 0,
+      updatedAt: 0, // Static timestamp to prevent reference changes
+      order: -1, // Always first
+      isSystemCollection: true,
+      systemType: 'favorites' as const
+    };
     // Always include favorites collection (even if empty)
     return [favoritesSystemCollection, ...collections];
-  }, [favoritesSystemCollection, collections]);
+  }, [favoritesArray, collections]);
+
+  // Pre-compute collection membership map for O(1) lookups
+  // Maps toolId -> { count, names } to avoid O(n²) filtering in AICard
+  const toolCollectionMap = useMemo(() => {
+    const map = new Map<string, { count: number; names: string[] }>();
+
+    allCollections.forEach(collection => {
+      collection.toolIds.forEach(toolId => {
+        const existing = map.get(toolId);
+        if (existing) {
+          existing.count++;
+          existing.names.push(collection.name);
+        } else {
+          map.set(toolId, { count: 1, names: [collection.name] });
+        }
+      });
+    });
+
+    return map;
+  }, [allCollections]);
 
   // Get collection by ID (includes system collections)
   const getCollection = useCallback((collectionId: string | null): Collection | null => {
     if (!collectionId) return null;
-    if (collectionId === 'system-favorites') {
-      return favoritesSystemCollection;
-    }
-    return collections.find(c => c.id === collectionId) || null;
-  }, [collections, favoritesSystemCollection]);
+    return allCollections.find(c => c.id === collectionId) || null;
+  }, [allCollections]);
 
   return {
     collections: allCollections,
+    toolCollectionMap,
     selectedCollectionId,
     setSelectedCollectionId,
     createCollection,

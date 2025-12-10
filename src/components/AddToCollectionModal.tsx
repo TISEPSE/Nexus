@@ -73,14 +73,14 @@ export function AddToCollectionModal({
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[99999] animate-fade-in"
+      className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[99999]"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="collection-modal-title"
     >
       <div
-        className="bg-gh-canvas-default border border-gh-border-default rounded-xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-modal-enter"
+        className="bg-gh-canvas-default border border-gh-border-default rounded-xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

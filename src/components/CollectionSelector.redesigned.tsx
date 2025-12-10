@@ -336,6 +336,9 @@ export function CollectionSelector({
             <span className="text-sm font-medium flex-1">{t('collectionSelector.all')}</span>
           </button>
 
+          {/* Separator */}
+          <div className="h-px bg-gh-border-default my-3" />
+
           {/* System Collections Section */}
           {systemCollections.length > 0 && (
             <>
@@ -351,6 +354,7 @@ export function CollectionSelector({
           {/* User Collections Section */}
           {userCollections.length > 0 && (
             <>
+              {systemCollections.length > 0 && <div className="h-px bg-gh-border-default my-3" />}
               <div className="px-3 py-1.5">
                 <p className="text-xs font-semibold text-gh-fg-muted uppercase tracking-wider">
                   {t('collections.myCollections')}

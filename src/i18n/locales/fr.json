@@ -405,6 +405,8 @@
     "emptyCollectionDescription": "Ajoutez des outils à cette collection pour commencer",
     "noCollections": "Vous n'avez pas encore de collections",
     "noCollectionsDescription": "Les collections vous aident à organiser vos outils en groupes",
+    "noCollectionsTitle": "Aucune collection",
+    "noCollectionsHint": "Créez votre première collection pour organiser vos outils",
 
     "create": "Créer une collection",
     "createNew": "Créer une nouvelle collection",
@@ -460,6 +462,9 @@
 
     "openSelector": "Ouvrir le menu des collections",
     "selectCollection": "Sélectionner une collection",
+
+    "system": "Collections système",
+    "myCollections": "Mes Collections",
 
     "sortBy": "Trier par",
     "sortName": "Nom",

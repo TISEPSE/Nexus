@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AITool } from '../data/aiData';
 import { buildLogoSources, extractDomain } from '../utils/logoUtils';
@@ -18,6 +18,7 @@ interface AICardProps {
   isSelected?: boolean;
   onToggleSelect?: (toolId: string) => void;
   collections?: Collection[];
+  toolCollectionMap?: Map<string, { count: number; names: string[] }>;
   onOpenCollectionModal?: (tool: AITool) => void;
   showCollectionIndicator?: boolean;
 }
@@ -33,22 +34,16 @@ const AICardComponent: React.FC<AICardProps> = ({
   isSelected = false,
   onToggleSelect,
   collections = [],
+  toolCollectionMap,
   onOpenCollectionModal,
   showCollectionIndicator = true
 }) => {
   const { t, i18n } = useTranslation();
 
-  // Count how many collections contain this tool
-  const collectionCount = useMemo(() => {
-    return collections.filter(collection => collection.toolIds.includes(tool.id)).length;
-  }, [collections, tool.id]);
-
-  // Get collection names for tooltip
-  const collectionNames = useMemo(() => {
-    return collections
-      .filter(collection => collection.toolIds.includes(tool.id))
-      .map(collection => collection.name);
-  }, [collections, tool.id]);
+  // Use pre-computed collection map for O(1) lookups instead of O(n) filtering
+  const collectionInfo = toolCollectionMap?.get(tool.id);
+  const collectionCount = collectionInfo?.count || 0;
+  const collectionNames = collectionInfo?.names || [];
 
   // Build complete list of logo sources (primary + fallbacks)
   const logoSources = React.useMemo(() => {
@@ -446,21 +441,12 @@ const arePropsEqual = (
     return false;
   }
 
-  // Check collections count (indicates tool was added/removed from collections)
-  const prevCollectionsCount = prevProps.collections?.length || 0;
-  const nextCollectionsCount = nextProps.collections?.length || 0;
-  if (prevCollectionsCount !== nextCollectionsCount) {
-    return false;
-  }
-
-  // Check if tool is in any collections (membership changed)
-  const prevInCollections = prevProps.collections?.some(c =>
-    c.toolIds.includes(prevProps.tool.id)
-  ) || false;
-  const nextInCollections = nextProps.collections?.some(c =>
-    c.toolIds.includes(nextProps.tool.id)
-  ) || false;
-  if (prevInCollections !== nextInCollections) {
+  // Check toolCollectionMap for this specific tool (O(1) lookup)
+  const prevCollectionInfo = prevProps.toolCollectionMap?.get(prevProps.tool.id);
+  const nextCollectionInfo = nextProps.toolCollectionMap?.get(nextProps.tool.id);
+  const prevCount = prevCollectionInfo?.count || 0;
+  const nextCount = nextCollectionInfo?.count || 0;
+  if (prevCount !== nextCount) {
     return false;
   }
 

@@ -36,7 +36,7 @@ function App({
   const [deletingTool, setDeletingTool] = useState<AITool | null>(null);
   const [collectionModalTool, setCollectionModalTool] = useState<AITool | null>(null);
 
-  const { collections, addToolsToCollection, removeToolsFromCollection, createCollection, setSelectedCollectionId } = useCollections();
+  const { collections, toolCollectionMap, addToolsToCollection, removeToolsFromCollection, createCollection, setSelectedCollectionId } = useCollections();
 
   const handleEdit = useCallback((tool: AITool) => {
     setEditingTool(tool);
@@ -118,6 +118,7 @@ function App({
                 }
                 matchesTemplate={matchesTemplate}
                 collections={collections}
+                toolCollectionMap={toolCollectionMap}
                 onOpenCollectionModal={(tool) => setCollectionModalTool(tool)}
               />
             );

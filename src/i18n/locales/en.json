@@ -405,6 +405,8 @@
     "emptyCollectionDescription": "Add tools to this collection to get started",
     "noCollections": "You don't have any collections yet",
     "noCollectionsDescription": "Collections help you organize your tools into groups",
+    "noCollectionsTitle": "No collections yet",
+    "noCollectionsHint": "Create your first collection to organize tools",
 
     "create": "Create Collection",
     "createNew": "Create New Collection",
@@ -460,6 +462,9 @@
 
     "openSelector": "Open collections menu",
     "selectCollection": "Select a collection",
+
+    "system": "System Collections",
+    "myCollections": "My Collections",
 
     "sortBy": "Sort by",
     "sortName": "Name",
