@@ -303,7 +303,7 @@ export function CollectionSelector({
       {/* Dropdown Menu */}
       {isOpen && (
         <div
-          className="absolute top-full mt-2 left-0 w-80 max-h-[480px] overflow-y-auto bg-gh-canvas-subtle border border-gh-border-default rounded-lg shadow-xl z-50 animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-150 scrollbar-thin scrollbar-track-gh-canvas-default scrollbar-thumb-gh-border-muted hover:scrollbar-thumb-gh-accent-muted"
+          className="absolute top-full mt-2 left-0 w-80 max-h-[480px] overflow-y-auto overflow-x-hidden bg-gh-canvas-subtle border border-gh-border-default rounded-lg shadow-xl z-50 animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-150 scrollbar-thin scrollbar-track-gh-canvas-default scrollbar-thumb-gh-border-muted hover:scrollbar-thumb-gh-accent-muted"
           style={{
             scrollbarWidth: 'thin',
             scrollbarColor: 'var(--color-border-muted) var(--color-canvas-default)'
