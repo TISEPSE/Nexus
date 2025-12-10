@@ -8,6 +8,8 @@ export interface Collection {
   createdAt: number;             // Timestamp
   updatedAt: number;             // Timestamp
   order: number;                 // For custom sorting
+  isSystemCollection?: boolean;  // True for system-managed collections (non-deletable)
+  systemType?: 'favorites';      // Type of system collection
 }
 
 export interface CollectionState {

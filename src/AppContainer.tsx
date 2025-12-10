@@ -14,7 +14,6 @@ type ViewMode = 'dashboard' | 'workspace' | 'settings';
 interface AppContainerProps {
   favorites: string[];
   customTools: AITool[];
-  onToggleFavorite: (toolId: string) => void;
   onAddTool: (toolData: ToolFormData) => void;
   onEditTool: (toolId: string, toolData: ToolFormData) => void;
   onDeleteTool: (toolId: string) => void;
@@ -25,7 +24,6 @@ interface AppContainerProps {
 export function AppContainer({
   favorites,
   customTools,
-  onToggleFavorite,
   onAddTool,
   onEditTool,
   onDeleteTool,
@@ -127,7 +125,6 @@ export function AppContainer({
           <App
             favorites={favorites}
             customTools={customTools}
-            onToggleFavorite={onToggleFavorite}
             onAddTool={onAddTool}
             onEditTool={onEditTool}
             onDeleteTool={onDeleteTool}
@@ -142,7 +139,6 @@ export function AppContainer({
             searchQuery={searchQuery}
             selectedCategory={selectedCategory}
             selectedTemplate="all"
-            onToggleFavorite={onToggleFavorite}
             onAddTool={onAddTool}
             onEditTool={onEditTool}
             onDeleteTool={onDeleteTool}

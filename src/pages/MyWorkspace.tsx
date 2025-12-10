@@ -22,20 +22,18 @@ interface MyWorkspaceProps {
   searchQuery: string;
   selectedCategory: string;
   selectedTemplate: string;
-  onToggleFavorite: (toolId: string) => void;
   onAddTool: (toolData: ToolFormData) => void;
   onEditTool: (toolId: string, toolData: ToolFormData) => void;
   onDeleteTool: (toolId: string) => void;
 }
 
-type ViewType = 'all' | 'favorites' | 'custom';
+type ViewType = 'all';
 
 export function MyWorkspace({
   favorites,
   customTools,
   searchQuery,
   selectedCategory,
-  onToggleFavorite,
   onAddTool,
   onEditTool,
   onDeleteTool,
@@ -97,29 +95,24 @@ export function MyWorkspace({
         tools = allTools.filter(tool => collection.toolIds.includes(tool.id));
       }
     } else {
-      // Filter by view type only when no collection is selected
-      if (view === 'all') {
-        // Get all unique tool IDs from: favorites, collections, and custom tools
-        const toolIdsSet = new Set<string>();
+      // Get all unique tool IDs from: favorites, collections, and custom tools
+      const toolIdsSet = new Set<string>();
 
-        // Add favorites
-        favorites.forEach(id => toolIdsSet.add(id));
+      // Add favorites
+      favorites.forEach(id => toolIdsSet.add(id));
 
-        // Add all tools from all collections
-        collections.forEach(collection => {
+      // Add all tools from all collections (excluding system collections to avoid duplicates)
+      collections.forEach(collection => {
+        if (!collection.isSystemCollection) {
           collection.toolIds.forEach(id => toolIdsSet.add(id));
-        });
+        }
+      });
 
-        // Add custom tools
-        customTools.forEach(tool => toolIdsSet.add(tool.id));
+      // Add custom tools
+      customTools.forEach(tool => toolIdsSet.add(tool.id));
 
-        // Get actual tools from the IDs
-        tools = allTools.filter(tool => toolIdsSet.has(tool.id));
-      } else if (view === 'favorites') {
-        tools = allTools.filter((tool) => favorites.includes(tool.id));
-      } else {
-        tools = customTools;
-      }
+      // Get actual tools from the IDs
+      tools = allTools.filter(tool => toolIdsSet.has(tool.id));
     }
 
     // Apply search filter
@@ -139,9 +132,6 @@ export function MyWorkspace({
 
     return tools;
   }, [allTools, favorites, customTools, view, searchQuery, selectedCategory, selectedCollectionId, getCollection, collections]);
-
-  // Convert favorites to Set for O(1) lookup
-  const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
 
   const handleEdit = useCallback((tool: AITool) => {
     setEditingTool(tool);
@@ -193,23 +183,21 @@ export function MyWorkspace({
 
       {/* Grid View - Aligned with filter tabs */}
       <div className="grid grid-cols-3 min-[480px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 sm:gap-3 md:gap-3">
-        {/* Add Tool Card - Show in "all" and "custom" views, not when a collection is selected */}
-        {(view === 'all' || view === 'custom') && !selectedCollectionId && (
+        {/* Add Tool Card - Show in "all" view, not when a collection is selected */}
+        {!selectedCollectionId && (
           <AddToolCard onClick={() => setIsModalOpen(true)} />
         )}
 
         {/* Tools Grid */}
         {workspaceTools.map((tool) => {
           const isCustom = tool.id.startsWith('custom-');
-          const showEditDelete = isCustom && (view === 'all' || view === 'custom');
+          const showEditDelete = isCustom;
           const isInCollectionView = !!selectedCollectionId;
 
           return (
             <AICard
               key={tool.id}
               tool={tool}
-              isFavorite={favoritesSet.has(tool.id)}
-              onToggleFavorite={view !== 'all' && !isInCollectionView ? onToggleFavorite : undefined}
               isCustom={isCustom}
               showEditDelete={showEditDelete}
               onEdit={showEditDelete ? () => handleEdit(tool) : undefined}

@@ -13,7 +13,6 @@ import { ToolFormData } from './types/tool';
 interface AppProps {
   favorites: string[];
   customTools: AITool[];
-  onToggleFavorite: (toolId: string) => void;
   onAddTool: (toolData: ToolFormData) => void;
   onEditTool: (toolId: string, toolData: ToolFormData) => void;
   onDeleteTool: (toolId: string) => void;
@@ -23,9 +22,8 @@ interface AppProps {
 }
 
 function App({
-  favorites,
+  favorites: _favorites,
   customTools,
-  onToggleFavorite,
   onAddTool,
   onEditTool,
   onDeleteTool,
@@ -39,9 +37,6 @@ function App({
   const [collectionModalTool, setCollectionModalTool] = useState<AITool | null>(null);
 
   const { collections, addToolsToCollection, removeToolsFromCollection, createCollection, setSelectedCollectionId } = useCollections();
-
-  // Convert favorites array to Set for O(1) lookup performance
-  const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
 
   const handleEdit = useCallback((tool: AITool) => {
     setEditingTool(tool);
@@ -115,8 +110,6 @@ function App({
               <AICard
                 key={tool.id}
                 tool={tool}
-                isFavorite={favoritesSet.has(tool.id)}
-                onToggleFavorite={onToggleFavorite}
                 isCustom={isCustom}
                 showEditDelete={showEditDelete}
                 onEdit={showEditDelete ? () => handleEdit(tool) : undefined}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { AITool } from './data/aiData';
 import { AppContainer } from './AppContainer';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -8,7 +8,7 @@ export function AppRouter() {
 
   // Shared state
   const [favorites, setFavorites] = useState<string[]>(() => {
-    const saved = localStorage.getItem('favorites');
+    const saved = localStorage.getItem('nexus_favorites');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -24,7 +24,7 @@ export function AppRouter() {
 
   // Save favorites to localStorage
   useEffect(() => {
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+    localStorage.setItem('nexus_favorites', JSON.stringify(favorites));
   }, [favorites]);
 
   // Apply theme
@@ -46,14 +46,6 @@ export function AppRouter() {
   useEffect(() => {
     const savedFontSize = localStorage.getItem('nexus_font_size') || 'medium';
     document.documentElement.setAttribute('data-font-size', savedFontSize);
-  }, []);
-
-  const toggleFavorite = useCallback((toolId: string) => {
-    setFavorites((prev) =>
-      prev.includes(toolId)
-        ? prev.filter((id) => id !== toolId)
-        : [...prev, toolId]
-    );
   }, []);
 
   const addCustomTool = (toolData: ToolFormData) => {
@@ -88,7 +80,6 @@ export function AppRouter() {
       <AppContainer
         favorites={favorites}
         customTools={customTools}
-        onToggleFavorite={toggleFavorite}
         onAddTool={addCustomTool}
         onEditTool={editCustomTool}
         onDeleteTool={deleteCustomTool}

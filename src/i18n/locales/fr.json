@@ -511,5 +511,8 @@
     "selectTool": "Sélectionner l'outil",
     "options": "Options",
     "addToCollection": "Ajouter à une collection"
+  },
+  "system": {
+    "favorites": "Favoris"
   }
 }

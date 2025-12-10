@@ -9,8 +9,6 @@ import { validateUrl } from '../utils/urlValidator';
 
 interface AICardProps {
   tool: AITool;
-  isFavorite: boolean;
-  onToggleFavorite?: (toolId: string) => void;
   isCustom?: boolean;
   showEditDelete?: boolean;
   onEdit?: () => void;
@@ -26,8 +24,6 @@ interface AICardProps {
 
 const AICardComponent: React.FC<AICardProps> = ({
   tool,
-  isFavorite,
-  onToggleFavorite,
   isCustom = false,
   showEditDelete = false,
   onEdit,
@@ -233,8 +229,8 @@ const AICardComponent: React.FC<AICardProps> = ({
         </div>
       </div>
 
-      {/* Multi-select checkbox - Top left (shows instead of favorite in multi-select mode) */}
-      {isMultiSelectMode ? (
+      {/* Multi-select checkbox - Top left */}
+      {isMultiSelectMode && (
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -257,33 +253,7 @@ const AICardComponent: React.FC<AICardProps> = ({
             )}
           </div>
         </button>
-      ) : onToggleFavorite ? (
-        /* Favorite button - Top left, larger touch target on mobile */
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleFavorite(tool.id);
-          }}
-          className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 p-1.5 sm:p-1 rounded hover:bg-gh-canvas-default active:bg-gh-canvas-default transition-colors touch-manipulation"
-          aria-label={isFavorite ? t('card.removeFromFavorites') : t('card.addToFavorites')}
-        >
-          <svg
-            className={`w-4 h-4 sm:w-4 sm:h-4 transition-colors ${
-              isFavorite
-                ? 'fill-yellow-400 stroke-yellow-400'
-                : 'fill-none stroke-gh-fg-muted hover:stroke-yellow-400'
-            }`}
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-            />
-          </svg>
-        </button>
-      ) : null}
+      )}
 
 
       {/* Collection indicator - Top right, when tool is in collection */}
@@ -473,11 +443,6 @@ const arePropsEqual = (
 ): boolean => {
   // Check tool identity (most important for re-renders)
   if (prevProps.tool.id !== nextProps.tool.id) {
-    return false;
-  }
-
-  // Check favorite status
-  if (prevProps.isFavorite !== nextProps.isFavorite) {
     return false;
   }
 

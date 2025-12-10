@@ -138,7 +138,9 @@ export function AddToCollectionModal({
                           isInCollection ? 'bg-gh-accent-emphasis/20' : 'bg-gh-canvas-default group-hover:bg-gh-accent-subtle/30'
                         }`}>
                           <svg
-                            className={`w-3.5 h-3.5 ${isInCollection ? 'text-gh-accent-fg' : 'text-gh-fg-muted group-hover:text-gh-accent-fg'}`}
+                            className={`w-3.5 h-3.5 ${
+                              isInCollection ? 'text-gh-accent-fg' : 'text-gh-fg-muted group-hover:text-gh-accent-fg'
+                            }`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -172,7 +174,7 @@ export function AddToCollectionModal({
                       <h4 className={`font-semibold text-sm mb-1 line-clamp-2 ${
                         isInCollection ? 'text-gh-accent-fg' : 'text-gh-fg-default'
                       }`}>
-                        {collection.name}
+                        {collection.isSystemCollection ? t(collection.name) : collection.name}
                       </h4>
 
                       {/* Tool Count */}
