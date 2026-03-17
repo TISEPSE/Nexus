@@ -141,11 +141,11 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
           position: relative;
           display: flex;
           align-items: center;
-          gap: 9px;
+          gap: 0.5rem;
           width: 100%;
-          padding: 7px 12px;
-          border-radius: 6px;
-          font-size: 13px;
+          padding: 0.4375rem 0.75rem;
+          border-radius: 0.375rem;
+          font-size: 0.8125rem;
           font-weight: 450;
           text-align: left;
           transition: background 120ms, color 120ms;
@@ -167,43 +167,44 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
           content: '';
           position: absolute;
           left: 0;
-          top: 4px;
-          bottom: 4px;
-          width: 2.5px;
-          border-radius: 2px;
+          top: 0.25rem;
+          bottom: 0.25rem;
+          width: 0.15rem;
+          border-radius: 0.125rem;
           background: var(--color-accent-fg, #2f81f7);
         }
         .danger-zone {
-          border: 1px solid var(--color-danger-muted);
-          border-radius: 8px;
+          border: 0.0625rem solid var(--color-danger-muted);
+          border-radius: 0.5rem;
           overflow: hidden;
         }
         .danger-zone-header {
-          padding: 12px 16px;
+          padding: 0.75rem 1rem;
           background: var(--color-danger-subtle);
-          border-bottom: 1px solid var(--color-danger-muted);
+          border-bottom: 0.0625rem solid var(--color-danger-muted);
         }
         .about-logo-ring {
-          width: 72px;
-          height: 72px;
-          border-radius: 18px;
+          width: 4.5rem;
+          height: 4.5rem;
+          border-radius: 1.125rem;
           background: var(--color-accent-subtle);
-          border: 1px solid var(--color-accent-muted);
+          border: 0.0625rem solid var(--color-accent-muted);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 32px;
+          font-size: 2rem;
           font-weight: 700;
           color: var(--color-accent-fg);
-          letter-spacing: -1px;
+          letter-spacing: -0.0625rem;
           font-variant-numeric: tabular-nums;
+          flex-shrink: 0;
         }
       `}</style>
 
-      <div className="flex rounded-lg overflow-hidden border border-gh-border-default bg-gh-canvas-default" style={{ minHeight: 520 }}>
+      <div className="flex rounded-lg overflow-hidden border border-gh-border-default bg-gh-canvas-default min-h-[70vh]">
 
         {/* ── Desktop Sidebar ── */}
-        <aside className="hidden lg:flex flex-col w-[200px] shrink-0 border-r border-gh-border-default bg-gh-canvas-subtle">
+        <aside className="hidden lg:flex flex-col w-1/5 min-w-[11rem] max-w-[15rem] shrink-0 border-r border-gh-border-default bg-gh-canvas-subtle">
           <div className="flex-1 px-2 py-4 space-y-0.5">
             {TABS.map(({ id, labelKey, fallback, Icon }) => (
               <button
@@ -261,7 +262,7 @@ export function Settings({ isDarkTheme, onToggleTheme }: SettingsProps) {
 
           {/* Content area */}
           <div className="flex-1 overflow-y-auto">
-            <div className="max-w-2xl px-6 py-6">
+            <div className="max-w-3xl mx-auto px-6 py-6 w-full">
 
               {/* Page header */}
               <div className="mb-6">
