@@ -1,4 +1,4 @@
-name: Auto Version Bump
+name: Bump Version
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
       bump_type:
         description: 'Version bump type'
         required: true
-        default: 'patch'
+        default: patch
         type: choice
         options:
           - patch
@@ -24,30 +24,35 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Bump version
+      - name: Bump version in all manifests
         run: |
-          # Bump version in package.json
+          # 1. Bump package.json (and package-lock.json)
           npm version ${{ inputs.bump_type }} --no-git-tag-version
 
-          # Get new version
           NEW_VERSION=$(node -p "require('./package.json').version")
-
-          # Update tauri.conf.json
-          sed -i "s/\"version\": \".*\"/\"version\": \"$NEW_VERSION\"/" src-tauri/tauri.conf.json
-
-          # Update Cargo.toml
-          sed -i "s/^version = \".*\"/version = \"$NEW_VERSION\"/" src-tauri/Cargo.toml
-
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "Bumping to v$NEW_VERSION"
+
+          # 2. tauri.conf.json  — use jq to target only the top-level "version" key
+          jq --arg v "$NEW_VERSION" '.version = $v' src-tauri/tauri.conf.json > _tmp.json
+          mv _tmp.json src-tauri/tauri.conf.json
+
+          # 3. Cargo.toml  — replace only the package version (first occurrence)
+          sed -i "0,/^version = \"[^\"]*\"/{s/^version = \"[^\"]*\"/version = \"$NEW_VERSION\"/}" \
+            src-tauri/Cargo.toml
+
+          echo "--- Versions after bump ---"
+          echo "package.json : $(node -p "require('./package.json').version")"
+          echo "tauri.conf   : $(jq -r '.version' src-tauri/tauri.conf.json)"
+          echo "Cargo.toml   : $(grep '^version' src-tauri/Cargo.toml | head -1)"
 
       - name: Commit and push
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add package.json package-lock.json src-tauri/tauri.conf.json src-tauri/Cargo.toml
           git commit -m "chore: bump version to ${{ env.NEW_VERSION }}"

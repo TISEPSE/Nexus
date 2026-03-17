@@ -1,7 +1,9 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate, Routes, Route } from 'react-router-dom';
 import { UnifiedHeader } from './components/UnifiedHeader';
 import { FloatingMenu } from './components/FloatingMenu';
+import { LoadingBar } from './components/LoadingBar';
 import App from './App';
 import { MyWorkspace } from './pages/MyWorkspace';
 import { Settings } from './pages/Settings';
@@ -31,15 +33,22 @@ export function AppContainer({
   onToggleTheme,
 }: AppContainerProps) {
   const { t } = useTranslation();
-  const [activeView, setActiveView] = useState<ViewMode>('dashboard');
+  const location = useLocation();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
+  // Derive active view from URL
+  const activeView: ViewMode =
+    location.pathname === '/workspace'
+      ? 'workspace'
+      : location.pathname === '/settings'
+      ? 'settings'
+      : 'dashboard';
 
   const handleViewChange = useCallback((newView: ViewMode) => {
     logger.log('🔄 View changing to:', newView);
 
-    // Scroll to top on view change
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // Announce to screen readers
@@ -52,20 +61,17 @@ export function AppContainer({
       announcement = t('navigation.switchedToSettings', 'Switched to Settings');
     }
 
-    // Update ARIA live region
     const liveRegion = document.getElementById('view-announcer');
     if (liveRegion) liveRegion.textContent = announcement;
 
-    setActiveView(newView);
-    logger.log('✅ Active view set to:', newView);
-  }, [t]);
+    navigate(newView === 'dashboard' ? '/' : `/${newView}`);
+    logger.log('✅ Navigated to:', newView);
+  }, [t, navigate]);
 
-  // Calculate total tools count
   const totalToolsCount = useMemo(() => {
     return aiTools.length + customTools.length;
   }, [customTools.length]);
 
-  // Compute title and subtitle based on view
   const title = t('app.title');
   let subtitle = '';
   let searchPlaceholder = '';
@@ -84,15 +90,15 @@ export function AppContainer({
     searchPlaceholder = '';
   }
 
-  // Compute available categories
   const categories = useMemo(() => {
     return allCategories;
   }, []);
 
   return (
-    <div
-      className="min-h-screen bg-gh-canvas-default text-gh-fg-default overflow-x-hidden"
-    >
+    <div className="min-h-screen bg-gh-canvas-default text-gh-fg-default overflow-x-hidden">
+      {/* Loading bar on route change */}
+      <LoadingBar />
+
       {/* ARIA live region for screen reader announcements */}
       <div
         id="view-announcer"
@@ -103,7 +109,6 @@ export function AppContainer({
       />
 
       <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 max-w-full">
-        {/* Unified Header - Show for all views */}
         <UnifiedHeader
           activeView={activeView}
           onViewChange={(view) => handleViewChange(view)}
@@ -120,35 +125,64 @@ export function AppContainer({
           onOpenSettings={() => handleViewChange('settings')}
         />
 
-        {/* Content Area - Conditional Rendering */}
-        {activeView === 'dashboard' ? (
-          <App
-            favorites={favorites}
-            customTools={customTools}
-            onAddTool={onAddTool}
-            onEditTool={onEditTool}
-            onDeleteTool={onDeleteTool}
-            searchQuery={searchQuery}
-            selectedCategory={selectedCategory}
-            selectedTemplate="all"
+        {/* Routed pages */}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <App
+                favorites={favorites}
+                customTools={customTools}
+                onAddTool={onAddTool}
+                onEditTool={onEditTool}
+                onDeleteTool={onDeleteTool}
+                searchQuery={searchQuery}
+                selectedCategory={selectedCategory}
+                selectedTemplate="all"
+              />
+            }
           />
-        ) : activeView === 'workspace' ? (
-          <MyWorkspace
-            favorites={favorites}
-            customTools={customTools}
-            searchQuery={searchQuery}
-            selectedCategory={selectedCategory}
-            selectedTemplate="all"
-            onAddTool={onAddTool}
-            onEditTool={onEditTool}
-            onDeleteTool={onDeleteTool}
+          <Route
+            path="/workspace"
+            element={
+              <MyWorkspace
+                favorites={favorites}
+                customTools={customTools}
+                searchQuery={searchQuery}
+                selectedCategory={selectedCategory}
+                selectedTemplate="all"
+                onAddTool={onAddTool}
+                onEditTool={onEditTool}
+                onDeleteTool={onDeleteTool}
+              />
+            }
           />
-        ) : (
-          <Settings
-            isDarkTheme={isDarkTheme}
-            onToggleTheme={onToggleTheme}
+          <Route
+            path="/settings"
+            element={
+              <Settings
+                isDarkTheme={isDarkTheme}
+                onToggleTheme={onToggleTheme}
+              />
+            }
           />
-        )}
+          {/* Fallback to dashboard */}
+          <Route
+            path="*"
+            element={
+              <App
+                favorites={favorites}
+                customTools={customTools}
+                onAddTool={onAddTool}
+                onEditTool={onEditTool}
+                onDeleteTool={onDeleteTool}
+                searchQuery={searchQuery}
+                selectedCategory={selectedCategory}
+                selectedTemplate="all"
+              />
+            }
+          />
+        </Routes>
 
         {/* Mobile Floating Menu - Hide on settings */}
         {activeView !== 'settings' && (

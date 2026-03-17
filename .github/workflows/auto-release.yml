@@ -1,4 +1,4 @@
-name: Auto Release
+name: Release
 
 on:
   push:
@@ -6,200 +6,187 @@ on:
       - main
 
 jobs:
-  check-and-release:
+  # ── 1. Check if version changed and create tag ──────────────────────────────
+  prepare:
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
-    runs-on: ubuntu-22.04
     outputs:
-      should_release: ${{ steps.check_tag.outputs.should_release }}
+      should_release: ${{ steps.check.outputs.should_release }}
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Get current version
+      - name: Read version from package.json
         id: version
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "current=$VERSION" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
-      - name: Check if version tag exists
-        id: check_tag
+      - name: Check if tag already exists
+        id: check
         run: |
-          if git rev-parse "v${{ steps.version.outputs.current }}" >/dev/null 2>&1; then
-            echo "exists=true" >> $GITHUB_OUTPUT
+          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Tag v${{ steps.version.outputs.version }} already exists — skipping release."
             echo "should_release=false" >> $GITHUB_OUTPUT
           else
-            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "No tag found for v${{ steps.version.outputs.version }} — will release."
             echo "should_release=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Create and push tag
-        if: steps.check_tag.outputs.exists == 'false'
+        if: steps.check.outputs.should_release == 'true'
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v${{ steps.version.outputs.current }}" -m "Release v${{ steps.version.outputs.current }}"
-          git push origin "v${{ steps.version.outputs.current }}"
+          git tag -a "v${{ steps.version.outputs.version }}" -m "Release v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
 
-  build-release:
-    needs: check-and-release
+  # ── 2. Build on all platforms ────────────────────────────────────────────────
+  build:
+    needs: prepare
+    if: needs.prepare.outputs.should_release == 'true'
     permissions:
       contents: write
     strategy:
       fail-fast: false
       matrix:
         include:
-          - platform: 'ubuntu-22.04'
+          - platform: ubuntu-22.04
             args: ''
-          - platform: 'windows-latest'
+            artifact-name: linux
+          - platform: windows-latest
             args: ''
-          - platform: 'macos-latest'
-            args: '--target universal-apple-darwin'
+            artifact-name: windows
+          - platform: macos-latest
+            args: --target universal-apple-darwin
+            artifact-name: macos
+
     runs-on: ${{ matrix.platform }}
-    if: needs.check-and-release.outputs.should_release == 'true'
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@stable
 
-      - name: Add x86_64-apple-darwin target
+      - name: Cache Rust build artifacts
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: ./src-tauri -> target
+
+      - name: Add macOS targets (x86_64 + arm64 for universal binary)
         if: matrix.platform == 'macos-latest'
-        run: rustup target add x86_64-apple-darwin
+        run: rustup target add x86_64-apple-darwin aarch64-apple-darwin
 
-      - name: Install dependencies (Ubuntu only)
+      - name: Install Linux system dependencies
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf
 
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Get version
-        id: version
-        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-
-      - name: Build the app
-        env:
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-        run: npm run tauri build -- ${{ matrix.args }}
-
-      - name: Upload artifacts (Linux)
-        if: matrix.platform == 'ubuntu-22.04'
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-artifacts
-          path: |
-            src-tauri/target/release/bundle/deb/*.deb
-            src-tauri/target/release/bundle/rpm/*.rpm
-            src-tauri/target/release/bundle/deb/*.deb.sig
-            src-tauri/target/release/bundle/rpm/*.rpm.sig
-
-      - name: Upload artifacts (Windows)
-        if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-artifacts
-          path: |
-            src-tauri/target/release/bundle/msi/*.msi
-            src-tauri/target/release/bundle/nsis/*.exe
-            src-tauri/target/release/bundle/msi/*.msi.sig
-            src-tauri/target/release/bundle/nsis/*.exe.sig
-
-      - name: Upload artifacts (macOS)
-        if: matrix.platform == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-artifacts
-          path: |
-            src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
-            src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg.sig
-            src-tauri/target/universal-apple-darwin/release/bundle/macos/*.app.tar.gz
-            src-tauri/target/universal-apple-darwin/release/bundle/macos/*.app.tar.gz.sig
-
-  publish-release:
-    needs: build-release
-    permissions:
-      contents: write
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Get version
-        id: version
-        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: List downloaded artifacts
-        run: |
-          echo "=== Downloaded artifacts structure ==="
-          ls -R artifacts/
-
-      - name: Generate latest.json for updater
-        run: |
-          # Create latest.json with proper structure
-          cat > latest.json << EOF
-          {
-            "version": "v${{ steps.version.outputs.version }}",
-            "notes": "Release v${{ steps.version.outputs.version }}",
-            "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "platforms": {
-              "linux-x86_64": {
-                "signature": "$(cat artifacts/linux-artifacts/*.deb.sig 2>/dev/null || echo '')",
-                "url": "https://github.com/TISEPSE/Nexus/releases/download/v${{ steps.version.outputs.version }}/$(cd artifacts/linux-artifacts && ls *.deb 2>/dev/null | head -1)"
-              },
-              "windows-x86_64": {
-                "signature": "$(cat artifacts/windows-artifacts/*.msi.sig 2>/dev/null || echo '')",
-                "url": "https://github.com/TISEPSE/Nexus/releases/download/v${{ steps.version.outputs.version }}/$(cd artifacts/windows-artifacts && ls *.msi 2>/dev/null | head -1)"
-              },
-              "darwin-x86_64": {
-                "signature": "$(cat artifacts/macos-artifacts/*.app.tar.gz.sig 2>/dev/null || echo '')",
-                "url": "https://github.com/TISEPSE/Nexus/releases/download/v${{ steps.version.outputs.version }}/$(cd artifacts/macos-artifacts && ls *.app.tar.gz 2>/dev/null | head -1)"
-              },
-              "darwin-aarch64": {
-                "signature": "$(cat artifacts/macos-artifacts/*.app.tar.gz.sig 2>/dev/null || echo '')",
-                "url": "https://github.com/TISEPSE/Nexus/releases/download/v${{ steps.version.outputs.version }}/$(cd artifacts/macos-artifacts && ls *.app.tar.gz 2>/dev/null | head -1)"
-              }
-            }
-          }
-          EOF
-          cat latest.json
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: Release v${{ steps.version.outputs.version }}
-          files: |
-            artifacts/**/*
-            latest.json
-          draft: false
-          prerelease: false
+      - name: Build Tauri app and publish to release
+        uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tagName: v${{ needs.prepare.outputs.version }}
+          releaseName: Nexus v${{ needs.prepare.outputs.version }}
+          releaseBody: |
+            ## Nexus v${{ needs.prepare.outputs.version }}
+
+            Download the installer for your platform from the assets below.
+
+            | Platform | File |
+            |---|---|
+            | Linux (Debian/Ubuntu) | `.deb` |
+            | Linux (Fedora/RHEL) | `.rpm` |
+            | Windows | `.msi` or `.exe` (NSIS) |
+            | macOS (Intel + Apple Silicon) | `.dmg` |
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}
+
+  # ── 3. Generate latest.json for the Tauri updater ───────────────────────────
+  publish-updater-manifest:
+    needs: [prepare, build]
+    if: needs.prepare.outputs.should_release == 'true'
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Generate and upload latest.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          TAG="v${VERSION}"
+
+          # Fetch all release assets via GH API
+          ASSETS=$(gh api "repos/${{ github.repository }}/releases/tags/${TAG}" --jq '.assets')
+
+          find_url() {
+            echo "$ASSETS" | jq -r --arg p "$1" '.[] | select(.name | test($p)) | .browser_download_url' | head -1
+          }
+
+          LINUX_DEB_URL=$(find_url '\.deb$')
+          LINUX_SIG_URL=$(find_url '\.deb\.sig$')
+          WIN_URL=$(find_url '\.exe$')        # prefer NSIS installer
+          WIN_SIG_URL=$(find_url '\.exe\.sig$')
+          MAC_TAR_URL=$(find_url '\.app\.tar\.gz$')
+          MAC_SIG_URL=$(find_url '\.app\.tar\.gz\.sig$')
+
+          # Fall back to .msi if no .exe
+          if [ -z "$WIN_URL" ]; then
+            WIN_URL=$(find_url '\.msi$')
+            WIN_SIG_URL=$(find_url '\.msi\.sig$')
+          fi
+
+          # Download signature files (they are small text files)
+          fetch_sig() { [ -n "$1" ] && curl -fsSL "$1" || echo ""; }
+          LINUX_SIG=$(fetch_sig "$LINUX_SIG_URL")
+          WIN_SIG=$(fetch_sig "$WIN_SIG_URL")
+          MAC_SIG=$(fetch_sig "$MAC_SIG_URL")
+
+          # Build JSON safely with jq (handles escaping automatically)
+          jq -n \
+            --arg version  "$TAG" \
+            --arg pub_date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg notes    "Nexus ${TAG}" \
+            --arg linux_url  "$LINUX_DEB_URL" \
+            --arg linux_sig  "$LINUX_SIG" \
+            --arg win_url    "$WIN_URL" \
+            --arg win_sig    "$WIN_SIG" \
+            --arg mac_url    "$MAC_TAR_URL" \
+            --arg mac_sig    "$MAC_SIG" \
+            '{
+              version:  $version,
+              notes:    $notes,
+              pub_date: $pub_date,
+              platforms: {
+                "linux-x86_64":  { url: $linux_url, signature: $linux_sig },
+                "windows-x86_64": { url: $win_url,   signature: $win_sig  },
+                "darwin-x86_64":  { url: $mac_url,   signature: $mac_sig  },
+                "darwin-aarch64": { url: $mac_url,   signature: $mac_sig  }
+              }
+            }' > latest.json
+
+          echo "=== latest.json ==="
+          cat latest.json
+
+          gh release upload "${TAG}" latest.json --clobber
