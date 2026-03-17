@@ -1,6 +1,6 @@
 # Nexus
 
-Votre hub centralisé pour tous vos outils d'IA.
+Votre hub centralisé pour tous vos outils d'IA, de travaille, perso etc...
 
 ## 📥 Installation
 
